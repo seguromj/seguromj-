@@ -1,0 +1,522 @@
+
+/* Cores */
+.cor-card {
+  color: #5C5454;
+}
+.cor-logo2 {
+  color: #68736B;
+  font-size: 9px;
+}
+.cor-text {
+  color: #1D3312;
+}
+
+
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*---------Style perfil------------*/
+
+/* Base */
+body {
+    background-color: white;
+    font-family: sans-serif;
+    margin: 0;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Define as cires do fundo do body*/
+
+.nuance-info-box {
+     text-align: center;
+    padding: 10px 20px;
+    
+    margin-top: -50px; 
+    border-radius: 20px 20px 0 0; 
+    position: relative; 
+    /* 1. Definir o Gradiente (cores, ângulo) */
+    background: linear-gradient(-45deg, #225214, #18A373, #5C3691, #B71FCC);
+    
+    /* 2. Aumentar o tamanho do fundo (ex: 400% da largura/altura) */
+    background-size: 400% 400%;
+    
+    /* 3. Aplicar a animação (nome, duração, tipo, repetição) */
+    animation: gradientMove1 6s ease infinite;
+}
+
+/* 4. Definir a Animação (@keyframes) */
+@keyframes gradientMove1 {
+    /* No início (0% da animação) */
+    0% {
+        /* Posição inicial do fundo */
+        background-position: 0% 50%;
+    }
+    /* Na metade (50% da animação) */
+    50% {
+        /* Desloca a posição para o lado oposto */
+        background-position: 100% 50%;
+    }
+    /* No fim (100% da animação) */
+    100% {
+        /* Volta para a posição inicial */
+        background-position: 0% 50%;
+    }
+}
+
+/* Container que simula a tela do app */
+
+
+.app-screen {
+    max-width: 600px;
+    margin: 0 auto; /* Centraliza no desktop */
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 0;
+}
+
+/* 1. CABEÇALHO COM IMAGEM DE FUNDO */
+.header-banner {
+    height: 150px;
+    background: url('https://www.shutterstock.com/image-photo/great-view-smiling-man-bartender-600nw-2163858961.jpg') no-repeat center center/cover; 
+    position: relative;
+}
+
+
+.logo-box {
+    margin-top: -40px; 
+    margin-bottom: 10px;
+}
+
+.nuance-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.avaliacao-1 {
+    font-size: 15px;
+}
+
+.estrela-diagonal {
+   display: inline-block; 
+        padding-top: 3px;
+        font-size: 16px;
+        /* MUDANÇA AQUI: de 'to bottom' para 'to top right' */
+        background: linear-gradient(to bottom right, 
+            #EDE902 0%, 
+            #EDE902 52%, /* Amarelo no canto inferior esquerdo/primeira metade */
+            black 50%, /* Preto a partir da metade */
+            black 100%
+        );
+        
+        /* O restante do código de mascaramento permanece o mesmo */
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+
+
+/* 7. Status ABERTO/FECHADO*/
+/* Estilos base do container de status */
+.status {
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.1s ease; /* Transição suave para a mudança de status */
+}
+
+/* Estilo para status ABERTO */
+.aberto {
+    background-color: #4CAF50; /* Um verde chamativo */
+    color: white;
+}
+
+/* Estilo para status FECHADO */
+.fechado {
+    background-color: #F44336; /* Um vermelho */
+    color: white;
+}
+
+/* ------------------------------------- */
+/* ANIMAÇÃO LEVE - Vai e Volta (CSS Keyframes) */
+/* ------------------------------------- */
+.aberto {
+    animation: pulse-aberto 2s infinite ease-in-out; /* Aplica a animação ao status ABERTO */
+}
+
+@keyframes pulse-aberto {
+    0% {
+        transform: scale(1); /* Tamanho normal */
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); /* Sombra 0 */
+    }
+    50% {
+        transform: scale(1.02); /* Aumenta levemente */
+        box-shadow: 0 0 10px 2px rgba(76, 175, 80, 0.9); /* Sombra para dar um efeito de pulso */
+    }
+    100% {
+        transform: scale(1); /* Volta ao tamanho normal */
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); /* Sombra 0 */
+    }
+}
+
+/* Remove a animação quando estiver FECHADO */
+.fechado {
+    animation: none;
+    transform: none;
+}
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*----Carrocel Automatico de imgs ---*/
+
+/* Container principal. Define a área visível do carrossel. */
+.carrossel-container {
+    width: 100%; /* Largura total da tela ou do seu elemento pai */
+    max-width: 500px; /* Limite de largura para melhor visualização, ajuste conforme necessário */
+    margin: 30px auto; /* Centraliza o carrossel na página */
+    overflow: hidden; /* **Oculta as imagens que estão fora da área visível** */
+    white-space: nowrap; /* Impede que os itens quebrem para a linha de baixo */
+  
+}
+
+/* Faixa que contém todas as imagens. Será animada para criar o movimento. */
+.carrossel-faixa {
+    display: flex; /* Coloca os itens lado a lado */
+    animation: rolar 8s linear infinite; /* Aplica a velocidade e animação de rolagem */
+    /* Tempo de animação: 16s é apenas um exemplo. Ajuste para a velocidade desejada.
+       `linear`: mantém a velocidade constante.
+       `infinite`: repete a animação indefinidamente. */
+}
+
+
+
+
+/* Container de cada imagem */
+.item-carrossel {
+    /* O item deve ter `flex-shrink: 0` para não encolher na faixa flexível */
+    flex-shrink: 0;
+    margin: 0 10px; /* Espaçamento entre as imagens */
+}
+
+/* Estilização da imagem (60x60 e redonda) */
+.item-carrossel img {
+    width: 60px; /* Largura definida */
+    height: 60px; /* Altura definida */
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 50%; /* **Torna a imagem perfeitamente redonda** */
+    border: 2px solid #ccc; /* Borda simples para destacar */
+    display: block;
+    border: none;
+}
+
+
+
+
+/* Keyframes para a animação. Controla o movimento horizontal da faixa. */
+@keyframes rolar {
+    0% {
+        /* Posição inicial: 0% de deslocamento horizontal */
+        transform: translateX(0);
+    }
+    100% {
+        /* Posição final: Move a faixa 50% para a esquerda.
+           Como os itens foram duplicados no HTML, -50% garante que o loop volte
+           ao início da segunda cópia, dando a ilusão de infinito. */
+        transform: translateX(-560px); /*Ajuste o valor do px pqra ter a rotação infinita do carrocel sem salto ou pulo*/
+    }
+}
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*------------style loja-------------*/
+/* Estilo Básico do Botão (Obrigatório para parecer um botão) */
+
+.container-loja {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+}
+
+.btn-loja {
+    display: flex; 
+    align-items: center; 
+    /* Removido justify-content: space-between; */
+    width: 340px;
+    height: 80px;
+    background-color: #123D14;
+    color: white;
+    text-decoration: none;
+    padding: 0 10px;
+    border-radius: 50px;
+    margin: 5px;
+}
+
+
+.nome-cardapio {
+  margin-left: 97px;
+  margin-right: auto;
+  color: #8FA6A3;
+}
+.nome-eventos {
+  margin-left: 48px;
+  margin-right: auto;
+  color: #8FA6A3;
+}
+.nome-entregas {
+  margin-left: 68px; 
+  margin-right: auto;
+  color: #8FA6A3;
+}
+
+.nome-perfil {
+    /* Adiciona margem automática à esquerda para empurrar o texto */
+    margin-left: 58px; 
+    /* E margem automática à direita para centralizar o texto no espaço restante */
+    margin-right: auto;
+    color: #8FA6A3;
+}
+
+
+/* 2. Efeito Hover (Interatividade) */
+.btn-loja:hover {
+  background-color: #5E94B5; /* Azul mais escuro ao passar o mouse */
+  transform: translateY(-2px); /* Efeito sutil de "levantar" */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
+}
+
+/* 3. Efeito Ativo (Ao clicar) */
+.btn-loja:active {
+  background-color: #004085; /* Azul ainda mais escuro ao clicar */
+  transform: translateY(0); /* Volta para a posição original */
+  box-shadow: none;
+}
+
+
+.perfil-barman {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+}
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----Avaliação comentario----------*/
+
+.review-carousel-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    position: relative; /* Essencial para posicionar os botões de navegação */
+    overflow: hidden; 
+    padding: 10px 0; /* Espaço para o botão não encostar na borda */
+}
+
+.review-carousel-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 16px;
+}
+
+/* 2. A Pista de Rolagem (Track) */
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Rolagem horizontal ativada */
+    scroll-snap-type: x mandatory; 
+    padding: 10px; /* Previne que o scrollbar corte o conteúdo */
+    /* Estilos para um scroll mais suave no mouse/trackpad */
+    scroll-behavior: smooth;
+    
+    /* Opcional: Esconder a barra de rolagem */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* 3. Estilo e Dimensões de Cada Card (200px + 200px) */
+.review-card {
+    /* Define a largura do card, garantindo 200px de altura para a imagem + espaço para o texto */
+    flex-shrink: 0;
+    width: 250px; 
+    align-items: center;
+    height: 290px; /* Aproximadamente 200px para imagem e 200px para conteúdo */
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    scroll-snap-align: start; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* 4. Espaço da Imagem (200px de altura) */
+.img-estrela {
+    width: 100px;
+    height: 100px; /* **Altura de 200px para a imagem** */
+    border-radius: 30px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 0.9em;
+    text-align: center;
+    padding: 10px;
+}
+/* 5. Cor das estrelas */
+.estrela-carrocel {
+  color: #EDE902;
+}
+
+
+
+/* 6. Conteúdo (Texto) do Card */
+.card-content {
+  align-items: center;
+  justify-content: center;
+    padding: 10px;
+    text-align: center;
+    flex-grow: 1; /* Permite que o texto preencha o espaço restante */
+}
+
+.rating {
+    color: red; /* Para destacar as estrelas */
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
+.client-name {
+    font-weight: bold;
+    color: #444;
+}
+
+.comment {
+    font-size: 0.80em;
+    font-style: italic;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* 7. Botões de Navegação */
+.nav-button {
+    position: absolute;
+    top: 50%; /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    font-size: 1.5em;
+    line-height: 1;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prev-button {
+    left: 0;
+    color: brown;
+}
+
+.next-button {
+    right: 0;
+  color: chartreuse;
+}
+
+
+
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*-----Styles.CSS do Pacote-------------------------*/
+
+
+.pacotes-card {
+  background-color: red;
+  width: 300px;
+  height: 400px;
+}
+
+.img-pacotes {
+  width: 300px;
+  height: 100px;
+}
+
+
+
+
+
+/*--------------------------------------*/
+/*--------------------------------------*/
+/*--------------------------------------*/
+/*--------------------------------------*/
+/*--------Buttons Imagens---------------*/
+
+#button-imgs {
+  background-color: #2E7343;
+  border: none;
+  width: 300px;
+  padding: 13px;
+  border-radius: 40px;
+}
+
+.imgbutton001 {
+  /* Esta é a regra principal: faz a imagem sumir */
+  display: none;
+  
+  /* Estilos opcionais para a imagem */
+  max-width: 100%; 
+  height: auto;
+  margin-top: 20px;
+  border: 2px solid #333;
+}
+
+/* Opcional: Adiciona um estilo para quando a imagem for exibida */
+.imagem-visivel {
+  display: block; /* Ou 'inline-block', dependendo do seu layout */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
