@@ -160,7 +160,7 @@ const conteudoElement = document.getElementById('mensagem-conteudo');
 
 // Configurações de tempo
 const tempoExibicao = 8000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
-const tempoIntervalo = 1700; // Tempo TOTAL do ciclo (1,7 segundos)
+const tempoIntervalo = 15000; // Tempo TOTAL do ciclo (1,7 segundos)
 const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (21 segundos)
 
 function showNextMessage() {
