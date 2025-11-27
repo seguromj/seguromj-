@@ -10,8 +10,8 @@
 // Defina os horários de fechamento e reabertura.
 // Use o formato de 24 horas (Ex: 14:30 para 2 e meia da tarde)
 
-const HORA_FECHAMENTO = '18:00'; // Exemplo: Fecha às 18:00 (6 da tarde)
-const HORA_REABERTURA = '23:59'; // Exemplo: Reabre às 08:00 (8 da manhã)
+const HORA_FECHAMENTO = '23:59'; // Exemplo: Fecha às 18:00 (6 da tarde)
+const HORA_REABERTURA = '08:00'; // Exemplo: Reabre às 08:00 (8 da manhã)
 // --------------------
 
 function verificarStatus() {
