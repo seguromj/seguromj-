@@ -5,13 +5,21 @@
 //-----------------------------------------
 //-----------------------------------------
 //------Status ABERTO ou FECHADO-----------
-
 // --- CONFIGURAÇÃO ---
 // Defina os horários de fechamento e reabertura.
 // Use o formato de 24 horas (Ex: 14:30 para 2 e meia da tarde)
 
-const HORA_FECHAMENTO = '23:00'; // Exemplo: Fecha às 18:00 (6 da tarde)
-const HORA_REABERTURA = '18:00'; // Exemplo: Reabre às 08:00 (8 da manhã)
+// 💡 EXEMPLO 1: FECHADO DURANTE A NOITE/MADRUGADA (Passa pela meia-noite)
+// const HORA_FECHAMENTO = '23:00'; // Fecha às 11 da noite
+// const HORA_REABERTURA = '08:00'; // Reabre às 8 da manhã
+
+// 💡 EXEMPLO 2: FECHADO AO MEIO-DIA (No mesmo dia)
+// const HORA_FECHAMENTO = '12:00'; // Fecha ao meio-dia
+// const HORA_REABERTURA = '14:00'; // Reabre às 2 da tarde
+
+// Usando suas constantes originais para demonstração
+const HORA_FECHAMENTO = '23:59'; 
+const HORA_REABERTURA = '18:00'; 
 // --------------------
 
 function verificarStatus() {
@@ -19,10 +27,10 @@ function verificarStatus() {
     const horaAtual = agora.getHours();
     const minutoAtual = agora.getMinutes();
 
-    // Converte a hora atual para um número (Ex: 15h30m vira 1530)
+    // 1. Converte a hora atual para um número (Ex: 15h30m vira 1530)
     const horaMinutoAtual = horaAtual * 100 + minutoAtual;
 
-    // Pega a hora e minuto dos horários de configuração
+    // 2. Converte os horários de configuração
     const [fechamentoHora, fechamentoMinuto] = HORA_FECHAMENTO.split(':').map(Number);
     const horaMinutoFechamento = fechamentoHora * 100 + fechamentoMinuto;
 
@@ -34,31 +42,40 @@ function verificarStatus() {
 
     let isFechado = false;
 
+    // --- LÓGICA CORRIGIDA ---
+
     if (horaMinutoFechamento > horaMinutoReabertura) {
-        // Cenário 1: Fecha e reabre no MESMO dia (Ex: 18:00 -> 22:00)
-        // Está FECHADO se a hora atual for APÓS o fechamento E ANTES da reabertura.
+        // Cenário 1: Fechamento no dia anterior e Reabertura no dia ATUAL (Ex: 23:00 -> 08:00)
+        // O período de fechamento atravessa a meia-noite.
+        // Está FECHADO se a hora atual for APÓS o fechamento OU ANTES da reabertura.
         if (horaMinutoAtual >= horaMinutoFechamento || horaMinutoAtual < horaMinutoReabertura) {
             isFechado = true;
         }
+
     } else {
-        // Cenário 2: Fecha em um dia e reabre no dia SEGUINTE (Ex: 18:00 -> 08:00)
-        // Está FECHADO se a hora atual for APÓS o fechamento OU ANTES da reabertura.
+        // Cenário 2: Fechamento e Reabertura no MESMO dia (Ex: 12:00 -> 14:00)
+        // O período de fechamento está contido no dia.
+        // Está FECHADO se a hora atual for MAIOR OU IGUAL ao fechamento E MENOR que a reabertura.
         if (horaMinutoAtual >= horaMinutoFechamento && horaMinutoAtual < horaMinutoReabertura) {
             isFechado = true;
         }
     }
 
+    // --- APLICAÇÃO DO ESTADO ---
+
     if (isFechado) {
-        // Mudar para FECHADO
         container.classList.remove('aberto');
         container.classList.add('fechado');
         texto.textContent = 'FECHADO';
+        // O texto extra foi removido, mas você pode adicioná-lo de volta se quiser!
     } else {
-        // Mudar para ABERTO
         container.classList.remove('fechado');
         container.classList.add('aberto');
         texto.textContent = 'ABERTO';
     }
+    
+    // Opcional: Mostra a hora atual no console para debug
+    console.log(`Hora atual: ${horaMinutoAtual}. Status: ${isFechado ? 'FECHADO' : 'ABERTO'}`);
 }
 
 // Executa a função imediatamente ao carregar
@@ -66,6 +83,8 @@ verificarStatus();
 
 // Configura para verificar o status a cada minuto (60000 milissegundos)
 setInterval(verificarStatus, 60000);
+
+
 
 
 //-----------------------------------------
