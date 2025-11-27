@@ -159,8 +159,8 @@ const boxElement = document.getElementById('atencao-box');
 const conteudoElement = document.getElementById('mensagem-conteudo');
 
 // Configurações de tempo
-const tempoExibicao = 8000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
-const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (1,7 segundos)
+const tempoExibicao = 9000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
+const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (20 segundos)
 const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (21 segundos)
 
 function showNextMessage() {
@@ -187,7 +187,7 @@ function showNextMessage() {
 }
 
 // Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
-setTimeout(showNextMessage, 3000); 
+setTimeout(showNextMessage, 2000); 
 
 
 
