@@ -253,7 +253,7 @@ body {
     display: flex; 
     align-items: center; 
     /* Removido justify-content: space-between; */
-    width: 340px;
+    width: 320px;
     height: 80px;
     background-color: #123D14;
     color: white;
