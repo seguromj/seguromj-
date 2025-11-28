@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verificador de CEP e Área de Atendimento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Define a fonte Inter (padrão) e aplica um fundo legal */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f7fafc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .botao-link-padrao {
+        /* Layout e Largura */
+        display: inline-block; /* Comporta-se como bloco, mas em linha */
+        text-align: center;
+        width: 100%;
+        max-width: 320px; /* Equivalente a max-w-xs */
+
+        /* Cores e Fundo (Gray 200) */
+        background-color: rgb(229 231 235); /* bg-gray-200 */
+        color: rgb(55 65 81); /* text-gray-700 */
+
+        /* Espaçamento e Borda */
+        padding: 1rem; /* p-4 */
+        border-radius: 0.75rem; /* rounded-xl */
+
+        /* Fonte e Sombra */
+        font-weight: 700; /* font-bold */
+        font-size: 1.125rem; /* text-lg */
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+
+        /* Transições (para efeitos de hover) */
+        transition-property: all; /* transition */
+        transition-duration: 300ms; /* duration-300 */
+        transition-timing-function: cubic-bezier(
+          0.4,
+          0,
+          0.2,
+          1
+        ); /* ease-in-out */
+      }
+
+      /* Estilos de Interação (Hover e Active) */
+      .botao-link-padrao:hover {
+        background-color: rgb(209 213 219); /* hover:bg-gray-300 */
+      }
+
+      .botao-link-padrao:active {
+        transform: scale(0.95); /* active:scale-95 */
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100"
+    >
+      <h1 class="text-3xl font-extrabold text-indigo-700 mb-3 text-center">
+        📍 Onde você está? 📍
+      </h1>
+      <p class="text-gray-600 mb-6 text-center">
+        Digite seu CEP para verificar a área de atendimento e possíveis ofertas.
+      </p>
+
+      <div class="space-y-4">
+        <input
+          id="inputCep"
+          type="text"
+          placeholder="Ex: 75000-000"
+          maxlength="9"
+          class="w-full p-3 border-2 border-indigo-300 rounded-xl focus:border-indigo-500 focus:ring-indigo-500 outline-none transition duration-150 text-center text-lg font-mono"
+          oninput="formatarCEP(this)"
+        />
+        <button
+          id="botaoVerificar"
+          onclick="verificarCEP()"
+          class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold text-lg hover:bg-indigo-700 transition duration-300 shadow-md shadow-indigo-300 active:scale-95 disabled:bg-indigo-400"
+        >
+          Verificar Atendimento
+        </button>
+      </div>
+
+      <div
+        id="mensagemResultado"
+        class="mt-8 p-5 min-h-[120px] bg-indigo-50 border-l-4 border-indigo-500 rounded-lg text-gray-800 transition-all duration-500 flex items-center justify-center text-center text-base font-semibold"
+      >
+        <p>Sua mensagem de resultado aparecerá aqui.</p>
+      </div>
+
+      <div id="indicadorCarregamento" class="hidden mt-4 text-center">
+        <svg
+          class="animate-spin h-5 w-5 text-indigo-600 mx-auto"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        <p class="text-sm text-indigo-600 mt-2">Buscando endereço...</p>
+      </div>
+
+      <br /><br />
+      <!-- O link "Confirmar" é ocultado por padrão e só é exibido se o CEP for atendido -->
+      <a id="linkConfirmar" class="botao-link-padrao hidden" href="loja.html">
+        Confirmar
+      </a>
+    </div>
+
+    <script>
+      // Função para formatar o CEP (adiciona o hífen)
+      function formatarCEP(input) {
+        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+        if (valor.length > 5) {
+          valor = valor.substring(0, 5) + '-' + valor.substring(5, 8);
+        }
+        input.value = valor;
+      }
+
+      // Variável para evitar múltiplos cliques enquanto busca a API
+      let estaBuscando = false;
+
+      async function verificarCEP() {
+        if (estaBuscando) return;
+
+        const inputCep = document.getElementById('inputCep');
+        const mensagemResultado = document.getElementById('mensagemResultado');
+        const indicadorCarregamento = document.getElementById('indicadorCarregamento');
+        const botaoVerificar = document.getElementById('botaoVerificar');
+        const linkConfirmar = document.getElementById('linkConfirmar');
+
+        const cep = inputCep.value.replace(/\D/g, ''); // Limpa o CEP (somente dígitos)
+
+        // 0. Esconde o link de confirmação no início de cada busca
+        linkConfirmar.classList.add('hidden');
+
+        // 1. Validação básica do CEP
+        if (cep.length !== 8) {
+          mensagemResultado.innerHTML = `<p class="text-red-600">Por favor, digite um CEP válido com 8 dígitos.</p>`;
+          mensagemResultado.classList.remove('border-indigo-500', 'bg-indigo-50', 'border-green-500', 'bg-green-50');
+          mensagemResultado.classList.add('border-red-500', 'bg-red-50');
+          return;
+        }
+
+        // Configurações de UI durante a busca
+        estaBuscando = true;
+        botaoVerificar.disabled = true;
+        botaoVerificar.textContent = 'Verificando...';
+        indicadorCarregamento.classList.remove('hidden');
+        mensagemResultado.classList.remove('border-indigo-500', 'bg-indigo-50', 'border-red-500', 'bg-red-50', 'border-green-500', 'bg-green-50');
+        mensagemResultado.innerHTML = `<p class="text-gray-500">Buscando informações do endereço...</p>`;
+
+        // Lógica de backoff para a API (Tenta 3 vezes em caso de falha de conexão)
+        const maxTentativas = 3;
+        let tentativaAtual = 0;
+        let dadosApi = null;
+        let isConnectionError = false; // Flag para diferenciar erro de conexão de CEP não encontrado
+
+        while (tentativaAtual < maxTentativas) {
+          try {
+            // API ViaCEP
+            const urlApi = `https://viacep.com.br/ws/${cep}/json/`;
+            const resposta = await fetch(urlApi);
+
+            if (!resposta.ok) {
+              // Erro HTTP (404, 500 etc)
+              throw new Error(`Erro HTTP: ${resposta.status}`);
+            }
+
+            const dados = await resposta.json();
+
+            // ViaCEP retorna { erro: true } para CEPs que não existem, mas a conexão foi bem-sucedida.
+            if (dados.erro) {
+              dadosApi = dados; 
+              isConnectionError = false; // Não é erro de conexão
+              break;
+            }
+
+            dadosApi = dados;
+            isConnectionError = false;
+            break; // Sai do loop se a busca for bem-sucedida
+
+          } catch (erro) {
+            // Este bloco captura erros de rede/conexão (API fora do ar, CORS, etc.)
+            isConnectionError = true;
+            tentativaAtual++;
+            if (tentativaAtual < maxTentativas) {
+              // Espera (1s, 2s, 4s) antes de tentar novamente (Exponential Backoff)
+              const atraso = Math.pow(2, tentativaAtual) * 1000;
+              await new Promise(resolve => setTimeout(resolve, atraso));
+            }
+          }
+        }
+
+        // Restaura as configurações de UI
+        estaBuscando = false;
+        botaoVerificar.disabled = false;
+        botaoVerificar.textContent = 'Verificar Atendimento';
+        indicadorCarregamento.classList.add('hidden');
+
+        // 2. Processamento da Resposta
+        let mensagem = '';
+        let classesEstilo = '';
+        let canProceed = false;
+        
+
+
+
+
+        
+        // Define as cidades que recebem o tratamento de "Serviços de Barman"
+        const cidadesBarman = ['goiânia', 'pirenópolis', 'abadiânia']; // Adicione mais cidades aqui, sempre em minúsculas
+        // Adicione mais cidades aqui, sempre em minúsculas
+        // Adicione mais cidades aqui, sempre em minúsculas
+        // Adicione mais cidades aqui, sempre em minúsculas
+
+
+
+
+
+        if (isConnectionError && dadosApi === null) {
+             // Caso de falha total na conexão após todas as tentativas
+             const cepFormatado = cep.length === 8 ? `${cep.substring(0, 5)}-${cep.substring(5, 8)}` : cep;
+             mensagem = `❌ Erro de Conexão. Não foi possível buscar o CEP ${cepFormatado} após ${maxTentativas} tentativas. Por favor, verifique sua conexão com a internet ou tente novamente mais tarde.`;
+             classesEstilo = 'border-red-500 bg-red-50 text-red-800';
+             canProceed = false;
+
+             // Exibe a mensagem de erro de conexão
+             mensagemResultado.innerHTML = `<p class="text-base text-current font-bold">${mensagem}</p>`;
+        } else {
+            // Extrai e normaliza os dados para comparação
+            const logradouro = dadosApi?.logradouro || 'Endereço não encontrado';
+            const estado = dadosApi?.uf?.toUpperCase() || '';
+            const cidade = dadosApi?.localidade?.toLowerCase() || '';
+            const bairro = dadosApi?.bairro?.toLowerCase() || ''; // Bairro em minúsculas para comparação
+
+            // Monta o endereço de forma mais amigável
+            const enderecoCompleto = `${logradouro}${dadosApi?.bairro ? ', ' + dadosApi.bairro : ''} - ${dadosApi?.localidade} / ${estado}`;
+
+            if (dadosApi.erro || cidade === '' || estado === '') {
+              // Caso a API retorne erro (CEP inexistente/dados vazios).
+              // Isso inclui o CEP geral de cidade que muitas vezes não retorna o nome da cidade.
+              const cepFormatado = cep.length === 8 ? `${cep.substring(0, 5)}-${cep.substring(5, 8)}` : cep;
+
+              mensagem = `😔 Sentimos muito, mas o CEP ${cepFormatado} está fora da nossa área de entrega ou não existe. 
+                          Se você está em uma cidade atendida, tente digitar um CEP mais específico (de uma rua, não o CEP geral).
+                          🥰 O convite está de pé: dê uma olhada no nosso site e planeje uma visita a Anápolis-GO!
+                          Teremos o prazer de preparar um drink exclusivo para você saborear conosco.`;
+              classesEstilo = 'border-red-500 bg-red-50 text-red-800';
+              canProceed = false;
+            } else if (cidadesBarman.includes(cidade) && estado === 'GO') {
+              // REGRA 1: Cidades Barman (Goiânia, Pirenópolis, Abadiânia)
+              mensagem = `🍹Atendemos a região de ${dadosApi.localidade} (GO) para serviços de Barman
+               em Festas, Aniversários, Confraternizações, etc.🍹 Confira nossos Pacotes.👇`;
+              classesEstilo = 'border-indigo-500 bg-indigo-50 text-indigo-800';
+              canProceed = true; // Permite prosseguir para ver pacotes/serviços
+            } else if (cidade === 'anápolis' && estado === 'GO') {
+              // REGRA 2: Anápolis (cidade inteira) - FRETE GRÁTIS
+              mensagem = `🥳 **Atendemos essa região**! Você pode ser elegível para **frete grátis**
+               na sua primeira compra. 
+               <br><br>
+               🍹Prossiga para ver nossos produtos!🍹`;
+              classesEstilo = 'border-green-500 bg-green-50 text-green-800';
+              canProceed = true;
+            } else {
+              // REGRA 3: Qualquer outra cidade/estado (fora da área principal)
+              mensagem = `😔 Desculpa! Não atendemos a cidade de ${dadosApi.localidade} (${estado}) no momento. Mas fique à vontade para olhar nosso site e um dia saborear nossos Drinks aqui em Anápolis-GO.`;
+              classesEstilo = 'border-red-500 bg-red-50 text-red-800';
+              canProceed = false;
+            }
+
+            // 3. Aplica a mensagem e a estilização
+            mensagemResultado.innerHTML = `
+                <div class="flex flex-col space-y-2">
+                    <p class="text-sm text-gray-700">${enderecoCompleto}</p>
+                    <hr class="border-t border-dashed border-current opacity-20"/>
+                    <p class="text-base text-current font-bold">${mensagem}</p>
+                </div>
+            `;
+        }
+
+        // Ajusta as classes para garantir um layout melhor na mensagem
+        mensagemResultado.className = `mt-8 p-5 min-h-[120px] border-l-4 rounded-lg transition-all duration-500 flex items-center justify-center text-center text-base font-semibold ${classesEstilo}`;
+
+        // 4. Controla a visibilidade do Link "Confirmar"
+        if (canProceed) {
+          linkConfirmar.classList.remove('hidden');
+        } else {
+          linkConfirmar.classList.add('hidden');
+        }
+      }
+    </script>
+  </body>
+</html>
