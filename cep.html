@@ -56,6 +56,33 @@
       .botao-link-padrao:active {
         transform: scale(0.95); /* active:scale-95 */
       }
+
+    .botao-Voltar {
+    background-color: #453ae1;
+    color: white;
+    /* Aumentei o padding para dar mais ar em cima e embaixo, e mantive o horizontal */
+    padding: 0.5rem 1.5rem; /*tamanho cima e baixo*/
+    
+    border-radius: 50px;
+    
+    
+    width: 100px; /*Mantem os lados menores*/
+    
+    /* Se quiser um limite, defina um valor realista, por exemplo: */
+    /* max-width: 250px; */ 
+
+    box-shadow: 0 5px 10px rgba(0, 10, 0, 10);
+    font-size: 20px;
+    
+    /* Propriedades para centralizar o PRÓPRIO BOTÃO (bloco) */
+    display: block;
+    margin: 0 auto;
+    
+    /* Propriedade para centralizar o TEXTO DENTRO DO BOTÃO */
+    text-align: center;
+}
+
+
     </style>
   </head>
   <body>
@@ -123,6 +150,12 @@
       <a id="linkConfirmar" class="botao-link-padrao hidden" href="loja.html">
         Confirmar
       </a>
+
+      <a class="botao-Voltar" href="index.html">
+        Voltar
+      </a>
+
+
     </div>
 
     <script>
@@ -225,7 +258,7 @@
 
 
 
-        
+
         // Define as cidades que recebem o tratamento de "Serviços de Barman"
         const cidadesBarman = ['goiânia', 'pirenópolis', 'abadiânia']; // Adicione mais cidades aqui, sempre em minúsculas
         // Adicione mais cidades aqui, sempre em minúsculas
