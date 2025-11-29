@@ -291,7 +291,7 @@ body {
     background-color: #123D14;
     color: white;
     text-decoration: none;
-    padding: 13px;
+    padding: none;
     border-radius: 50px;
     margin: 5px;
 }
