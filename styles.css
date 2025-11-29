@@ -291,7 +291,20 @@ body {
     background-color: #123D14;
     color: white;
     text-decoration: none;
-    padding: none;
+    padding: 20;
+    border-radius: 50px;
+    margin: 5px;
+}
+.bbtn-loja {
+    display: flex; 
+    align-items: center; 
+    /* Removido justify-content: space-between; */
+    width: 300px;
+    height: none;
+    background-color: #123D14;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
     border-radius: 50px;
     margin: 5px;
 }
