@@ -92,35 +92,49 @@
         background-color: red; /* hover:bg-gray-300 */
       }
 
+
+      
+    /* CSS para garantir que a dupla fique na mesma linha */
+.cep-ajuda {
+    /* Exibe os elementos filhos lado a lado */
+    display: flex; 
     
-    .botao-buscarCEP {
-      background-color: #453ae1;
-      color: white;
+    /* Alinha verticalmente no centro (opcional, mas bom) */
+    align-items: center; 
     
-    /* REMOVA: padding: 0.1rem 1.2rem; */ 
+    /* Adiciona um pequeno espaço abaixo do input */
+    margin-top: 5px; 
     
-    border-radius: 8px;
+    /* Garante que o texto comece à esquerda do contêiner */
+    width: 100%;
+}
+
+.cep-label {
+    /* Garante um pequeno espaço entre o texto e o botão */
+    margin-right: 5px; 
     
-    /* DEIXE A LARGURA E ALTURA IGUAIS para formar um círculo */
-    width: 80px; 
-    height: 20px; /* Adicione altura igual à largura */
+    /* Estilo de fonte para o texto auxiliar */
+    font-size: 0.9em; 
+}
+
+/* Estilos do botão/link para ficar como na sua imagem */
+.buscar-cep-link {
+    /* Remove sublinhado */
+    text-decoration: none; 
     
-    box-shadow: 0 5px 10px rgba(0, 10, 0, 0.2); /* Sombra mais suave */
-    font-size: 10px;
+    /* Garante que o padding funcione */
+    display: inline-block; 
     
-      /* PROPRIEDADES DE POSICIONAMENTO PARA O CANTO SUPERIOR DIREITO */
-    position: absolute;
-    top: 440px; /* Ajuste para sair um pouco para fora do topo */
-    right: 240px; /* Ajuste para sair um pouco para fora da direita */
-    z-index: 10; /* Garante que fique acima de outros elementos */
+    /* Cores e padding para o visual de "botão pequeno" */
+    background-color: #5c6bc0; /* Azul do seu botão */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+      
     
-    /* Centralização do texto (o "X") */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer; /* Adiciona cursor de clique */
-  
-    }
       
     .img-mapa {
       display: flex;
@@ -135,15 +149,10 @@
     }
     
     
-    .paragrafo-descobrir-cep {
-      font-size: 10px;
-    }
+    
 
 
-      .agrupar-cep {
-        display: flex;
-      }
-
+      
       
     </style>
   </head>
@@ -171,15 +180,13 @@
 
         <a class="botao-X" href="loja.html">
        X</a>
-    <div class="agrupar-cep">
-        <span class="paragrafo-descobrir-cep">
-          <strong>Não sei meu CEP::</strong>
-        </span>
-       </a>
-      <a class="botao-buscarCEP" href="buscarCEP.html" target="blank">
-        <strong>Buscar CEP</strong>
-      </a>
-    </div>
+
+
+<div class="cep-ajuda">
+    <span class="cep-label">Não sei meu CEP::</span>
+    <a href="#" class="buscar-cep-link">Buscar CEP</a>
+</div>
+        
 
         <button
           id="botaoVerificar"
@@ -416,6 +423,7 @@
   </body>
 
 </html>
+
 
 
 
