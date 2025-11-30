@@ -210,8 +210,70 @@ body {
 /*----Carrocel Automatico de imgs ---*/
 
 
+/* Container principal. Define a área visível do carrossel. */
+.carrossel-container {
+    width: 100%; /* Largura total da tela ou do seu elemento pai */
+  max-width: 500px; /* Limite de largura para melhor visualização, ajuste conforme necessário */
+    margin: 30px auto; /* Centraliza o carrossel na página */
+    overflow: hidden; /* **Oculta as imagens que estão fora da área visível** */
+    white-space: nowrap; /* Impede que os itens quebrem para a linha de baixo */
+  
+}
+
+/* Faixa que contém todas as imagens. Será animada para criar o movimento. */
+.carrossel-faixa {
+    display: flex; /* Coloca os itens lado a lado */
+    animation: rolar 8s linear infinite; /* Aplica a velocidade e animação de rolagem */
+    /* Tempo de animação: 16s é apenas um exemplo. Ajuste para a velocidade desejada.
+       `linear`: mantém a velocidade constante.
+       `infinite`: repete a animação indefinidamente. */
+}
 
 
+
+
+/* Container de cada imagem */
+.item-carrossel {
+    /* O item deve ter `flex-shrink: 0` para não encolher na faixa flexível */
+    flex-shrink: 0;
+    margin: 0 10px; /* Espaçamento entre as imagens */
+}
+
+/* Estilização da imagem (60x60 e redonda) */
+.item-carrossel img {
+    width: 60px; /* Largura definida */
+    height: 60px; /* Altura definida */
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 50%; /* **Torna a imagem perfeitamente redonda** */
+    border: 2px solid #ccc; /* Borda simples para destacar */
+    display: block;
+    border: none;
+}
+
+
+
+
+/* Keyframes para a animação. Controla o movimento horizontal da faixa. */
+@keyframes rolar {
+    0% {
+        /* Posição inicial: 0% de deslocamento horizontal */
+        transform: translateX(0);
+    }
+    100% {
+        /* Posição final: Move a faixa 50% para a esquerda.
+           Como os itens foram duplicados no HTML, -50% garante que o loop volte
+           ao início da segunda cópia, dando a ilusão de infinito. */
+        transform: translateX(-560px); /*Ajuste o valor do px pqra ter a rotação infinita do carrocel sem salto ou pulo*/
+    }
+}
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*------------style loja-------------*/
+/* Estilo Básico do Botão (Obrigatório para parecer um botão) */
 
 .PRODUTOS {
   font-family: Georgia, "Times New Roman", serif;
@@ -312,71 +374,6 @@ body {
 
 /*----------------------------------*/
 
-
-/* Container principal. Define a área visível do carrossel. */
-.carrossel-container {
-    width: 100%; /* Largura total da tela ou do seu elemento pai */
-    max-width: 500px; /* Limite de largura para melhor visualização, ajuste conforme necessário */
-    margin: 30px auto; /* Centraliza o carrossel na página */
-    overflow: hidden; /* **Oculta as imagens que estão fora da área visível** */
-    white-space: nowrap; /* Impede que os itens quebrem para a linha de baixo */
-  
-}
-
-/* Faixa que contém todas as imagens. Será animada para criar o movimento. */
-.carrossel-faixa {
-    display: flex; /* Coloca os itens lado a lado */
-    animation: rolar 8s linear infinite; /* Aplica a velocidade e animação de rolagem */
-    /* Tempo de animação: 16s é apenas um exemplo. Ajuste para a velocidade desejada.
-       `linear`: mantém a velocidade constante.
-       `infinite`: repete a animação indefinidamente. */
-}
-
-
-
-
-/* Container de cada imagem */
-.item-carrossel {
-    /* O item deve ter `flex-shrink: 0` para não encolher na faixa flexível */
-    flex-shrink: 0;
-    margin: 0 10px; /* Espaçamento entre as imagens */
-}
-
-/* Estilização da imagem (60x60 e redonda) */
-.item-carrossel img {
-    width: 60px; /* Largura definida */
-    height: 60px; /* Altura definida */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
-    border-radius: 50%; /* **Torna a imagem perfeitamente redonda** */
-    border: 2px solid #ccc; /* Borda simples para destacar */
-    display: block;
-    border: none;
-}
-
-
-
-
-/* Keyframes para a animação. Controla o movimento horizontal da faixa. */
-@keyframes rolar {
-    0% {
-        /* Posição inicial: 0% de deslocamento horizontal */
-        transform: translateX(0);
-    }
-    100% {
-        /* Posição final: Move a faixa 50% para a esquerda.
-           Como os itens foram duplicados no HTML, -50% garante que o loop volte
-           ao início da segunda cópia, dando a ilusão de infinito. */
-        transform: translateX(-560px); /*Ajuste o valor do px pqra ter a rotação infinita do carrocel sem salto ou pulo*/
-    }
-}
-
-/*-----------------------------------*/
-/*-----------------------------------*/
-/*-----------------------------------*/
-/*-----------------------------------*/
-/*-----------------------------------*/
-/*------------style loja-------------*/
-/* Estilo Básico do Botão (Obrigatório para parecer um botão) */
 
 .container-loja {
   display: flex;
