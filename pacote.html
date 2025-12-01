@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUANCE - Experiências Premium</title>
+    
+    <style>
+        /* Variáveis de Cores */
+        :root {
+            --color-primary: #005645; /* Verde da Marca */
+            --color-secondary: #DAA520; /* Dourado Metálico */
+            --color-text-light: #f4f4f4;
+            --color-text-dark: #1a1a1a;
+            --color-background: #1e1e1e; /* Fundo Dark Mode Suave */
+            --color-card-bg: rgba(255, 255, 255, 0.05); /* Vidro Fosco */
+            --color-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Estilos Gerais */
+        body {
+            /* Fontes: Substitua por 'Montserrat', 'Playfair Display' se usar Google Fonts */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: var(--color-background);
+            background-image: radial-gradient(circle, #2a2a2a 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--color-text-light);
+            text-align: center;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 40px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--color-secondary); 
+        }
+
+        h1 {
+            /* Use 'Playfair Display' se estiver disponível */
+            font-family: Georgia, serif; 
+            font-size: 4em;
+            font-weight: 700;
+            color: var(--color-secondary);
+            letter-spacing: 8px;
+            flex-grow: 1;
+            text-align: left;
+            text-shadow: 0 0 10px rgba(218, 165, 32, 0.5); /* Brilho Dourado */
+        }
+
+
+        /* Layout dos Pacotes */
+        .packages-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .package {
+            flex-basis: 320px;
+            flex-grow: 1;
+            
+            /* EFEITO GLASSMORPHISM */
+            background-color: var(--color-card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: 15px;
+            
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+        }
+        
+        /* Efeito ao passar o mouse (Mais dramático) */
+        .package:hover {
+            transform: translateY(-10px) rotateZ(0.5deg); 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+            border-color: var(--color-secondary);
+        }
+
+        /* Título do Pacote */
+        .package h2 {
+            font-size: 2em;
+            color: var(--color-secondary);
+            text-align: center;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(218, 165, 32, 0.3);
+        }
+
+        .ideal-for {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-align: center;
+            width: fit-content;
+            margin: 0 auto 15px auto;
+            text-transform: uppercase;
+        }
+
+        .description {
+            font-style: italic;
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--color-border);
+            min-height: 60px;
+        }
+
+        /* Subseções */
+        .details {
+            margin-bottom: 20px;
+        }
+
+        .details h3 {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 10px;
+            margin: 0 0 0 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .details p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin: 0;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1); /* Fundo claro sutil */
+            border-radius: 0 0 5px 5px;
+        }
+
+        /* Duração - Barra de Rodapé Destacada */
+        .duration {
+            margin-top: 30px;
+            padding: 15px;
+            background: linear-gradient(90deg, #333, #555);
+            color: var(--color-secondary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .duration p {
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: var(--color-text-light);
+        }
+
+        .duration strong {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: var(--color-secondary);
+            text-shadow: 0 0 10px var(--color-secondary);
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .packages-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .package {
+                max-width: 90%;
+            }
+            h1 {
+                font-size: 3em;
+                letter-spacing: 5px;
+            }
+        }
+  
+        .img-logo {
+             width: 120px;
+             height: 120px;
+             border-radius: 60%;
+        }
+  
+  
+        
+        
+
+  
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PACOTES</h1>
+        <div class="logo">
+          <img class="img-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrTmHVjCcRlcqqF2asUVplZEAR334n72H5vbI4cck6rQFV2LbOOS0q0c8V&s=10" alt="logo">
+             
+        </div>
+    </header>
+
+    <div class="packages-container">
+        <div class="package" id="essencial">
+            <h2>BAR ESSENCIAL</h2>
+            <p class="ideal-for">ideal</p>
+            <p class="description">Ideal para casamentos, festas de formatura e eventos corporativos que desejam elevar a experiência dos convidados.</p>
+            
+            <div class="details">
+                <h3>Cardápio</h3>
+                <p>3 drinks clássicos e 1 sem álcool</p>
+            </div>
+            
+            <div class="details">
+                <h3>Destilados</h3>
+                <p>Bebidas de linha como vodka, cachaça e rum de marcas populares.</p>
+            </div>
+            
+            <div class="details">
+                <h3>Insumos</h3>
+                <p>Frutas básicas e xaropes simples</p>
+            </div>
+
+            <div class="details">
+                <h3>Equipamentos</h3>
+                <p>Copos de acrílico</p>
+            </div>
+            
+            <div class="duration">
+                <p>duração</p>
+                <strong>4 H</strong>
+            </div>
+        </div>
+
+        <div class="package" id="premium">
+            <h2>OPEN PREMIUM</h2>
+            <p class="ideal-for">ideal</p>
+            <p class="description">Indicado para eventos de alto padrão, como casamentos luxuosos, jantares de gala e lançamentos de produtos.</p>
+            
+            <div class="details">
+                <h3>Cardápio</h3>
+                <p>4 drinks clássicos e 2 sem álcool</p>
+            </div>
+            
+            <div class="details">
+                <h3>Destilados</h3>
+                <p>Inclui destilados premium de marcas conhecidas e uma seleção mais ampla de insumos (xaropes e frutas).</p>
+            </div>
+            
+            <div class="details">
+                <h3>Insumos</h3>
+                <p>Frutas frescas, especiarias, xaropes artesanais</p>
+            </div>
+
+            <div class="details">
+                <h3>Equipamentos</h3>
+                <p>Taças e copos de vidro, valorizando a apresentação.</p>
+            </div>
+            
+            <div class="duration">
+                <p>duração</p>
+                <strong>5 H</strong>
+            </div>
+        </div>
+
+        <div class="package" id="gold">
+            <h2>NUANCE GOLD</h2>
+            <p class="ideal-for">ideal</p>
+            <p class="description">Ideal para eventos pequenos, festa na piscina, churrascos e reuniões informais que buscam uma solução prática e econômica.</p>
+            
+            <div class="details">
+                <h3>Cardápio</h3>
+                <p>3 drinks clássicos 2 autorais e 2 sem álcool</p>
+            </div>
+            
+            <div class="details">
+                <h3>Destilados</h3>
+                <p>Destilados premium, vodkas importadas, gins e whiskies de alta qualidade, licores especiais e espumantes.</p>
+            </div>
+            
+            <div class="details">
+                <h3>Insumos</h3>
+                <p>Frutas exóticas, insumos diferenciados, purês de frutas</p>
+            </div>
+
+            <div class="details">
+                <h3>Equipamentos</h3>
+                <p>Copos e taças de vidro de design, com itens de decoração diferenciados.</p>
+            </div>
+            
+            <div class="duration">
+                <p>duração</p>
+                <strong>5 H</strong>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript para Interatividade (Melhora a experiência de usuário)
+        document.addEventListener('DOMContentLoaded', () => {
+            const packages = document.querySelectorAll('.package');
+
+            packages.forEach(pkg => {
+                // Adiciona um listener para clique que mostra um alerta premium
+                pkg.addEventListener('click', () => {
+                    const packageName = pkg.querySelector('h2').textContent;
+                    const contactMessage = `✨ Elevando sua Experiência! Você escolheu o ${packageName}. Clique em "OK" para falar com um consultor NUANCE e solicitar um orçamento exclusivo!`;
+                    
+                    // Substituir por um modal ou link para WhatsApp/Formulário em um site real.
+                    alert(contactMessage); 
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
