@@ -198,7 +198,51 @@
   
         
         
+/* --- Estilos do Botão Animado --- */
+.action-button {
+    display: block;
+    width: 80%;
+    margin: 20px auto 0 auto;
+    padding: 15px 10px;
+    background-color: var(--color-secondary); /* Dourado */
+    color: var(--color-background); /* Texto escuro */
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(218, 165, 32, 0.5);
+    transition: background-color 0.3s, transform 0.3s;
+    
+    /* Aplica a Animação */
+    animation: subtle-pulse 2s infinite ease-in-out;
+}
 
+.action-button:hover {
+    background-color: #ffcc44; /* Dourado mais claro no hover */
+    transform: scale(1.05);
+}
+
+/* Definição da Animação */
+@keyframes subtle-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 10px rgba(218, 165, 32, 0.5);
+    }
+    50% {
+        transform: scale(1.02); /* Cresce sutilmente */
+        box-shadow: 0 0 20px rgba(218, 165, 32, 0.9); /* Brilho mais forte */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 10px rgba(218, 165, 32, 0.5);
+    }
+}
+
+    .link-btn {
+        text-decoration: none;
+    }
   
     </style>
 </head>
@@ -241,6 +285,13 @@
                 <p>duração</p>
                 <strong>4 H</strong>
             </div>
+            
+            <a class="link-btn" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ1eO4MtYPezU52d5NYtxUE8vTPmXEE9YIW8qemPcEma1mEvOjp3GnLec&s=10">
+           <button class="action-button">
+            Solicitar Orçamento
+            </button>
+            </a>
+            <!------------------------>
         </div>
 
         <div class="package" id="premium">
@@ -272,8 +323,15 @@
                 <p>duração</p>
                 <strong>5 H</strong>
             </div>
+            
+            <a class="link-btn" href="#">
+            <button class="action-button">
+            Solicitar Orçamento
+            </button>
+            </a>
         </div>
-
+        <!------------------------------------>
+        
         <div class="package" id="gold">
             <h2>NUANCE GOLD</h2>
             <p class="ideal-for">ideal</p>
@@ -303,6 +361,13 @@
                 <p>duração</p>
                 <strong>5 H</strong>
             </div>
+            
+             <a class="link-btn" href="#">
+            <button class="action-button">
+            Solicitar Orçamento
+            </button>
+            </a>
+            <!------------------------>
         </div>
     </div>
     
