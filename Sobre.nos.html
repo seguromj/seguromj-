@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuance Barman | A Arte Exclusiva da Coquetelaria</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variáveis CSS para um tema escuro e sofisticado */
+        :root {
+            --dark-background: #1C1C1C; /* Fundo principal chique e escuro */
+            --dark-text: #FFFFFF; /* Texto principal claro */
+            --accent-gold: #D4AF37; /* Toque de dourado para luxo */
+            --green-subtle: #008080; /* Teal/Verde Esmeralda Sutil */
+            --neutral-light: #F0F0F0;
+        }
+
+        /* Reset Básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: var(--dark-background);
+            color: var(--dark-text);
+        }
+
+        /* Cabeçalho de Impacto (Minimalista) */
+        .header {
+            background-color: var(--dark-background);
+            color: var(--dark-text);
+            padding: 80px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-weight: 300;
+            margin-top: 10px;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            color: var(--neutral-light);
+        }
+        
+        /* Seção Principal */
+        .main-content {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 30px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 2.5em;
+            color: var(--accent-gold);
+            margin-bottom: 50px;
+            position: relative;
+            text-transform: uppercase;
+        }
+        
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 2px;
+            background-color: var(--green-subtle);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Destaque Exclusivo (Anápolis/Nós 2) */
+        .exclusive-focus {
+            background-color: #282828; 
+            padding: 30px;
+            border-radius: 5px;
+            margin-bottom: 50px;
+            border-left: 5px solid var(--accent-gold);
+            text-align: center;
+        }
+        
+        .exclusive-focus h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--green-subtle);
+        }
+
+        .barman-duo {
+            font-style: italic;
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: var(--neutral-light);
+        }
+
+        /* Sessão de Serviço (Grid de Atendimento) */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: #282828;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 30px;
+            border-radius: 5px;
+            transition: background-color 0.3s, border-color 0.3s;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            background-color: #333333;
+            border-color: var(--accent-gold);
+        }
+
+        .service-card .icon {
+            font-size: 2.5em;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--green-subtle);
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        
+        /* Rodapé Elegante */
+        .footer {
+            background-color: var(--dark-background);
+            color: var(--neutral-light);
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
+        }
+        
+        /* Botão Destaque (Vendas em Feiras) */
+        .cta-anapolis {
+            display: inline-block;
+            background-color: var(--green-subtle);
+            color: var(--dark-text);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .cta-anapolis:hover {
+            background-color: var(--accent-gold);
+        }
+    .strong {
+        color: var(--green-subtle);
+    }
+    
+    .logo-sobre-nos{
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <img class="logo-sobre-nos" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrTmHVjCcRlcqqF2asUVplZEAR334n72H5vbI4cck6rQFV2LbOOS0q0c8V&s=10" alt="logo">
+        <h1>ANÁPOLIS</h1>
+    </header>
+
+    <main class="main-content">
+        
+        <div class="exclusive-focus">
+            <span class="icon">🥂</span>
+            <h2>Serviço Barman Exclusivo</h2>
+            <p>A Nuance é formada por <strong class="strong">dois bartenders</strong>, garantindo um serviço de Barman <strong class="strong">íntimo, exclusivo e de altíssima qualidade</strong>, para o seu evento. Focamos na arte e na perfeição de cada drink.</p>
+            <p class="barman-duo">Sua festa merece a atenção e o talento de um duo especializado.</p>
+        </div>
+        
+        <h2 class="section-title">Onde Nos Encontrar</h2>
+        
+
+        <div class="service-grid">
+            
+            <div class="service-card">
+                <div class="icon">🍾</div>
+                <h3>Eventos Privados</h3>
+                <p>Contrate o Duo Nuance para casamentos, formaturas e festas corporativas. Levamos a experiência de Barman completa para as seguintes regiões:</p>
+                <ul style="list-style: none; padding: 10px 0; font-size: 0.9em; color: var(--neutral-light);">
+                    <li>**Anápolis** (Disponibilidade Total)</li>
+                    <li>Goiânia</li>
+                    <li>Pirenópolis</li>
+                    <li>Caldas Novas</li>
+                    <li>Bahia (Projetos Especiais)</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">📍</div>
+                <h3>Onde estamos: (Feiras de Anápolis)</h3>
+                <p>Para o público individual, vendemos nossos drinks exclusivos e coquetéis de autor nas principais feiras da região de Anápolis. Siga nossas redes e descubra onde estaremos:</p>
+                
+                <a href="https://maps.app.goo.gl/GaYpSwaNT27nYtwV7" class="cta-anapolis">Terça-Feira</a>
+                <a href="https://maps.app.goo.gl/GaYpSwaNT27nYtwV7" class="cta-anapolis">Quarta-Feira</a>
+             
+                <p style="margin-top: 15px; font-size: 0.8em;">**A coquetelaria acessível em seu ponto de encontro favorito.**</p>
+            </div>
+            
+        </div>
+        
+    </main>
+
+    <footer class="footer" id="contato">
+        <p>Nuance Barman. A elegância está no detalhe. <br>Orçamentos Exclusivos: Entre em contato!</p>
+        <p>© 2025 Nuance. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
