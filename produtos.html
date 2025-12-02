@@ -228,6 +228,90 @@
             flex-direction: column;
             padding: 40px 20px; 
         }
+
+/*----------------------------------------*/  
+/*----------------------------------------*/
+/*----__Card com Botões de Opições__------*/
+    
+.card-produto {
+    position: relative; /* ESSENCIAL para o dropdown se posicionar corretamente */
+    /* ... mantenha suas outras propriedades de cor, padding, sombra, etc. ... */
+}
+
+/* Oculta o botão 'Pedir' no card com dropdown */
+.card-produto .dropdown-sabor + .botao-comprar {
+    display: none; 
+}
+
+
+/* --- ESTILOS DO DROPDOWN (POSICIONAMENTO E CORES) --- */
+
+.dropdown-sabor {
+    /* Define o posicionamento do botão 'SABORES' no final do card */
+    width: calc(100% - 30px); 
+    left: 15px;
+    bottom: 15px; /* FIXA O BOTÃO NA PARTE INFERIOR DO CARD */
+    z-index: 10;
+    position: absolute; 
+}
+
+.botao-sabores {
+    background-color: #FF5722; 
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.seta {
+    margin-left: 10px;
+    font-size: 0.8em;
+}
+
+/* Conteúdo dos Sabores: A LISTA QUE SE EXPANDDE */
+.conteudo-sabores {
+    display: none; /* ESCONDIDO por padrão */
+    position: relative; 
+    width: 100%; 
+    /* Faz a lista aparecer PARA CIMA do botão "SABORES" */
+    margin-top: -100%; 
+    padding-bottom: 40px; /* Garante que haja espaço entre o menu e o próximo card */
+    z-index: 100; 
+}
+
+/* Botões de Sabor Individuais */
+.conteudo-sabores .sabor-btn {
+    background-color: #FF5722; 
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    width: 100%; 
+    margin-bottom: 5px; 
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+/* Classe que o JavaScript adiciona para MOSTRAR o conteúdo */
+.show {
+    display: block;
+}
+/*------------------------*/
+/*------------------------*/
+/*------------------------*/
+
     </style>
 </head>
 <body>
@@ -256,6 +340,56 @@
     <section id="sessao1" class="secao secao-catalogo">
         <h2 class="titulo-secao-original">🍸 Drinks com Álcool</h2>
         <div class="container-produtos">
+
+<!------------------------------------>
+<!------------------------------------>
+<!------------------------------------>
+<!---__Card com Botões de Opições__--->         
+            
+<div class="card-produto">
+    <img src="https://via.placeholder.com/80/FF5722/FFFFFF?text=D1" alt="Mojito Clássico" class="imagem-produto">
+    <span class="nome-produto">Mojito Clássico</span> 
+  <div class="detalhes-preco">
+        <span class="preco-antigo">R$ 25,00</span>
+        <div class="linha-preco">
+            <span class="preco-real">R$ 22,90</span>
+            <span class="volume">350ml</span>
+        </div>
+    </div>
+    <div class="divisor"></div>
+    
+    <div class="dropdown-sabor">
+        <button onclick="toggleDropdown('mojitoSabores')" class="botao-sabores">
+            SABORES <span class="seta"></span>
+        </button>
+        
+        <div id="mojitoSabores" class="conteudo-sabores">
+            
+            <a href="https://miro.medium.com/v2/0*ItQ3dyEqSVCXQRs8.jpg">
+            <button class="sabor-btn">Limão (Tradicional)</button>
+            </a>
+            
+            <a href="https://miro.medium.com/v2/0*ItQ3dyEqSVCXQRs8.jpg">
+                <button class="sabor-btn">Morango</button>
+            </a>
+            
+            <a href="https://miro.medium.com/v2/0*ItQ3dyEqSVCXQRs8.jpg">
+            <button class="sabor-btn">Coco</button>
+            </a>
+            
+            <a href="https://miro.medium.com/v2/0*ItQ3dyEqSVCXQRs8.jpg">
+            <button class="sabor-btn">Manga</button>
+            </a>
+            
+            <a href="https://miro.medium.com/v2/0*ItQ3dyEqSVCXQRs8.jpg">
+            <button class="sabor-btn">Uva</button>
+            </a>
+        </div>
+   </div>
+</div>
+<!------------------------------------>
+<!------------------------------------>
+<!------------------------------------>  
             
             <div class="card-produto">
                 <img src="https://via.placeholder.com/80/FF5722/FFFFFF?text=D1" alt="Mojito Clássico" class="imagem-produto">
@@ -531,6 +665,60 @@
     <hr class="divisor-catalogo">
 
     <script>
+
+        
+//--------------------------------------------------
+//--------------------------------------------------
+//--------------------------------------------------
+//----__Card com Botões de Opições__----------------
+        
+// Pega o container que permite o arrasto (deve ter id="containerScroll" na DIV do catálogo)
+const containerScroll = document.getElementById('containerScroll');
+
+// 1. Função para fechar TODOS os dropdowns abertos
+function fecharTodosDropdowns() {
+    var dropdowns = document.getElementsByClassName("conteudo-sabores");
+    for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+        }
+    }
+}
+
+// 2. FUNÇÃO QUE FECHA AO ARRASTAR/ROLAR O CATÁLOGO
+// O evento 'scroll' dispara ao arrastar para o lado!
+if (containerScroll) {
+    containerScroll.addEventListener('scroll', fecharTodosDropdowns);
+}
+
+// 3. Função para abrir/fechar ao clicar no botão 'SABORES'
+function toggleDropdown(id) {
+    var isCurrentlyOpen = document.getElementById(id).classList.contains('show');
+    
+    fecharTodosDropdowns();
+    
+    if (!isCurrentlyOpen) {
+        document.getElementById(id).classList.add("show");
+    }
+}
+
+// 4. FUNÇÃO QUE FECHA AO CLICAR EM OUTRA PARTE DO SITE
+window.onclick = function(event) {
+    if (!event.target.closest('.botao-sabores') && !event.target.closest('.sabor-btn')) {
+        fecharTodosDropdowns();
+    }
+}
+
+// Placeholder (Mantenha as outras funções necessárias no seu script)
+function buscarProdutos() {
+    console.log("Busca ativada!");
+}
+//--------------------------------------------------
+//--------------------------------------------------
+//--------------------------------------------------
+//--------------------------------------------------
+        
         const MAX_TOLERANCIA = 1; 
 
         function normalizarTextoParaPalavras(texto) {
