@@ -64,11 +64,17 @@
             content: " *";
             color: red;
         }
+
+        .tetx-alternado{
+            font-size: 8px
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Coleta de Dados</h2>
+        <h2>Coleta de Dados<br>
+        🏍️ Para Fazermos a Entrega 🏍️  
+        </h2>
         <form id="dataForm" onsubmit="enviarParaWhatsApp(event)">
             
             <div class="form-group">
@@ -97,7 +103,7 @@
             </div>
 
             <div class="form-group">
-                <label for="complemento">Complemento</label>
+                <label for="complemento">Complemento <strong class="tetx-alternado">Ex.: ⁿ⁰ Casa-00 ou Quadra-00 Lote-00</strong></label>
                 <input type="text" id="complemento">
             </div>
             
@@ -142,7 +148,7 @@
                 "Rua/Av: " + rua + "\n" +
                 "Endereço (Detalhes): " + endereco + " \n" +
                 "Complemento: " + complemento; 
-           var mensagem = 
+            
                "**Escolha mais Drinks 👉** \n\n" +
                "https://seguromj.github.io/seguromj-/"
 
