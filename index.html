@@ -125,20 +125,13 @@
     border-radius: 50%;
     
     /* DEIXE A LARGURA E ALTURA IGUAIS para formar um círculo */
-    width: 30px; 
-    height: 30px; /* Adicione altura igual à largura */
+    width: 40px; 
+    height: 40px; /* Adicione altura igual à largura */
     
     box-shadow: 0 5px 10px rgba(0, 10, 0, 0.2); /* Sombra mais suave */
     font-size: 20px;
     
-    /* Aplica a animação principal */
-    /* Propriedades:
-    1. nome-da-animacao (piscar)
-    2. duração (1s)
-    3. função de tempo (ease-in-out para um piscar suave)
-    4. contagem de repetições (infinite para piscar sem parar)
-    5. direção (alternate - opcional, garante que o piscar seja suave)
-    */
+
     animation: piscar 1s ease-in-out infinite alternate;
 }
 
@@ -155,7 +148,7 @@
     /* Ponto intermediário (50% do ciclo de animação) */
     50% {
         background-color: #000000; /* Preto */
-        opacity: 0.7; /* Ligeiramente transparente para dar efeito de "piscar" */
+        opacity: 0.7; /* Ligeiramente lensparente para dar efeito de "piscar" */
     }
 
     /* Estado final (100% do ciclo de animação) */
@@ -440,6 +433,7 @@
   </body>
 
 </html>
+
 
 
 
