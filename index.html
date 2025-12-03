@@ -120,8 +120,8 @@
     background-color: #453ae1;
     color: red;
     border-radius: 50%;
-    width: 40px; 
-    height: 40px; 
+    width: 30px; 
+    height: 30px; 
     box-shadow: 0 5px 10px rgba(0, 10, 0, 0.2); /* Sombra mais suave */
     font-size: 20px;
 
@@ -131,6 +131,13 @@
     right: 20px; /* Ajuste para sair um pouco para fora da direita */
     z-index: 10; /* Garante que fique acima de outros elementos */
     animation: piscar 1s ease-in-out infinite alternate;
+
+    
+    /* Centralização do texto (o "X") */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Adiciona cursor de clique */
 }
 
 /* Define a animação "piscar" usando keyframes 
@@ -431,6 +438,7 @@
   </body>
 
 </html>
+
 
 
 
