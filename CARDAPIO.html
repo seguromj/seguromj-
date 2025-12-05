@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍹CARDÁPIO🍹</title>
+    <style>
+        /* ==================== */
+        /* === CSS (Estilos) === */
+        /* ==================== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Cabeçalho (Lealte Bonito) */
+        header {
+            background: linear-gradient(90deg, #ff6b6b, #ee5253);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #4A148C, #00A6FB, #1DE9B6, #D4E157, #FFAB40);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            margin-top: 5px;
+            font-size: 1.1em;
+        }
+        
+        /* Campo de Pesquisa */
+        .search-container {
+            width: 50%;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 1px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 9px 10px 12px 50px;
+            border: 2px solid #ff6b6b;
+            border-radius: 25px;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: border-color 0.3s;
+            background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b6b" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>') no-repeat 10px center;
+            background-size: 30px;
+        }
+
+        #search-input:focus {
+            border-color: #ee5253;
+        }
+
+        /* Conteúdo Principal */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.9rem;
+            margin-bottom: 10px;
+            color: #175727;
+        }
+        
+        /* Mensagem de Sem Resultados */
+        #no-results {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin: 50px 0;
+            display: none;
+        }
+        
+        /* Título do Carrossel de Resultados */
+        #search-results-title {
+            display: none; /* Escondido por padrão */
+        }
+        
+        /* === ESTILO: CARROSSEL HORIZONTAL (Product Grid) === */
+        .product-grid {
+            display: flex; 
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            padding: 10px 20px 25px 20px; 
+            gap: 20px; 
+            margin-bottom: 30px; /* Espaço entre as grades */
+        }
+
+        /* Esconder barra de rolagem (Chrome, Safari) */
+        .product-grid::-webkit-scrollbar {
+            height: 8px;
+            background-color: #f1f1f1;
+        }
+        .product-grid::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+        .product-grid {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        /* Cards de Produtos */
+        .card {
+            min-width: 250px; 
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            scroll-snap-align: start; 
+            flex-shrink: 0; 
+            overflow: hidden; 
+        }
+        
+        /* O card no carrossel de busca pode ter um estilo um pouco diferente */
+        #search-results-carousel .card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Destaque leve */
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h3 {
+            color: #ee5253;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+
+        .card span {
+            display: block;
+            font-size: 1.4em;
+            color: #4CAF50;
+            margin: 8px 0;
+            font-weight: bold;
+        }
+
+        /* Botões */
+        .btn-add {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-add:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilos do Carrinho (Sem alterações) */
+        #carrinho-flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #00bcd4;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); display: none; z-index: 1000; transition: background-color 0.3s;}
+        
+         #carrinho-flutuante:hover { background-color: #00bcd4;}
+        
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {   /*Card dentro do carrinho*/
+            background-color: #51A6A5;
+            margin: 15% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+    }
+       .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold;}
+        
+       .close-btn:hover, .close-btn:focus { color: #000; text-decoration: none; cursor: pointer; }
+        
+        #lista-carrinho { list-style: none; padding: 0; }
+    
+        #lista-carrinho li { padding: 10px 0; border-bottom: 1px dashed #eee; display: flex; justify-content: space-between; align-items: center;}
+    
+        #lista-carrinho li:last-child { border-bottom: none; }
+    
+        .btn-whatsapp { background-color: #25D366; color: white; border: none; padding: 8px 15px; text-align: center; text-decoration: none; display: block; width: 250px; font-size: 18px; margin-top: 20px; cursor: pointer; border-radius: 30px; transition: background-color 0.3s;}
+        
+    .btn-whatsapp:hover { background-color: #128C7E;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🍸 NUANCE 🍸</h1>
+        <p>CARDÁPIO</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Pesquisar Drink, Copões..." onkeyup="filtrarProdutos()">
+    </div>
+    
+    <p id="no-results">Nenhum produto encontrado com o termo digitado.</p>
+
+    <div class="container">
+        
+        <h2 class="section-title" id="search-results-title"></h2>
+        <div class="product-grid" id="search-results-carousel" style="display: none;">
+            </div>
+            
+            <div id="original-sections">
+                <h2 class="section-title section-original-title" id="section-1-title">🍸 Drinks com Álcool 🍸</h2>
+                <div class="product-grid section-original-grid" id="grid-1">
+                    
+                    <div class="card" data-name="Mojito Refrescante" data-price="25.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mojito.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Mojito Refrescante</h3>
+                            <span>R$ 25,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Mojito Refrescante', 25.00 pix: www.google.com )">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Caipirinha Gourmet" data-price="20.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-caipirinha.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Caipirinha Gourmet</h3>
+                            <span>R$ 20,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Caipirinha Gourmet', 20.00)">Quero esse</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" data-name="Gin Tônica Morango" data-price="35.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-gin.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Gin Tônica Morango</h3>
+                            <span>R$ 35,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Gin Tônica Morango', 35.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Margarita Clássica" data-price="28.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-margarita.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Margarita Clássica</h3>
+                            <span>R$ 28,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Margarita Clássica', 28.00)">Quero esse</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" data-name="Cosmopolitan" data-price="30.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-cosmo.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Cosmopolitan</h3>
+                            <span>R$ 30,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Cosmopolitan', 30.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Whisky Sour" data-price="40.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-whisky.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Whisky Sour</h3>
+                            <span>R$ 40,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Whisky Sour', 40.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Aperol Spritz" data-price="25.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-aperol.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Aperol Spritz</h3>
+                            <span>R$ 25,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Aperol Spritz', 25.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Daiquiri Limão" data-price="27.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-daiquiri.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Daiquiri Limão</h3>
+                            <span>R$ 27,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Daiquiri Limão', 27.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Moscow Mule" data-price="33.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mule.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Moscow Mule</h3>
+                            <span>R$ 33,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Moscow Mule', 33.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Long Island Iced Tea" data-price="45.00" data-section="Drinks com Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-liit.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Long Island Iced Tea</h3>
+                            <span>R$ 45,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Long Island Iced Tea', 45.00)">Quero esse</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title section-original-title" id="section-2-title">🥤 Drinks Sem Álcool 🥤</h2>
+                <div class="product-grid section-original-grid" id="grid-2">
+                    
+                    <div class="card" data-name="Mojito Virgem" data-price="18.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail1.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Mojito Virgem</h3>
+                            <span>R$ 18,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Mojito Virgem', 18.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Limonada Pink" data-price="15.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail2.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Limonada Pink</h3>
+                            <span>R$ 15,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Limonada Pink', 15.00)">Quero esse</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" data-name="Soda Italiana Maçã Verde" data-price="17.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail3.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Soda Italiana Maçã Verde</h3>
+                            <span>R$ 17,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Soda Italiana Maçã Verde', 17.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Sunset Juice" data-price="19.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail4.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Sunset Juice</h3>
+                            <span>R$ 19,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Sunset Juice', 19.00)">Quero esse</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" data-name="Cranberry Cooler" data-price="16.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail5.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Cranberry Cooler</h3>
+                            <span>R$ 16,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Cranberry Cooler', 16.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Virgin Piña Colada" data-price="22.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail6.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Virgin Piña Colada</h3>
+                            <span>R$ 22,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Virgin Piña Colada', 22.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Suco Detox" data-price="18.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail7.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Suco Detox</h3>
+                            <span>R$ 18,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Suco Detox', 18.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Ice Tea da Casa" data-price="14.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail8.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Ice Tea da Casa</h3>
+                            <span>R$ 14,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Ice Tea da Casa', 14.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Tropical Punch" data-price="20.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail9.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Tropical Punch</h3>
+                            <span>R$ 20,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Tropical Punch', 20.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Ginger Ale Lemon" data-price="17.00" data-section="Drinks Sem Álcool">
+                        <div class="product-image" style="background-image: url('placeholder-mocktail10.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Ginger Ale Lemon</h3>
+                            <span>R$ 17,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Ginger Ale Lemon', 17.00)">Quero esse</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title section-original-title" id="section-3-title">🥃 Copão (500ml) 🥃</h2>
+                <div class="product-grid section-original-grid" id="grid-3">
+                    
+                    <div class="card" data-name="Copão Gin Melancia" data-price="38.00" data-section="Copão">
+                        <div class="product-image" style="background-image: url('placeholder-copao1.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Copão Gin Melancia</h3>
+                            <span>R$ 38,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Copão Gin Melancia', 38.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Copão Vodka Energético" data-price="35.00" data-section="Copão">
+                        <div class="product-image" style="background-image: url('placeholder-copao2.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Copão Vodka Energético</h3>
+                            <span>R$ 35,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Copão Vodka Energético', 35.00)">Quero esse</button>
+                        </div>
+                    </div>
+
+                    <div class="card" data-name="Copão Whisky Coca" data-price="42.00" data-section="Copão">
+                        <div class="product-image" style="background-image: url('placeholder-copao3.jpg');">Adicionar Imagem</div>
+                        <div class="card-content">
+                            <h3>Copão Whisky Coca</h3>
+                            <span>R$ 42,00</span>
+                            <button class="btn-add" onclick="adicionarAoCarrinho('Copão Whisky Coca', 42.00)">Quero esse</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    
+    <button id="carrinho-flutuante" onclick="abrirModalCarrinho()">🛒 Carrinho (0)</button>
+
+    <div id="modal-carrinho" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModalCarrinho()">&times;</span>
+        <h2>Seu Pedido</h2>
+        <ul id="lista-carrinho">
+            </ul>
+        <p>Total: <strong id="carrinho-total">R$ 0,00</strong></p>
+        <button class="btn-whatsapp" onclick="finalizarPedido()">Finalizar no WhatsApp</button>
+      </div>
+    </div>
+
+<script>
+    /* ==================== */
+    /* === JAVASCRIPT === */
+    /* ==================== */
+
+    // Variável global para armazenar os itens do carrinho
+    let carrinho = [];
+
+    // Função para adicionar um item ao carrinho
+    function adicionarAoCarrinho(nome, preco) {
+        // Verifica se o item já está no carrinho
+        const itemExistente = carrinho.find(item => item.nome === nome);
+
+        if (itemExistente) {
+            itemExistente.quantidade++;
+        } else {
+            carrinho.push({ nome, preco, quantidade: 1 });
+        }
+
+        atualizarCarrinhoFlutuante();
+        // Opcional: Feedback visual de que o item foi adicionado
+        console.log(`Adicionado: ${nome} (x${itemExistente ? itemExistente.quantidade : 1})`);
+    }
+    
+    // Função para remover um item do carrinho (simples, remove 1 unidade)
+    function removerDoCarrinho(nome) {
+        const itemIndex = carrinho.findIndex(item => item.nome === nome);
+        if (itemIndex > -1) {
+            if (carrinho[itemIndex].quantidade > 1) {
+                carrinho[itemIndex].quantidade--;
+            } else {
+                carrinho.splice(itemIndex, 1); // Remove o item se a quantidade for 1
+            }
+        }
+        atualizarModalCarrinho();
+        atualizarCarrinhoFlutuante();
+    }
+    
+    // Função para calcular o total e atualizar o botão flutuante
+    function atualizarCarrinhoFlutuante() {
+        const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+        const btnFlutuante = document.getElementById('carrinho-flutuante');
+        
+        btnFlutuante.textContent = `🛒 Carrinho (${totalItens})`;
+
+        if (totalItens > 0) {
+            btnFlutuante.style.display = 'block';
+        } else {
+            btnFlutuante.style.display = 'none';
+        }
+    }
+
+    // Função para abrir e atualizar o modal do carrinho
+    function abrirModalCarrinho() {
+        atualizarModalCarrinho();
+        document.getElementById('modal-carrinho').style.display = 'block';
+    }
+
+    // Função para fechar o modal do carrinho
+    function fecharModalCarrinho() {
+        document.getElementById('modal-carrinho').style.display = 'none';
+    }
+
+    // Função para preencher o modal com os itens do carrinho
+    function atualizarModalCarrinho() {
+        const listaCarrinho = document.getElementById('lista-carrinho');
+        const carrinhoTotalElement = document.getElementById('carrinho-total');
+        let total = 0;
+        listaCarrinho.innerHTML = ''; // Limpa a lista
+
+        carrinho.forEach(item => {
+            const subtotal = item.preco * item.quantidade;
+            total += subtotal;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${item.nome} (x${item.quantidade})</span>
+                <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                <button onclick="removerDoCarrinho('${item.nome}')" style="background: #ff6b6b; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; margin-left: 10px;">-</button>
+            `;
+            listaCarrinho.appendChild(li);
+        });
+
+        carrinhoTotalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    // Função para finalizar pedido (simulação)
+    function finalizarPedido() {
+        if (carrinho.length === 0) {
+            alert('Seu carrinho está vazio!');
+            return;
+        }
+
+        let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+        let total = 0;
+
+        carrinho.forEach(item => {
+            const subtotal = item.preco * item.quantidade;
+            total += subtotal;
+            mensagem += `* ${item.nome} (x${item.quantidade}) - R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+        });
+
+        mensagem += `\n*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}`;
+
+        // Codifica a mensagem para o link do WhatsApp
+        const numeroTelefone = "5562995679219"; // Substitua pelo seu número de WhatsApp com código do país e DDD
+        const linkWhatsapp = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(mensagem)}`;
+
+        window.open(linkWhatsapp, '_blank');
+        fecharModalCarrinho();
+    }
+    
+    // ===================================
+    // === FUNÇÃO DE PESQUISA (NOVO) ===
+    // ===================================
+
+    // Pega todos os cards de produtos para reuso
+    const todosOsCards = document.querySelectorAll('.card');
+    
+    // Elementos do DOM
+    const searchInput = document.getElementById('search-input');
+    const searchResultsTitle = document.getElementById('search-results-title');
+    const searchResultsCarousel = document.getElementById('search-results-carousel');
+    const noResultsMessage = document.getElementById('no-results');
+    const originalSections = document.getElementById('original-sections');
+
+    // Função principal de filtragem
+    function filtrarProdutos() {
+        const termo = searchInput.value.toLowerCase().trim();
+        
+        // Limpa o carrossel de resultados anterior
+        searchResultsCarousel.innerHTML = '';
+        
+        // Se o campo de pesquisa estiver vazio
+        if (termo === '') {
+            searchResultsTitle.style.display = 'none';
+            searchResultsCarousel.style.display = 'none';
+            noResultsMessage.style.display = 'none';
+            originalSections.style.display = 'block'; // Mostra as seções originais
+            return;
+        }
+
+        // Caso contrário, esconde as seções originais
+        originalSections.style.display = 'none';
+
+        let resultadosEncontrados = 0;
+        
+        // Itera sobre todos os cards
+        todosOsCards.forEach(card => {
+            const nomeProduto = card.getAttribute('data-name').toLowerCase();
+            const secaoProduto = card.getAttribute('data-section').toLowerCase();
+
+            // Verifica se o termo está no nome ou na seção
+            if (nomeProduto.includes(termo) || secaoProduto.includes(termo)) {
+                // Clona o card para o carrossel de resultados
+                const cardClonado = card.cloneNode(true);
+                searchResultsCarousel.appendChild(cardClonado);
+                resultadosEncontrados++;
+            }
+        });
+
+        // Atualiza a exibição com base nos resultados
+        if (resultadosEncontrados > 0) {
+            // Atualiza o título do carrossel de busca com a contagem
+            searchResultsTitle.innerHTML = `🔍 Resultados da Busca (${resultadosEncontrados} encontrado${resultadosEncontrados > 1 ? 's' : ''})`;
+            searchResultsTitle.style.display = 'block';
+            searchResultsCarousel.style.display = 'flex';
+            noResultsMessage.style.display = 'none';
+        } else {
+            // Se não encontrou resultados
+            searchResultsTitle.style.display = 'none';
+            searchResultsCarousel.style.display = 'none';
+            noResultsMessage.style.display = 'block';
+        }
+    }
+    
+    // Inicializa o carrinho flutuante ao carregar a página
+    window.onload = atualizarCarrinhoFlutuante;
+
+</script>
+
+</body>
+</html>
