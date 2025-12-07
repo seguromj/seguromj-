@@ -1065,19 +1065,19 @@
         // Catálogo de cupons válidos
         const cuponsValidos = {
             // CUPOM DE R$5,00 (Exemplo que ABATE o valor)
-            "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },
+            "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   // ---CINCO---
 
             // CUPOM FRETEGRATIS (NÃO ABATE o valor, apenas adiciona uma NOTA no WhatsApp)
-            "FRETEGRATIS": { 
-                type: "note", 
+            "FRETEGRATIS": {                                                                                                       // --- FRETEGRATIS ---
+                type: "note",  
                 value: 0, 
                 minPurchase: 10.00, 
                 message: "Frete Grátis a ser aplicado na finalização da entrega/balcão." 
             },
             
-            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },
-            "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }
-        };
+            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
+            "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
+        }; 
 
         // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
         function formatarTelefone(input) {
