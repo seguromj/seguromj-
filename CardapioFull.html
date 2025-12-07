@@ -580,112 +580,124 @@
     
     <p id="no-results">Nenhum produto encontrado com o termo digitado.</p>
 
-    <div class="container">
+
+
+
+
+
+
+    
+<div id="original-sections">
+    <h2 class="section-title section-original-title" id="section-1-title">🍸 Drinks com Álcool 🍸</h2>
+    
+    <div class="carousel-container">
         
-        <h2 class="section-title" id="search-results-title"></h2>
-        <div class="product-grid" id="search-results-carousel" style="display: none;">
-            </div>
+        <button class="nav-button prev" onclick="scrollCarousel('grid-1', 'prev')">
+            &#10094; </button>
+
+        <div class="product-grid section-original-grid carousel-content" id="grid-1">
             
-            <div id="original-sections">
-                <h2 class="section-title section-original-title" id="section-1-title">🍸 Drinks com Álcool 🍸</h2>
-                <div class="product-grid section-original-grid" id="grid-1">
-                    
-                    <div class="card" data-name="CaipiFrutas" data-price="9.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/caipifrutas.jpg');"></div>
-                        <div class="card-content">
-                            <h3>CaipiFrutas</h3>
-                            <div class="caipifrutas-details">
-                                <span class="price-old">R$ 11,00</span>
-                                <div class="price-row">
-                                    <span class="price-real">R$ 9,99</span>
-                                    <span class="volume">(350ml)</span>
-                                </div>
-                            </div>
-                            
-                            <div class="dropdown-container">
-                                <button class="btn-sabores" onclick="toggleDropdown('saboresCaipiFrutas')">
-                                    Selecione o Sabor
-                                </button>
-                                <div id="saboresCaipiFrutas" class="sabores-menu">
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Limão 🍋‍🟩', 9.99, this)">Limão 🍋‍🟩</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Morango 🍓', 9.99, this)">Morango 🍓</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Maracujá 🥂', 9.99, this)">Maracujá 🥂</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Abacaxi 🍍', 9.99, this)">Abacaxi 🍍</button>
-                                </div>
-                            </div>
+            <div class="card" data-name="CaipiFrutas" data-price="9.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/caipifrutas.jpg');"></div>
+                <div class="card-content">
+                    <h3>CaipiFrutas</h3>
+                    <div class="caipifrutas-details">
+                        <span class="price-old">R$ 11,00</span>
+                        <div class="price-row">
+                            <span class="price-real">R$ 9,99</span>
+                            <span class="volume">(350ml)</span>
                         </div>
                     </div>
-                    <div class="card" data-name="Mojito" data-price="14.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Mojitos.jpg');"></div>
-                        <div class="card-content">
-                            <h3>Mojito</h3>
-                            <div class="caipifrutas-details">
-                                <span class="price-old">R$ 16,99</span>
-                                <div class="price-row">
-                                    <span class="price-real">R$ 14,99</span>
-                                    <span class="volume">(350ml)</span> 
-                                </div>
-                            </div>
-                            
-                            <div class="dropdown-container">
-                                <button class="btn-sabores" onclick="toggleDropdown('saboresMojitos')">
-                                    Selecione o Sabor
-                                </button>
-                                <div id="saboresMojitos" class="sabores-menu">
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Limão 🍋‍🟩', 14.99, this)">🍋‍🟩 Limão 🍋‍🟩</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Hortelã 🌿', 14.99, this)">Hortelã 🌿</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Rum 🥂', 14.99, this)">Rum 🥂</button>
-                                    <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda 🍸', 14.99, this)">Soda 🍸</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card" data-name="Moscow Mule" data-price="19.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Moscow-mule.jpg');"></div>
-                        <div class="card-content">
-                            <h3>Moscow Mule</h3>
-                            <span>R$ 19,99</span>
-                            <button class="btn-add" onclick="adicionarAoCarrinho('Moscow Mule', 19.99, this)">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-
-                    <div class="card" data-name="Jack limoned" data-price="24,99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Jack-limoned.jpg');"></div>
-                        <div class="card-content">
-                            <h3>Jack limoned</h3>
-                            <span>R$ 24,99</span>
-                            <button class="btn-add" onclick="adicionarAoCarrinho('Jack Limoned', 24.99, this)">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    
-                    <div class="card" data-name="Joge Amado" data-price="17.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Joge-amado.jpeg');"></div>
-                        <div class="card-content">
-                            <h3>Joge Amado</h3>
-                            <span>R$ 17,99</span>
-                            <button class="btn-add" onclick="adicionarAoCarrinho('Joge Amado', 17.99, this)">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-
-                 <div class="card" data-name="Pina Colada" data-price="19.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Pina-colada.jpg');"></div>
-                        <div class="card-content">
-                            <h3>Pina Colada</h3>
-                            <span>R$ 19,99</span>
-                            <button class="btn-add" onclick="adicionarAoCarrinho('Pina Colada', 19.99, this)">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-
-                <div class="card" data-name="Pina Colada" data-price="19.99" data-section="Drinks com Álcool">
-                        <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Moscow-mule.jpg');"></div>
-                        <div class="card-content">
-                            <h3>Pina Colada</h3>
-                            <span>R$ 19,99</span>
-                            <button class="btn-add" onclick="adicionarAoCarrinho('Pina Colada', 19.99, this)">Adicionar ao Carrinho</button>
+                    <div class="dropdown-container">
+                        <button class="btn-sabores" onclick="toggleDropdown('saboresCaipiFrutas')">
+                            Selecione o Sabor
+                        </button>
+                        <div id="saboresCaipiFrutas" class="sabores-menu">
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Limão 🍋‍🟩', 9.99, this)">Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Morango 🍓', 9.99, this)">Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Maracujá 🥂', 9.99, this)">Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Abacaxi 🍍', 9.99, this)">Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div class="card" data-name="Mojito" data-price="14.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Mojitos.jpg');"></div>
+                <div class="card-content">
+                    <h3>Mojito</h3>
+                    <div class="caipifrutas-details">
+                        <span class="price-old">R$ 16,99</span>
+                        <div class="price-row">
+                            <span class="price-real">R$ 14,99</span>
+                            <span class="volume">(350ml)</span> 
+                        </div>
+                    </div>
+                    <div class="dropdown-container">
+                        <button class="btn-sabores" onclick="toggleDropdown('saboresMojitos')">
+                            Selecione o Sabor
+                        </button>
+                        <div id="saboresMojitos" class="sabores-menu">
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Limão 🍋‍🟩', 14.99, this)">🍋‍🟩 Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Hortelã 🌿', 14.99, this)">Hortelã 🌿</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Rum 🥂', 14.99, this)">Rum 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda 🍸', 14.99, this)">Soda 🍸</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" data-name="Moscow Mule" data-price="19.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Moscow-mule.jpg');"></div>
+                <div class="card-content">
+                    <h3>Moscow Mule</h3>
+                    <span>R$ 19,99</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Moscow Mule', 19.99, this)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="card" data-name="Jack limoned" data-price="24,99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Jack-limoned.jpg');"></div>
+                <div class="card-content">
+                    <h3>Jack limoned</h3>
+                    <span>R$ 24,99</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Jack Limoned', 24.99, this)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            
+            <div class="card" data-name="Joge Amado" data-price="17.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Joge-amado.jpeg');"></div>
+                <div class="card-content">
+                    <h3>Joge Amado</h3>
+                    <span>R$ 17,99</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Joge Amado', 17.99, this)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="card" data-name="Pina Colada" data-price="19.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Pina-colada.jpg');"></div>
+                <div class="card-content">
+                    <h3>Pina Colada</h3>
+                    <span>R$ 19,99</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Pina Colada', 19.99, this)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="card" data-name="Pina Colada" data-price="19.99" data-section="Drinks com Álcool">
+                <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Moscow-mule.jpg');"></div>
+                <div class="card-content">
+                    <h3>Pina Colada</h3>
+                    <span>R$ 19,99</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Pina Colada', 19.99, this)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+        
+        <button class="nav-button next" onclick="scrollCarousel('grid-1', 'next')">
+            &#10095; </button>
+        
+    </div>
+    </div>
 
 <!-------------------------------------------------------------------------------------------------------->
 <!-------------------------------------------------------------------------------------------------------->
