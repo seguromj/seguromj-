@@ -1624,31 +1624,33 @@
 
 
 
-const wrapper = document.querySelector('.cards-wrapper');
-const nextBtn = document.getElementById('next-btn');
-const prevBtn = document.getElementById('prev-btn');
+/**
+ * Rola o carrossel (product-grid) na direção especificada.
+ * @param {string} elementId - O ID da div que contém os produtos (ex: 'grid-1').
+ * @param {string} direction - A direção do scroll ('prev' para voltar, 'next' para avançar).
+ */
+function scrollCarousel(elementId, direction) {
+    const carousel = document.getElementById(elementId);
+    if (!carousel) return;
 
-// Calcule o quanto rolar. Isso pode ser ajustado.
-// Aqui, pegamos a largura do primeiro card para rolar um card por vez.
-const cardWidth = document.querySelector('.card').offsetWidth;
-const scrollAmount = cardWidth + 20; // + 20px de margem/gap, se houver
+    // Define a distância do scroll.
+    // Usamos a largura do próprio carrossel (clientWidth) para mover uma "página" de itens por vez.
+    const scrollDistance = carousel.clientWidth;
 
-nextBtn.addEventListener('click', () => {
-    // Adiciona o valor do deslocamento ao scroll horizontal atual
-    // Usamos 'smooth' para uma transição suave.
-    wrapper.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth'
-    });
-});
-
-prevBtn.addEventListener('click', () => {
-    // Subtrai o valor do deslocamento do scroll horizontal atual
-    wrapper.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth'
-    });
-});
+    if (direction === 'next') {
+        // Rola para a direita
+        carousel.scrollBy({
+            left: scrollDistance,
+            behavior: 'smooth'
+        });
+    } else if (direction === 'prev') {
+        // Rola para a esquerda
+        carousel.scrollBy({
+            left: -scrollDistance,
+            behavior: 'smooth'
+        });
+    }
+}
         
     </script>
 </body>
