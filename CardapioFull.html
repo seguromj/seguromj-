@@ -693,6 +693,78 @@
 }
 
 /*=====================================================================*/  
+
+
+/*------Mensagens de Atenção------------*/
+
+/* Estilo Base da Caixa de Atenção */
+#atencao-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px 20px; /* Mais espaço interno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    display: none; /* Começa escondido, será 'flex' quando exibido pelo JS */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    max-width: 300px;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+/* Estilo do Cabeçalho "Atenção!" - USA FLEXBOX AGORA */
+.atencao-header {
+    /* Usa Flexbox para colocar ícone e texto lado a lado */
+    display: flex;
+    align-items: center; /* Centraliza verticalmente o ícone e o texto */
+    font-size: 1em;
+    font-weight: bold;
+    color: #eb5757; /* Cor do texto de Atenção */
+    margin-bottom: 5px;
+}
+
+/* Estilo para o Checkmark Verde - REMOVIDO POSITION: ABSOLUTE */
+.atencao-checkmark {
+    width: 20px; /* Tamanho do círculo (reduzido para alinhar melhor) */
+    height: 20px;
+    margin-right: 5px; /* Espaço entre o ícone e o texto "Atenção!" */
+    /* Garante que o SVG preencha a div */
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.atencao-checkmark svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilo do Texto "Atenção!" */
+.atencao-icon {
+    color: #eb5757; /* Cor de alerta */
+}
+
+/* Estilo do Conteúdo da Mensagem */
+.atencao-body {
+    font-size: 9px;
+    color: #333;
+    line-height: 1.4;
+    /* Ajusta o alinhamento do conteúdo principal */
+    margin-top: 5px;
+    padding-left: 25px; /* Alinha o conteúdo principal com o texto "Atenção!" */
+}
+
+.atencao-body strong {
+    color: #000;
+    font-weight: 700;
+}
+
+        
 /*=====================================================================*/  
 /*====__A ml do lado dos nome para ficar meno lá na aria de copão__====*/  
         .Copao-ml {
@@ -1322,6 +1394,37 @@
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+<!--------------------------------------> 
+<!-------------------------------------->
+<!-----Mensagens de Atenção--------->
+    
+  <div id="atencao-box">
+    <div class="atencao-header">
+        <div class="atencao-checkmark">
+            <svg viewBox="0 0 52 52">
+                <circle cx="26" cy="26" r="25" fill="#4CAF50"/>
+                <path stroke="#fff" stroke-width="5" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <span class="atencao-icon">⚠️ Atenção!</span>
+    </div>
+    <div id="mensagem-conteudo" class="atencao-body">
+        </div>
+  </div>
+         
+<!--------------------------------------> 
+<!-------------------------------------->
+    
+
+    
     <script>
   
         // =======================
@@ -2093,7 +2196,89 @@ startTypingEffect();
 // Repete o efeito a cada 6 segundos
 setInterval(startTypingEffect, repeatInterval);
 
+
+
+
+
+
+
+
+
+
         
+     //-----------------------------------------
+//---__Mensagens de Atenção__--------------
+
+// 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
+const primeiraMensagem = "O Drink **Negroni** foi o mais pedido hoje!";
+
+// 2. Array com as mensagens que irão ALTERNAR
+const mensagensAlternadas = [
+    "O Drink **Manhattan** foi pedido por **5 pessoas** hoje!",
+    "A promoção do drink **'Caipirinha'** está quase ao fim!",
+    "Há **3 usuários** navegando e montando seus pedidos neste momento.",
+    "O tempo das entregas pode subir devido ao alto volume de pedidos!"
+];
+
+// Função para embaralhar um array (algoritmo Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Verifica se o usuário já visitou o site
+const isFirstVisit = localStorage.getItem('hasVisited') === null;
+localStorage.setItem('hasVisited', 'true'); // Marca a visita para a próxima vez
+
+let mensagensParaExibir = [];
+
+if (isFirstVisit) {
+    // Na primeira visita, exibe a primeira mensagem, e depois o resto embaralhado
+    mensagensParaExibir.push(primeiraMensagem);
+    mensagensParaExibir = mensagensParaExibir.concat(shuffleArray([...mensagensAlternadas]));
+} else {
+    // Em visitas subsequentes, embaralha todas as mensagens, incluindo a "Negroni"
+    mensagensParaExibir = shuffleArray([primeiraMensagem, ...mensagensAlternadas]);
+}
+
+
+let currentIndex = 0; // Índice inicial da mensagem
+const boxElement = document.getElementById('atencao-box');
+const conteudoElement = document.getElementById('mensagem-conteudo');
+
+// Configurações de tempo
+const tempoExibicao = 9000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
+const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (20 segundos)
+const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (21 segundos)
+
+function showNextMessage() {
+    // Pega a mensagem atual
+    // O array 'mensagensParaExibir' está agora com a ordem definida (ou embaralhada)
+    let message = mensagensParaExibir[currentIndex];
+
+    // Insere o conteúdo, convertendo **texto** para <strong>texto</strong> (negrito)
+    conteudoElement.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // 1. Exibe a caixa (Display ON)
+    boxElement.style.display = 'flex';
+
+    // 2. Agenda para esconder a caixa após o tempo de exibição
+    setTimeout(() => {
+        boxElement.style.display = 'none';
+
+        // 3. Agenda a próxima exibição após o tempo de espera (21 segundos)
+        setTimeout(showNextMessage, tempoEspera);
+    }, tempoExibicao);
+
+    // Atualiza o índice para a próxima mensagem (circular)
+    currentIndex = (currentIndex + 1) % mensagensParaExibir.length;
+}
+
+// Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
+setTimeout(showNextMessage, 2000);    
     </script>
 </body>
 </html>
