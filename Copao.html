@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monte Seu Copão - Pedido Rápido</title>
+    <style>
+        /* ==================== */
+        /* === ESTILOS GERAIS === */
+        /* ==================== */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #5d4a8e;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+        .btn-modal-opener {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #eee;
+            text-align: left;
+            font-size: 1em;
+            color: #333;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        .resumo-modal-text {
+            font-size: 0.9em;
+            font-weight: normal;
+            display: block;
+            color: #777;
+            margin-top: 3px;
+        }
+        
+        /* === ESTILO: VALOR TOTAL === */
+        #valor-total-display {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #ffeccf; 
+            border: 1px solid #ffbb58;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5d4a8e;
+        }
+        
+        /* === Seção de Finalização e Contador === */
+        .finalizar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px; 
+        }
+        #btn-finalizar {
+            flex-grow: 1; 
+            background-color: #25D366; 
+            color: white;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-right: 10px;
+        }
+        .contador-copao {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .btn-contador-copao {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        #quantidade-copao {
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            background-color: white;
+            text-align: center;
+            width: 30px;
+        }
+
+        /* ================= */
+        /* === ESTILOS MODAL === */
+        /* ================= */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%; 
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center; 
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: left; 
+        }
+        .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* === ESTILOS ITENS MODAL === */
+        .modal-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            text-align: left; 
+        }
+        .item-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .item-info img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        .item-nome {
+            font-size: 1em;
+            flex-grow: 1; 
+        }
+        .item-valor {
+            font-weight: bold;
+            color: #5d4a8e;
+            margin-left: 10px;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* 🔴 BOTÃO DE SELEÇÃO: VERMELHO (NÃO SELECIONADO) -> AZUL (SELECIONADO) 🔵 */
+        .btn-selecao {
+            width: 30px; 
+            height: 30px;
+            padding: 0;
+            position: relative; /* Necessário para posicionar a bolinha interna */
+            /* Cor inicial: VERMELHO */
+            border: 3px solid #dc3545; 
+            background-color: #dc3545; 
+            border-radius: 50%; 
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0; 
+            line-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        }
+        /* Cor de seleção: AZUL (Fundo do botão) */
+        .btn-selecao.selecionado {
+            background-color: #007bff; /* Fundo AZUL */
+            border-color: #007bff; /* Borda AZUL */
+        }
+        
+        /* NOVO: A BOLA BRANCA INTERNA (quando SELECIONADO) */
+        .btn-selecao.selecionado::after {
+            content: "";
+            display: block;
+            width: 14px; /* Tamanho da bola */
+            height: 14px; /* Tamanho da bola */
+            background-color: white; /* Cor da bola */
+            border-radius: 50%; /* Faz ser uma bola */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Botão de confirmação do modal (mantido azul) */
+        .modal-content button[type="button"]:last-child {
+            background-color: #007bff; 
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1.0em;
+            transition: background-color 0.2s;
+            width: auto; 
+            display: block; 
+            margin: 20px auto 0 auto;
+        }
+        .modal-content button[type="button"]:last-child:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🥃 Monte o Seu Copão!</h1>
+    
+    <form id="formCopao">
+        
+        <label>🍾 Escolha a Bebida Base (100ml):</label>
+        <button type="button" class="btn-modal-opener" data-modal="bebidaModal">
+            Selecionar Bebida
+            <span id="bebida-resumo" class="resumo-modal-text">Nenhuma Bebida Selecionada</span>
+        </button>
+        
+        <label>⚡ Escolha o Energético (Lata 350ml):</label>
+        <button type="button" class="btn-modal-opener" data-modal="energeticoModal">
+            Selecionar Energético
+            <span id="energetico-resumo" class="resumo-modal-text">Nenhum Energético Selecionado</span>
+        </button>
+
+        <label>🧊 Escolha os Gelos de Sabores:</label>
+        <button type="button" class="btn-modal-opener" data-modal="geloModal">
+            Selecionar Gelos
+            <span id="gelo-resumo" class="resumo-modal-text">Nenhum Gelo Selecionado</span>
+        </button>
+        
+        <div id="valor-total-display">
+            VALOR TOTAL: R$ 0,00
+        </div>
+        
+        <div class="finalizar-container">
+            <button type="button" id="btn-finalizar" onclick="enviarPedidoWhatsApp()">
+                Finalizar
+            </button>
+            <div class="contador-copao">
+                <button type="button" class="btn-contador-copao" onclick="alterarContagemCopao(-1)">-</button>
+                <span id="quantidade-copao">1</span>
+                <button type="button" class="btn-contador-copao" onclick="alterarContagemCopao(1)">+</button>
+            </div>
+        </div>
+        
+    </form>
+</div>
+
+<div id="bebidaModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>🍾 Bebida Base (100ml)</h2>
+            <span class="close-btn" data-modal-id="bebidaModal">&times;</span>
+        </div>
+        <div id="lista-bebidas"></div>
+        <button type="button" data-modal-id="bebidaModal" onclick="salvarSelecao('bebida')">Confirmar Bebida</button>
+    </div>
+</div>
+
+<div id="energeticoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>⚡ Energético (Lata 350ml)</h2>
+            <span class="close-btn" data-modal-id="energeticoModal">&times;</span>
+        </div>
+        <div id="lista-energeticos"></div>
+        <button type="button" data-modal-id="energeticoModal" onclick="salvarSelecao('energetico')">Confirmar Energético</button>
+    </div>
+</div>
+
+<div id="geloModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>🧊 Gelos de Sabores (Múltipla Escolha)</h2>
+            <span class="close-btn" data-modal-id="geloModal">&times;</span>
+        </div>
+        <div id="lista-gelos"></div>
+        <button type="button" data-modal-id="geloModal" onclick="salvarSelecao('gelo')">Confirmar Gelos</button>
+    </div>
+</div>
+
+
+<script>
+    // --- CONFIGURAÇÃO ---
+    const NUMERO_WHATSAPP = '5562999999999'; 
+    const VALOR_GELO_PADRAO = 3.00; 
+
+    // --- DEFINIÇÕES DOS ITENS (COM VALORES) ---
+    const itens = {
+        bebida: [
+            { id: 'pitu', nome: 'Pitu (Dose: 100ml)', valor: 8.00, img: 'https://redemix.vteximg.com.br/arquivos/ids/213055-1000-1000/7896607100174.jpg?v=638350621696500000' },
+            { id: '51', nome: '51 (Dose: 100ml)', valor: 12.00, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKKwXKFBrl9eRqUXkLpSirqtins6-1f-TePONBOhaXyx6ZhTIzkcLH0XZs&s=10' },
+            { id: 'rum_prata', nome: 'Rum Prata (Dose: 100ml)', valor: 10.00, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4AZ7_JSZPtAhZeDKfg341qErorsBPG5KeMU1QgL7XCVEv5jUY4Du8MSxV&s=10' },
+            { id: 'Vodka_Smirnoff_Red', nome: 'Vodka Red (Dose: 100ml)', valor: 12.00, img: 'https://io.convertiez.com.br/m/superpaguemenos/shop/products/images/15452/medium/vodka-smirnoff-red-998ml_122398.jpg' },
+        ],
+        energetico: [
+            { id: 'Red_Bull', nome: 'Red Bull (350ml)', valor: 15.00, img: 'https://mercantilnovaera.vtexassets.com/arquivos/ids/189028/Energetico-RED-BULL-Energy-Drink-Lata-355ml.jpg?v=637699245132670000' },
+            { id: 'Baly', nome: 'Baly Melancia (350ml)', valor: 15.00, img: 'https://mercantilnovaera.vtexassets.com/arquivos/ids/210401-800-450?v=638303178840930000&width=800&height=450&aspect=true' },
+            { id: 'Monster', nome: 'Monster Energy (350ml)', valor: 16.00, img: 'https://product-data.raiadrogasil.io/images/3465993.webp' },
+            { id: 'Extra', nome: 'Extra Power', valor: 10.00, img: 'https://www.drogariaminasbrasil.com.br/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/image/6145599a8/energetico-extra-power-473ml.jpg' },
+        ],
+        gelo: [ // Múltipla escolha
+            { id: 'Morango', nome: 'Sabor Morango', valor: VALOR_GELO_PADRAO, img: 'https://nobredo.agilecdn.com.br/272440_1.jpg' },
+            { id: 'Coco', nome: 'Sabor Água de Coco', valor: VALOR_GELO_PADRAO, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9xQElbIv3AF6CL3iHr3sln0Izjbe_7lPg1LWFfOUWcOcFNB-2dofvssZJ&s=10' },
+            { id: 'Maçã', nome: 'Sabor Maçã Verde', valor: 3.00, img: 'https://phygital-files.mercafacil.com/allshopping/uploads/produto/gelo_coco_leve_ma_a_verde_190gr_dd9ac62e-6c7a-41df-9e8d-964c34080fc5.jpg' },
+            { id: 'Maracujá', nome: 'Sabor Maracujá', valor: 3.00, img: 'https://d3gdr9n5lqb5z7.cloudfront.net/fotos/944502-28-10-2024-11-58-04-13.jpg' },
+        ]
+    };
+
+    // Objeto para armazenar as seleções ativas
+    let selecoesAtivas = {
+        bebida: { id: '', nome: 'Nenhuma', valor: 0.00 },
+        energetico: { id: '', nome: 'Nenhum', valor: 0.00 },
+        gelo: [] 
+    };
+    
+    let quantidadeCopao = 1; 
+
+    // --- FUNÇÕES DE CONTROLE DE MODAL E SELEÇÃO ---
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        renderizarLista('bebida', false);
+        renderizarLista('energetico', false);
+        renderizarLista('gelo', true);
+
+        document.querySelectorAll('.btn-modal-opener').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById(this.getAttribute('data-modal')).style.display = 'block';
+            });
+        });
+        document.querySelectorAll('.close-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById(this.getAttribute('data-modal-id')).style.display = 'none';
+            });
+        });
+
+        atualizarResumoDisplay('bebida');
+        atualizarResumoDisplay('energetico');
+        atualizarResumoDisplay('gelo');
+        atualizarValorTotalDisplay();
+    });
+
+    /**
+     * Renderiza o HTML dos itens dentro de um modal.
+     */
+    function renderizarLista(tipo, isMultiple) {
+        const lista = itens[tipo];
+        const idContainer = `lista-${tipo}s`;
+        
+        const listaHtml = lista.map(item => {
+            let classe = '';
+            
+            let selecionado;
+            if (isMultiple) {
+                selecionado = selecoesAtivas[tipo].some(sel => sel.id === item.id);
+            } else {
+                selecionado = selecoesAtivas[tipo].id === item.id;
+            }
+
+            if (selecionado) {
+                classe = 'selecionado';
+            }
+            
+            const onclickFunction = isMultiple 
+                ? `selecionarMultiplo('${tipo}', '${item.id}', '${item.nome}', ${item.valor}, this)` 
+                : `selecionarUnico('${tipo}', '${item.id}', '${item.nome}', ${item.valor})`;
+
+            const valorFormatado = item.valor > 0 ? `R$ ${item.valor.toFixed(2).replace('.', ',')}` : 'Grátis';
+
+            return `
+                <div class="modal-item">
+                    <div class="item-info">
+                        <img src="${item.img}" alt="Imagem do ${item.nome}">
+                        <span class="item-nome">${item.nome}</span>
+                    </div>
+                    <span class="item-valor">${valorFormatado}</span>
+                    <div>
+                        <button type="button" class="btn-selecao ${classe}" id="btn-${tipo}-${item.id}" onclick="${onclickFunction}">
+                            &nbsp;
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById(idContainer).innerHTML = listaHtml;
+    }
+
+    /**
+     * Lida com a seleção de itens ÚNICOS (Bebida, Energético)
+     */
+    function selecionarUnico(tipo, idSelecionado, nomeSelecionado, valorSelecionado) {
+        let jaSelecionado = selecoesAtivas[tipo].id === idSelecionado;
+        
+        // Zera todos os botões
+        itens[tipo].forEach(item => {
+            const btn = document.getElementById(`btn-${tipo}-${item.id}`);
+            if (btn) {
+                btn.classList.remove('selecionado');
+            }
+        });
+        
+        if (!jaSelecionado) {
+            // Seleciona o novo item
+            selecoesAtivas[tipo] = { id: idSelecionado, nome: nomeSelecionado, valor: valorSelecionado };
+            const btn = document.getElementById(`btn-${tipo}-${idSelecionado}`);
+            if (btn) {
+                btn.classList.add('selecionado');
+            }
+        } else {
+            // Desmarca se clicar no item já selecionado
+            selecoesAtivas[tipo] = { id: '', nome: 'Nenhum', valor: 0.00 };
+        }
+    }
+
+    /**
+     * Lida com a seleção de itens MÚLTIPLOS (Gelo)
+     */
+    function selecionarMultiplo(tipo, id, nome, valor, button) {
+        const index = selecoesAtivas[tipo].findIndex(item => item.id === id);
+        
+        if (index > -1) {
+            selecoesAtivas[tipo].splice(index, 1);
+            button.classList.remove('selecionado');
+        } else {
+            selecoesAtivas[tipo].push({ id: id, nome: nome, valor: valor });
+            button.classList.add('selecionado');
+        }
+    }
+
+    function salvarSelecao(tipo) {
+        atualizarResumoDisplay(tipo);
+        atualizarValorTotalDisplay();
+        document.getElementById(`${tipo}Modal`).style.display = 'none';
+    }
+
+    function atualizarResumoDisplay(tipo) {
+        let resumoTexto;
+        if (tipo === 'gelo') {
+            if (selecoesAtivas.gelo.length === 0) {
+                resumoTexto = 'Nenhum Gelo Selecionado';
+            } else {
+                const nomes = selecoesAtivas.gelo.map(item => item.nome.split(' ')[0]);
+                resumoTexto = nomes.length === 1 ? nomes[0] : `${nomes.length} Gelos Selecionados`;
+            }
+        } else {
+            const valor = selecoesAtivas[tipo].valor;
+            const nome = selecoesAtivas[tipo].nome;
+            if (valor > 0) {
+                 resumoTexto = `${nome} (R$ ${valor.toFixed(2).replace('.', ',')})`;
+            } else {
+                resumoTexto = nome || `Nenhuma ${tipo === 'bebida' ? 'Bebida' : 'Energético'} Selecionada`;
+            }
+        }
+        document.getElementById(`${tipo}-resumo`).textContent = resumoTexto;
+    }
+
+    // --- FUNÇÕES: CÁLCULO E WHATSAPP ---
+    
+    function calcularValorTotal() {
+        let valorUnitario = 0;
+
+        valorUnitario += selecoesAtivas.bebida.valor;
+        valorUnitario += selecoesAtivas.energetico.valor;
+
+        selecoesAtivas.gelo.forEach(gelo => {
+            valorUnitario += gelo.valor;
+        });
+
+        const valorTotalPedido = valorUnitario * quantidadeCopao;
+        return valorTotalPedido;
+    }
+
+    function atualizarValorTotalDisplay() {
+        const valorTotal = calcularValorTotal();
+        const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
+        document.getElementById('valor-total-display').textContent = `VALOR TOTAL: R$ ${valorFormatado}`;
+    }
+
+    function alterarContagemCopao(delta) {
+        let novaQuantidade = quantidadeCopao + delta;
+        
+        if (novaQuantidade < 1) {
+            novaQuantidade = 1;
+        }
+
+        quantidadeCopao = novaQuantidade;
+        document.getElementById('quantidade-copao').textContent = quantidadeCopao;
+        atualizarValorTotalDisplay();
+    }
+
+    function enviarPedidoWhatsApp() {
+        
+        const bebida = selecoesAtivas.bebida.nome || 'NÃO SELECIONADA';
+        const energetico = selecoesAtivas.energetico.nome || 'NÃO SELECIONADO';
+        const gelosFormatados = selecoesAtivas.gelo.length > 0 
+            ? selecoesAtivas.gelo.map(item => item.nome).join(' | ') 
+            : 'NÃO SELECIONADOS';
+        
+        const quantidade = quantidadeCopao;
+        const valorTotal = calcularValorTotal();
+        const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
+
+        const mensagemBase = 
+            `*🚨 NOVO PEDIDO DE COPÃO PERSONALIZADO 🚨*\n\n` +
+            `*QUANTIDADE TOTAL:* ${quantidade} Copão(ões)\n` +
+            `*VALOR TOTAL ESTIMADO:* R$ ${valorFormatado}\n\n` +
+            `*DETALHES DO COPÃO:* (Por Unidade)\n` +
+            `* Base Alcoólica:* ${bebida}\n` +
+            `* Energético:* ${energetico}\n` +
+            `* Gelos de Sabor:* ${gelosFormatados}\n\n` +
+            `_O valor final será confirmado pelo atendente._`;
+
+        const mensagemCodificada = encodeURIComponent(mensagemBase);
+        
+        const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${mensagemCodificada}`;
+        
+        window.open(urlWhatsApp, '_blank');
+        
+        alert(`Seu pedido (R$ ${valorFormatado}) está sendo enviado ao WhatsApp!`);
+    }
+</script>
+
+</body>
+</html>
