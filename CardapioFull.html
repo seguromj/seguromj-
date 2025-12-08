@@ -566,14 +566,9 @@
             margin-top: 15px;
         }
 
-
-
-
-
-
-
-
-
+/*=========================================*/
+/*=========================================*/
+/*===__Botões de seta para arrastar Produtos_====*/
 
         /* 1. Contêiner Principal */
 /* O contêiner pai deve ter 'position: relative' para que os botões possam ser posicionados 'absolute' em relação a ele. */
@@ -645,6 +640,51 @@
 .nav-button:hover {
     background-color: rgba(0, 0, 0, 0.7);
 }
+
+
+/*=========================================*/
+/*=========================================*/
+/*==_Butão Faça seu Copão==================*/
+
+               .typing-button {
+            /* AJUSTADO PARA SER MENOR */
+            padding: 10px 20px; /* Reduz o espaçamento interno (altura e largura) */
+            font-size: 18px; /* Reduz o tamanho da fonte */
+            
+            cursor: pointer;
+            border: none;
+            border-radius: 6px; /* Levemente menor para combinar */
+            background-color: #ffc107; 
+            color: #333;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra menor */
+            transition: background-color 0.3s, transform 0.1s;
+            overflow: hidden; 
+            width: fit-content; 
+        }
+
+        .typing-button:hover {
+            background-color: #e0a800;
+            transform: translateY(-1px); /* Efeito de elevação menor */
+        }
+
+        /* Estilo do cursor piscante para simular a digitação */
+        .typing-button::after {
+            content: '|'; 
+            margin-left: 5px;
+            color: #333;
+            animation: blink 0.7s infinite;
+        }
+
+        .typing-complete::after {
+            content: '';
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
     </style>
 </head>
 <body>
@@ -979,7 +1019,8 @@
                 <h2 class="section-title section-original-title" id="section-3-title">🍺 COPÃO 🍺</h2>
 
 <a href="Copao.html">
-    <Button>Montar Copão</Button>
+    <button id="myButton" class="typing-button"></button>
+
 </a>
 
 <div class="carousel-container">
@@ -1918,6 +1959,44 @@ function scrollCarousel(elementId, direction) {
         });
     }
 }
+
+//================================
+//================================
+//==Botão: Faça seu Copão=========
+
+         // JAVASCRIPT (Mantido o mesmo para a repetição de 6 segundos)
+        
+        const button = document.getElementById('myButton');
+        const textToType = "Faço seu Copão"; 
+        const typingSpeed = 120; 
+        const repeatInterval = 6000; 
+
+        let charIndex = 0;
+        let typingTimeout; 
+        
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                button.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                typingTimeout = setTimeout(typeWriter, typingSpeed);
+            } else {
+                button.classList.add('typing-complete');
+            }
+        }
+
+        function startTypingEffect() {
+            button.textContent = ''; 
+            charIndex = 0;
+            button.classList.remove('typing-complete');
+            typeWriter();
+        }
+
+        startTypingEffect();
+
+        setInterval(startTypingEffect, repeatInterval);
+
+
+
         
     </script>
 </body>
