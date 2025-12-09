@@ -32,20 +32,3 @@ Aqui estão algumas das tecnologias que eu uso ou estou aprendendo:
 | **Backend/Runtime** | <img src="https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge" alt="Node.js"/> <img src="https://img.shields.io/badge/-Express-000000?logo=express&logoColor=white&style=for-the-badge" alt="Express"/> <img src="https://img.shields.io/badge/-Heroku-430098?logo=heroku&logoColor=white&style=for-the-badge" alt="Heroku"/> |
 | **Banco de Dados** | <img src="https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge" alt="MongoDB"/> <img src="https://img.shields.io/badge/-MySQL-4479A1?logo=mysql&logoColor=white&style=for-the-badge" alt="MySQL"/> |
 | **Outros** | <img src="https://img.shields.io/badge/-Git-F05032?logo=git&logoColor=white&style=for-the-badge" alt="Git"/> <img src="https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white&style=for-the-badge" alt="GitHub"/> |
-
----
-
-### 📊 Minhas Estatísticas do GitHub
-
-Você pode gerar este widget de estatísticas usando o serviço [**github-readme-stats**](https://github.com/anuraghazra/github-readme-stats).
-
-```markdown
-<p align="center">
-    <img src="[https://github-readme-stats.vercel.app/api?username=](https://github-readme-stats.vercel.app/api?username=)[SeuNomeDeUsuário]&show_icons=true&theme=dark&include_all_commits=true&count_private=true" alt="Estatísticas Gerais do GitHub" />
-    <img src="[https://github-readme-stats.vercel.app/api/top-langs/?username=](https://github-readme-stats.vercel.app/api/top-langs/?username=)[SeuNomeDeUsuário]&layout=compact&theme=dark&hide_title=true&langs_count=5" alt="Idiomas Mais Usados" />
-</p>
-
-<p align="center">
-    <img src="[https://github-readme-streak-stats.herokuapp.com/?user=](https://github-readme-streak-stats.herokuapp.com/?user=)[SeuNomeDeUsuário]&theme=dark&hide_border=true&date_format=M%20j%2C%20Y" alt="Estatísticas de Streak do GitHub" />
-</p>
-
