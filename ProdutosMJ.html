@@ -1964,12 +1964,12 @@
             if (linkParaPagamento) {
                 // SE EXISTE O LINK FIXO (Valor Exato Encontrado, Ex: R$8.00)
                 mensagemPedido += `👇*FAÇA O SEU PAGAMENTO*👇\n`;
-                mensagemPedido += `🔗 ${linkParaPagamento} \n`;
-                mensagemPedido += `🤗Não esqueça de nos enviar o Comprovante: 📃`
+                mensagemPedido += `🔗 ${linkParaPagamento} \n\n`;
+                mensagemPedido += `🤗 *Não* esqueça de nos enviar o *Comprovante*: 📃`
             }
             else {
                 // SE O LINK FIXO NÃO EXISTE (Valor Diferente de R$8.00, ou não mapeado)
-                mensagemPedido += `_Vamos criar o seu link de pagamento agora. Só um estante._`;
+                mensagemPedido += `_Vamos criar o seu *link* de pagamento agora. *Só um estant*e._`;
             }
 
             return { mensagem: mensagemPedido, link: linkParaPagamento };
