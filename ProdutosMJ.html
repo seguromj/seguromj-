@@ -1250,7 +1250,7 @@
      </div>
 
 <!--================================================-->
-<!--=============🚨🚨🍺 COPÃO 🍺🚨🚨================-->
+<!--=============🚨🚨 CARRINHO 🚨🚨================-->
 <!--================================================-->
     
             </div> </div> <button id="carrinho-flutuante" onclick="abrirModal()">
@@ -1417,7 +1417,7 @@
         };
 
         // =================================================================
-        // 🚨 NOVO: OBJETO DE CUPOM🚨
+        // 🚨 OBJETO DE CUPOM🚨
         // =================================================================
    
         // Catálogo de cupons válidos
@@ -1963,7 +1963,9 @@
                 // SE EXISTE O LINK FIXO (Valor Exato Encontrado, Ex: R$8.00)
                 mensagemPedido += `*FAÇA O SEU PAGAMENTO* 👇\n`;
                 mensagemPedido += `🔗 ${linkParaPagamento}`;
-            } else {
+                mensagemPedido += `🤗Não esqueça de nos enviar o Comprovante: 📃`
+            }
+            else {
                 // SE O LINK FIXO NÃO EXISTE (Valor Diferente de R$8.00, ou não mapeado)
                 mensagemPedido += `_Vamos criar o seu link de pagamento agora. Só um estante._`;
             }
