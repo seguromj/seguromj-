@@ -1,5 +1,6 @@
 # Olá, eu me chamo Mayckon Jhonatas 👋
 ## Estudo para ser um Desenvolvedor Web.
+# Veja meu primeiro site: https://seguromj.github.io/Nuance-/
 
 <p align="center">
     <img src="https://media.licdn.com/dms/image/v2/D4D12AQHKtRTVk0ZLaA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1710506763478?e=2147483647&v=beta&t=iX3PQRibwNWyC5Pl8s5ZffaIja_ZNgqMWQ1HE_fg5g0" alt="Banner com uma paisagem noturna ou um design legal">
@@ -8,13 +9,11 @@
 <p align="center">
     <img src="https://img.shields.io/github/followers/[SeuNomeDeUsuário]?style=social" alt="Seguidores do GitHub">
     <img src="https://komarev.com/ghpvc/?username=[SeuNomeDeUsuário]&color=blue" alt="Contagem de Visualizações">
-    <img src="https://github-readme-stats.vercel.app/api?username=[SeuNomeDeUsuário]&show_icons=true&hide_title=true&icon_color=0079ff&text_color=ffffff&bg_color=151515&layout=compact" alt="Estatísticas de Repositórios">
 </p>
 
 ---
 
 ### 🌟 Sobre Mim
-
 Eu sou estudante autodidata em programação 🎓. Sou um aprendiz apaixonado que está sempre disposto a aprender e trabalhar em diferentes tecnologias e domínios.
 
 Eu amo explorar novas tecnologias e usá-las para resolver problemas da vida real. Além disso, eu adoro ajudar e orientar novatos ✨. Atualmente, estou focado em Desenvolvimento Web Full-Stack] e aprimorando minhas habilidades nesse mundo grande da Programação 💻.
