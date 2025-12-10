@@ -15,11 +15,6 @@
             background-color: #f4f4f9;
             color: #333;
         }
-        : boot {
-            --iconeCarrinho: Red;
-            --iconeCarrinhO: #FFC107;
-            --cor-fundo-carrinho: #4CAF50;
-        }
 
         /* Cabeçalho */
         header {
@@ -313,7 +308,7 @@
             top: 20px; 
             right: 10px;
             
-            background-color: var(--cor-fundo-carrinho); /* Cor de fundo fixa (botão) */
+            background-color: #4CAF50; /* Cor de fundo fixa (botão) */
             color: white;
             padding: 15px 25px;
             border: none;
@@ -333,11 +328,11 @@
         /* Define a animação de piscar (cor do ícone) */
         @keyframes flash-icon {
             0% { 
-                fill: var(--iconeCarrinho); /* Cor do Ícone (Visível) */
+                fill: red; /* Cor do Ícone (Visível) */
                 transform: scale(1);
             }
             50% { 
-                fill: var(--iconeCarrinhO); /* Cor do Ícone (Amarelo Vibrante) */
+                fill: #FFC107; /* Cor do Ícone (Amarelo Vibrante) */
                 transform: scale(1.1);
             }
             100% {
