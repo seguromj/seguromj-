@@ -2,7 +2,7 @@
 ## Estudo para ser um Desenvolvedor Web.
 
 <p align="center">
-    <img src="https://br.pinterest.com/direktorf/fundo-para-banner/" alt="Banner com uma paisagem noturna ou um design legal">
+    <img src="https://media.licdn.com/dms/image/v2/D4D12AQHKtRTVk0ZLaA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1710506763478?e=2147483647&v=beta&t=iX3PQRibwNWyC5Pl8s5ZffaIja_ZNgqMWQ1HE_fg5g0" alt="Banner com uma paisagem noturna ou um design legal">
 </p>
 
 <p align="center">
