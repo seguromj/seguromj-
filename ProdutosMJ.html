@@ -1403,8 +1403,8 @@
         };
         
         // =================================================================
-        // 🚨 NOVO: OBJETO DE LINKS FIXOS DO MERCADO PAGO 🚨
-        // * Seu link de R$8.00 foi adicionado aqui *
+        // 🚨__Adicionar os links de pagamento aqui__🚨
+        //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
         // =================================================================
         const linksDePagamentoFixos = {
             // A chave é o valor total formatado como string "XX.XX"
@@ -1418,6 +1418,7 @@
 
         // =================================================================
         // 🚨 OBJETO DE CUPOM🚨
+       //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
         // =================================================================
    
         // Catálogo de cupons válidos
@@ -1898,8 +1899,9 @@
             return isValid;
         }
 
-
-        // 🚨 FUNÇÃO MODIFICADA PARA BUSCAR E INCLUIR O LINK CONDICIONAL 🚨
+// ==================================================================================
+// =========🚨 FUNÇÃO MODIFICADA PARA BUSCAR E INCLUIR O LINK CONDICIONAL 🚨=========
+// ==================================================================================
         function gerarMensagemPedido() {
             let mensagemPedido = '';
             let totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
@@ -1989,9 +1991,12 @@
             // OBTÉM A MENSAGEM E O LINK (se existir)
             const { mensagem } = gerarMensagemPedido();
 
+
+            // ==================================================================================
             // *** ATENÇÃO: SUBSTITUA ESTE NÚMERO PELO SEU WHATSAPP REAL ***
+            // ==================================================================================
             const numeroWhatsapp = '5562995679219'; 
-            
+            // ==🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨====
             const url = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${encodeURIComponent(mensagem)}`;
             
             window.open(url, '_blank');
