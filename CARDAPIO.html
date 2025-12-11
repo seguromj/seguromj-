@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1529,6 +1530,59 @@
             "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
             "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
         }; 
+        
+        // =================================================================
+        // 💾 FUNÇÕES DE LOCAL STORAGE - NOVO CÓDIGO 💾
+        // =================================================================
+
+        /**
+         * Salva o estado atual do carrinho no localStorage.
+         */
+        function salvarCarrinho() {
+            try {
+                // Converte o array de objetos para uma string JSON e armazena
+                localStorage.setItem('carrinhoNuance', JSON.stringify(carrinho));
+                
+                // Salva também o cupom (para que ele continue aplicado após o F5)
+                if (cupomAplicado) {
+                    localStorage.setItem('cupomNuance', JSON.stringify(cupomAplicado));
+                } else {
+                    localStorage.removeItem('cupomNuance');
+                }
+            } catch (e) {
+                console.error("Erro ao salvar o carrinho no localStorage:", e);
+            }
+        }
+
+        /**
+         * Carrega o carrinho e o cupom do localStorage ao iniciar a página.
+         */
+        function carregarCarrinho() {
+            try {
+                const carrinhoSalvo = localStorage.getItem('carrinhoNuance');
+                const cupomSalvo = localStorage.getItem('cupomNuance');
+
+                if (carrinhoSalvo) {
+                    // Converte a string JSON de volta para um array de objetos
+                    carrinho = JSON.parse(carrinhoSalvo);
+                } else {
+                    carrinho = [];
+                }
+                
+                if (cupomSalvo) {
+                    cupomAplicado = JSON.parse(cupomSalvo);
+                    // Garante que o input mostre o código do cupom
+                    document.getElementById('coupon-input').value = cupomAplicado.codigo;
+                } else {
+                    cupomAplicado = null;
+                }
+                
+            } catch (e) {
+                console.error("Erro ao carregar o carrinho do localStorage:", e);
+                carrinho = []; // Garante que a aplicação não quebre se o storage estiver corrompido
+                cupomAplicado = null;
+            }
+        }
 
         // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
         function formatarTelefone(input) {
@@ -1693,6 +1747,9 @@
                 carrinho.push({ nome, preco: precoFloat, quantidade: 1 });
             }
             
+            // 💾 Salva no localStorage 
+            salvarCarrinho();
+            
             // Feedback visual
             if (buttonElement) {
                 const originalText = buttonElement.textContent;
@@ -1723,6 +1780,9 @@
                 carrinho.push({ nome: nomeCompleto, preco: precoFloat, quantidade: 1 });
             }
             
+            // 💾 Salva no localStorage
+            salvarCarrinho();
+            
             // Feedback visual e fechar dropdown
             if (buttonElement) {
                 const menu = buttonElement.closest('.sabores-menu');
@@ -1741,6 +1801,10 @@
 
         function removerItemCarrinho(index) {
             carrinho.splice(index, 1); 
+            
+            // 💾 Salva no localStorage
+            salvarCarrinho();
+            
             atualizarCarrinhoFlutuante();
             aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
             atualizarListaCarrinhoModal(); 
@@ -1758,6 +1822,9 @@
             document.getElementById('coupon-message').style.color = 'gray';
             document.getElementById('remove-coupon-btn').style.display = 'none';
 
+            // 💾 Salva no localStorage
+            salvarCarrinho();
+
             atualizarListaCarrinhoModal();
             atualizarCarrinhoFlutuante();
         }
@@ -1771,7 +1838,7 @@
             // Se for silencioso e não houver cupom no input, usa o que já está aplicado
             const cupomParaTestar = codigoCupom.length > 0 ? codigoCupom : (cupomAplicado ? cupomAplicado.codigo : null);
 
-            cupomAplicado = null;
+            let novoCupomAplicado = null;
             descontoValor = 0;
             
             if (!isSilent || codigoCupom.length > 0) {
@@ -1792,7 +1859,7 @@
                 const cupom = cuponsValidos[cupomParaTestar];
 
                 if (totalItens >= cupom.minPurchase) {
-                    cupomAplicado = { ...cupom, codigo: cupomParaTestar }; // Armazena o código também
+                    novoCupomAplicado = { ...cupom, codigo: cupomParaTestar }; // Armazena o código também
                     
                     if (!isSilent) {
                         messageDisplay.textContent = `✅ ${cupom.message}`;
@@ -1809,11 +1876,15 @@
                             messageDisplay.textContent = `🚫 Pedido mínimo de R$${cupom.minPurchase.toFixed(2).replace('.', ',')} necessário.`;
                         }
                     }
-                    // Se a chamada foi silenciosa, apenas deixa cupomAplicado como null
+                    // Se a chamada foi silenciosa, apenas deixa novoCupomAplicado como null
                 }
             } else if (codigoCupom.length > 0 && !isSilent) {
                 messageDisplay.textContent = '🚫 Cupom inválido ou expirado.';
             }
+
+            // Atualiza o cupom principal e salva.
+            cupomAplicado = novoCupomAplicado;
+            salvarCarrinho();
 
             atualizarListaCarrinhoModal(); 
         }
@@ -1841,6 +1912,7 @@
                  messageDisplay.textContent = ''; 
                  removeBtn.style.display = 'none';
                  input.value = ''; 
+                 salvarCarrinho(); // 💾 Salva o carrinho vazio
             }
 
             // 1. Calcular o subtotal dos itens
@@ -1909,7 +1981,11 @@
             } else {
                 discountDisplay.style.display = 'none';
                 removeBtn.style.display = 'none'; // Esconde se não houver cupom ativo
-                messageDisplay.textContent = ''; // Limpa se não houver cupom ativo
+                
+                // Se o input tem valor mas não há cupom aplicado (Ex: não atingiu o mínimo), não limpa a mensagem de erro
+                if (input.value === '') { 
+                    messageDisplay.textContent = ''; 
+                }
             }
 
             // 4. Calcular e exibir o Total Final
@@ -2104,6 +2180,10 @@
             cupomAplicado = null; // Limpa o cupom após o envio
             document.getElementById('coupon-input').value = '';
             document.getElementById('coupon-message').textContent = '';
+            
+            // 💾 Salva o carrinho vazio após o envio
+            salvarCarrinho();
+            
             atualizarCarrinhoFlutuante();
         }
 
@@ -2215,9 +2295,20 @@
         
         // Inicializa o carrinho ao carregar
         document.addEventListener('DOMContentLoaded', () => {
+             // 🚨 NOVO: Carrega o carrinho e o cupom do localStorage
+             carregarCarrinho();
+             
              // Garante que o input do cupom esteja vazio ao carregar
-             document.getElementById('coupon-input').value = '';
+             // (Já está definido na carregarCarrinho se houver cupom)
+             if (!cupomAplicado) {
+                 document.getElementById('coupon-input').value = '';
+             }
+
+             // Atualiza a visualização com os dados carregados
              atualizarCarrinhoFlutuante();
+             // (Não precisa do aplicarCupom(true) aqui, pois ele será chamado ao abrir o modal, 
+             // mas é bom para recalcular o desconto se as regras de minPurchase mudaram)
+             aplicarCupom(true);
         });
 
 
