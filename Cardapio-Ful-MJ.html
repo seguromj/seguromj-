@@ -2411,29 +2411,36 @@ function startTypingEffect() {
 startTypingEffect();
 // Repete o efeito a cada 6 segundos
 setInterval(startTypingEffect, repeatInterval);
+
+
+
+    
 // 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
-const primeiraMensagem = "O Drink **Caipfruta** de morango foi o mais pedido hoje!";
-//🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+const primeiraMensagem = "O Drink **Negroni** foi o mais pedido hoje!";
+
 // 2. Array com as mensagens que irão ALTERNAR
 const mensagensAlternadas = [
-    "**5 pessoas** hoje fizeram seus próprios **Copões**!",
-    "**Victor** acabou de usar o **Cupom** de Frete Grátis.",
+    "O Drink **Manhattan** foi pedido por **5 pessoas** hoje!",
+    "A promoção do drink **'Caipirinha'** está quase ao fim!",
     "Há **3 usuários** navegando e montando seus pedidos neste momento.",
-    "**Fernando** acabou de usar o **Cupom** de 5 reais de desconto adquirido no Instagram **Nuance**.",
     "O tempo das entregas pode subir devido ao alto volume de pedidos!"
 ];
+
 // Função para embaralhar um array (algoritmo Fisher-Yates)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = array[j], array[i];
+        [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
 }
+
 // Verifica se o usuário já visitou o site
 const isFirstVisit = localStorage.getItem('hasVisited') === null;
 localStorage.setItem('hasVisited', 'true'); // Marca a visita para a próxima vez
+
 let mensagensParaExibir = [];
+
 if (isFirstVisit) {
     // Na primeira visita, exibe a primeira mensagem, e depois o resto embaralhado
     mensagensParaExibir.push(primeiraMensagem);
@@ -2442,13 +2449,17 @@ if (isFirstVisit) {
     // Em visitas subsequentes, embaralha todas as mensagens, incluindo a "Negroni"
     mensagensParaExibir = shuffleArray([primeiraMensagem, ...mensagensAlternadas]);
 }
+
+
 let currentIndex = 0; // Índice inicial da mensagem
 const boxElement = document.getElementById('atencao-box');
 const conteudoElement = document.getElementById('mensagem-conteudo');
+
 // Configurações de tempo
 const tempoExibicao = 9000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
 const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (20 segundos)
 const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (21 segundos)
+
 function showNextMessage() {
     // Pega a mensagem atual
     // O array 'mensagensParaExibir' está agora com a ordem definida (ou embaralhada)
@@ -2473,7 +2484,7 @@ function showNextMessage() {
 }
 
 // Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
-setTimeout(showNextMessage, 1800);    
+setTimeout(showNextMessage, 2000); 
     </script>
 </body>
 </html>
