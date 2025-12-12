@@ -1178,19 +1178,19 @@
             
             // Lógica de mensagens
             if (selectedStateCode === 'GO' && selectedCity === 'ANÁPOLIS') {
-                finalMessage = `✅ Base Nuance mais próxima encontrada: <strong>1.6 km</strong>. Boas-vindas a Anápolis! Delivery disponível.`;
+                finalMessage = `😍<br> A nossa loja mais próxima de você está a <strong>1.6 km</strong>!<br> Seu pedido chegará até você entre <strong>20</strong> a <strong>30</strong> minutos.`;
                 loadingTitleElement.textContent = 'Região de Delivery Confirmada!';
                 
                 // AÇÃO 1: Anápolis (Libera conteúdo principal)
                 buttonAction = 'showMainContent()'; 
             } else if (['GO'].includes(selectedStateCode)) {
-                finalMessage = `👋 Você está em ${selectedCity}! Atendemos essa região com nossos serviços de <strong>Barman para eventos</strong>. Para Delivery, entre em contato.`;
+                finalMessage = `👋 Você está em ${selectedCity}! Atendemos essa região com nossos serviços de <strong>Barman para Eventos, Aniversários, Confraternização...</strong><br> Para Delivery, entre em contato.`;
                 loadingTitleElement.textContent = 'Serviços de Barman Disponíveis!';
                 
                 // AÇÃO 2: Outras cidades de GO (Redireciona para pacote.html)
                 buttonAction = "window.location.href='pacote.html'"; 
             } else {
-                finalMessage = `No momento, só realizamos entrega de Drinks Prontos em <strong>Anápolis</strong>. Nossos servisus ainda não chegou em ${selectedCity}, mas fique a vontade e confira nosso Cardáio`;
+                finalMessage = `No momento, só realizamos entrega de Drinks Prontos em <strong>Anápolis</strong>.<br> Nossos servisus ainda não chegou em ${selectedCity}, mas fique a vontade e confira nosso Cardáio e venha nos visitar`;
                 loadingTitleElement.textContent = 'Delivery Fora da Área!';
                 
                 // AÇÃO 3: Outros estados (Libera conteúdo principal)
