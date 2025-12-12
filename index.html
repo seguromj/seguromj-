@@ -201,7 +201,7 @@
             0% { transform: translateX(0); }
             /* AJUSTE ESSENCIAL: O valor -490px corresponde exatamente à largura 
                de 7 itens (60px * 7) + 7 gaps (10px * 7) */
-            100% { transform: translateX(-699px); } 
+            100% { transform: translateX(-490px); } 
         }
 
         /*--------------------------style loja---------------------------------------------------------*/
@@ -657,9 +657,6 @@
             <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2rh_DMUHCsY2jt3rpwsZCRNecOjkp1L2Ecwd5pvQpCx3Biqr586rQi9t-&s=10" alt="Imagem 3"></div>
             <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKjZzVKlJvKOZcKU4a4gRC8mRErmoSXf1NbRfAaDXAuQ&s=10" alt="Imagem 4"></div>
             <div class="item-carrossel"><img src="https://www.drinkpedia.net.br/wp-content/uploads/2023/12/drinks-com-abacaxi-01-edited.png" alt="Imagem 5"></div>
-            <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkT3WyhLsQSxtsMuCuHb_O_3GvRZ6mCV48TqQzWH7x7sxIm3cein5yrWVW&s=10" alt="Imagem 6"></div>
-            <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMN9PgGD0KCgO2dVV0tifn2j2R6VqxhxFQ7j-oAL01S63_lnvJjH2gx1s&s=10" alt="Imagem 7"></div>
-
             <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkT3WyhLsQSxtsMuCuHb_O_3GvRZ6mCV48TqQzWH7x7sxIm3cein5yrWVW&s=10" alt="Imagem 6"></div>
             <div class="item-carrossel"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMN9PgGD0KCgO2dVV0tifn2j2R6VqxhxFQ7j-oAL01S63_lnvJjH2gx1s&s=10" alt="Imagem 7"></div>
             
@@ -1126,8 +1123,8 @@ setInterval(verificarStatus, 60000);
     // INÍCIO DA NOVA FUNCIONALIDADE: CONTROLE POR TEMPO
     // ----------------------------------------------------
     
-    // Constante para definir o intervalo de tempo (20 minutos do modal de perguntar estado e cidade)
-    const INTERVALO_MINUTOS = 5; //só trocar o 20 minutos para qualquer um outro minuto que nós quiser 
+    // Constante para definir o intervalo de tempo (20 minutos em milissegundos)
+    const INTERVALO_MINUTOS = 4;
     const INTERVALO_MS = INTERVALO_MINUTOS * 60 * 1000;
     const NEXT_DISPLAY_KEY = 'nuance_next_modal_display_time'; 
     
