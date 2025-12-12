@@ -862,8 +862,6 @@
     // Usando suas constantes originais para demonstração
 const HORA_FECHAMENTO = '23:59'; 
 const HORA_REABERTURA = '18:00'; 
-// ALTERAÇÃO AQUI: Definindo a constante para 2 carregamentos
-const MAX_CARREGAMENTOS = 2; 
 
 // --------------------
 
@@ -1122,40 +1120,44 @@ setInterval(verificarStatus, 60000);
     }
 
     // ----------------------------------------------------
-    // INÍCIO DA NOVA FUNCIONALIDADE: CONTADOR DE CARREGAMENTO
+    // INÍCIO DA NOVA FUNCIONALIDADE: CONTROLE POR TEMPO
     // ----------------------------------------------------
     
-    function handlePageLoadCount() {
-        // Chave para armazenar a contagem no localStorage
-        const countKey = 'nuance_page_load_count';
+    // Constante para definir o intervalo de tempo (20 minutos em milissegundos)
+    const INTERVALO_MINUTOS = 20;
+    const INTERVALO_MS = INTERVALO_MINUTOS * 60 * 1000;
+    const NEXT_DISPLAY_KEY = 'nuance_next_modal_display_time'; 
+    
+    function handleModalDisplayByTime() {
+        const agora = Date.now();
         
-        // 1. Pega o valor atual do contador (se não existir, é 0)
-        let loadCount = parseInt(localStorage.getItem(countKey)) || 0;
-        
-        // 2. Incrementa a contagem para o carregamento atual
-        loadCount++;
-        localStorage.setItem(countKey, loadCount);
-        
-        console.log(`Página carregada ${loadCount} de ${MAX_CARREGAMENTOS} vezes.`);
+        // Pega o tempo em que o modal pode ser exibido novamente. Se for a primeira visita, será 0.
+        const nextDisplayTime = parseInt(localStorage.getItem(NEXT_DISPLAY_KEY)) || 0;
 
-        // 3. Verifica se a contagem atingiu o limite
-        if (loadCount >= MAX_CARREGAMENTOS) {
+        // Se o tempo atual for maior ou igual ao tempo de próxima exibição, mostre o modal.
+        if (agora >= nextDisplayTime) {
             
-            // Reseta a contagem para 0 para começar o ciclo novamente
-            localStorage.setItem(countKey, 0); 
-
-            // Mostra o modal
+            // 1. Mostra o modal
             populateStates(); 
             updateCities();   
             showModal('stateModal');
+            
+            // 2. Define o novo tempo de exibição (agora + 20 minutos)
+            const newNextDisplayTime = agora + INTERVALO_MS;
+            localStorage.setItem(NEXT_DISPLAY_KEY, newNextDisplayTime.toString());
+            
+            console.log(`Modal exibido. Próxima exibição em: ${new Date(newNextDisplayTime).toLocaleTimeString()}`);
+        } else {
+            // Se ainda não passou o tempo, apenas loga e não mostra nada
+            const remainingTime = nextDisplayTime - agora;
+            const minutes = Math.ceil(remainingTime / 60000);
+            console.log(`Intervalo de ${INTERVALO_MINUTOS} minutos ainda não passou. Faltam aproximadamente ${minutes} minutos.`);
         }
-        
-        // Se loadCount for menor que MAX_CARREGAMENTOS, nada acontece e o modal permanece escondido (display: none).
     }
     
     // Inicialização ao carregar a página
     document.addEventListener('DOMContentLoaded', () => {
-        handlePageLoadCount(); 
+        handleModalDisplayByTime(); 
     });
     // ----------------------------------------------------
     // FIM DA NOVA FUNCIONALIDADE
