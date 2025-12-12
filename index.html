@@ -9,7 +9,6 @@
     <title>Nuance - Delivery de Drinks</title>
     
     <style>
-        /* [Seu CSS anterior omitido por brevidade] */
         /* Cores */
         .cor-card { color: #5C5454; }
         .cor-logo2 { color: #68736B; font-size: 9px; }
@@ -32,24 +31,35 @@
             background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding-top: 0;
+            position: relative; /* Importante para o z-index em relação aos modais */
+            z-index: 1; /* Garante que o conteúdo base esteja em uma camada abaixo dos modais */
         }
         
-        /* NOVO: Classe para o corpo principal, oculto por padrão */
+        /* NOVO: Classe para o corpo principal, com desfoque e visível por padrão */
         .content-hidden {
-             /* Define a área fora da tela ou oculta com opacidade 0 */
-             visibility: hidden;
-             opacity: 0;
-             transition: opacity 0.5s ease-in-out, visibility 0.5s;
-             height: 0;
-             overflow: hidden;
+             /* O conteúdo deve ser totalmente opaco (opacity: 1) para o blur funcionar */
+             opacity: 1;
+             visibility: visible;
+             height: auto;
+             overflow: visible;
+             /* Aplica o desfoque */
+             filter: blur(5px);
+             /* Transição suave para desfoque */
+             transition: filter 0.5s ease-in-out;
+             pointer-events: none; /* Desabilita o clique no conteúdo desfocado */
         }
         
-        /* NOVO: Classe para o corpo principal, visível após liberação */
+        /* NOVO: Classe para o corpo principal, visível e nítido após liberação */
         .content-visible {
              visibility: visible;
              opacity: 1;
              height: auto;
              overflow: visible;
+             /* Remove o desfoque */
+             filter: blur(0);
+             /* Transição suave para remoção do desfoque */
+             transition: filter 0.5s ease-in-out;
+             pointer-events: auto; /* Habilita o clique no conteúdo principal */
         }
         
         /* Define as cires do fundo do body (nuance-info-box) */
@@ -478,7 +488,7 @@
         /*----------------------------------------------------*/
         .modal-overlay {
             position: fixed;
-            z-index: 9999; 
+            z-index: 9999; /* Z-index alto garante que ele fique na frente */
             left: 0;
             top: 0;
             width: 100%;
@@ -647,6 +657,78 @@
             font-style: italic;
             color: #555;
             margin-top: 5px;
+        }
+    
+    
+        /*=====================================================================*/  
+        /*------Mensagens de Atenção------------*/
+
+        /* Estilo Base da Caixa de Atenção */
+        #atencao-box {
+            position: fixed;
+            bottom: 20px;
+            /* CORREÇÃO AQUI: Centralização horizontal */
+            left: 50%;
+            transform: translateX(-50%); 
+            /* -------------------------------------- */
+            
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px 20px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+            display: none; 
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 300px;
+            width: 90%;
+            box-sizing: border-box;
+            text-align: left; /* Garante que o texto interno seja lido da esquerda */
+        }
+
+        /* Estilo do Cabeçalho "Atenção!" - USA FLEXBOX AGORA */
+        .atencao-header {
+            display: flex;
+            align-items: center; 
+            font-size: 1em;
+            font-weight: bold;
+            color: #eb5757; 
+            margin-bottom: 5px;
+        }
+
+        /* Estilo para o Checkmark Verde - REMOVIDO POSITION: ABSOLUTE */
+        .atencao-checkmark {
+            width: 20px; 
+            height: 20px;
+            margin-right: 5px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
+        .atencao-checkmark svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilo do Texto "Atenção!" */
+        .atencao-icon {
+            color: #eb5757; 
+        }
+
+        /* Estilo do Conteúdo da Mensagem */
+        .atencao-body {
+            font-size: 9px;
+            color: #333;
+            line-height: 1.4;
+            margin-top: 5px;
+            padding-left: 25px; 
+        }
+
+        .atencao-body strong {
+            color: #000;
+            font-weight: 700;
         }
         
     </style>
@@ -820,23 +902,22 @@
                     </div>
                 </div>
             </div>
-            
-            <div id="atencao-box">
-                <div class="atencao-header">
-                    <div class="atencao-checkmark">
-                        <svg viewBox="0 0 52 52">
-                            <circle cx="26" cy="26" r="25" fill="#4CAF50"/>
-                            <path stroke="#fff" stroke-width="5" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                        </svg>
-                    </div>
-                    <span class="atencao-icon">⚠️ Atenção!</span>
-                </div>
-                <div id="mensagem-conteudo" class="atencao-body">
-                </div>
-            </div>
          </section>
     </div> </main>
 
+<div id="atencao-box">
+    <div class="atencao-header">
+        <div class="atencao-checkmark">
+            <svg viewBox="0 0 52 52">
+                <circle cx="26" cy="26" r="25" fill="#4CAF50"/>
+                <path stroke="#fff" stroke-width="5" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <span class="atencao-icon">⚠️ Atenção!</span>
+    </div>
+    <div id="mensagem-conteudo" class="atencao-body">
+    </div>
+</div>
 <div id="stateModal" class="modal-overlay">
     <div class="modal-content-custom">
         <h3>Procure o Delivery mais próximo de você.</h3>
@@ -869,6 +950,8 @@
         </button>
     </div>
 </div>
+    
+    
 
 <script>
     // Suas constantes de configuração
@@ -896,24 +979,25 @@
     }
     
     /**
-     * Libera o conteúdo principal da página.
+     * Libera o conteúdo principal da página (remove desfoque).
      */
     function showMainContent() {
         closeAllModals(); // Fecha o último modal
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
-            // Remove a classe de ocultar e adiciona a de visibilidade
+            // Remove a classe de desfoque/ocultação e adiciona a de visibilidade nítida
             mainContent.classList.remove('content-hidden');
             mainContent.classList.add('content-visible');
         }
     }
     
     /**
-     * Oculta o conteúdo principal da página.
+     * Oculta o conteúdo principal da página (aplica desfoque).
      */
     function hideMainContent() {
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
+            // No início, garantimos que o desfoque está ativo e o conteúdo visível.
             mainContent.classList.remove('content-visible');
             mainContent.classList.add('content-hidden');
         }
@@ -1054,6 +1138,8 @@
         populateStates(); 
         updateCities();   
         showModal('stateModal');
+        // Aplica o desfoque ao iniciar o modal
+        hideMainContent(); 
         return false; 
     }
 
@@ -1081,22 +1167,35 @@
         loadingTitleElement.textContent = 'Analisando a nossa base mais próxima de você...';
         loadingMessageElement.innerHTML = `Buscando...`;
         
-        // 2. Simulação do Carregamento (3 segundos)
+        // 2. Simulação do Carregamento (1.8 segundos)
         setTimeout(() => {
             
             spinner.style.display = 'none';
             let finalMessage = '';
             
+            // Variável para armazenar a ação do botão
+            let buttonAction = ''; 
+            
             // Lógica de mensagens
             if (selectedStateCode === 'GO' && selectedCity === 'ANÁPOLIS') {
                 finalMessage = `✅ Base Nuance mais próxima encontrada: <strong>1.6 km</strong>. Boas-vindas a Anápolis! Delivery disponível.`;
                 loadingTitleElement.textContent = 'Região de Delivery Confirmada!';
+                
+                // AÇÃO 1: Anápolis (Libera conteúdo principal)
+                buttonAction = 'showMainContent()'; 
             } else if (['GO'].includes(selectedStateCode)) {
                 finalMessage = `👋 Você está em ${selectedCity}! Atendemos essa região com nossos serviços de <strong>Barman para eventos</strong>. Para Delivery, entre em contato.`;
                 loadingTitleElement.textContent = 'Serviços de Barman Disponíveis!';
+                
+                // AÇÃO 2: Outras cidades de GO (Redireciona para pacote.html)
+                buttonAction = "window.location.href='pacote.html'"; 
             } else {
                 finalMessage = `No momento, só realizamos entrega de Drinks Prontos em <strong>Anápolis</strong>. Nossos servisus ainda não chegou em ${selectedCity}, mas fique a vontade e confira nosso Cardáio`;
                 loadingTitleElement.textContent = 'Delivery Fora da Área!';
+                
+                // AÇÃO 3: Outros estados (Libera conteúdo principal)
+                // Mantemos o padrão de liberar o conteúdo, como fallback.
+                buttonAction = 'showMainContent()'; 
             }
 
             loadingMessageElement.innerHTML = finalMessage;
@@ -1104,10 +1203,86 @@
             // 3. Atualiza o display da cidade no banner principal (mesmo que ainda não tenha sido liberado)
             document.getElementById('delivery-city-display').textContent = selectedCity + '-' + selectedStateCode;
             
-            // 4. Exibe o botão para liberar o acesso ao conteúdo
+            // 4. ATUALIZAÇÃO PRINCIPAL: Define a função onclick do botão
+            menuButton.setAttribute('onclick', buttonAction);
+            
+            // 5. Exibe o botão para liberar o acesso ao conteúdo
             menuButton.classList.remove('hidden');
 
         }, 1800); 
+    }
+
+    // ----------------------------------------------------
+    // LÓGICA DE MENSAGENS FLUTUANTES (Alerta de Atenção)
+    // ----------------------------------------------------
+    
+    // 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
+    const primeiraMensagem = "O Drink **CaipFrutas** foi o mais pedido hoje!";
+
+    // 2. Array com as mensagens que irão ALTERNAR
+    const mensagensAlternadas = [
+        "**5 pessoas** hoje fizeram seus próprios **Copões**!",
+        "**Victor** acabou de usar o **Cupom** de Frete Grátis.",
+        "Há **3 usuários** navegando e montando seus pedidos neste momento.",
+        "**Fernando** acabou de usar o **Cupom** de 5 reais de desconto adquirido no Instagram **Nuance**.",
+        "O tempo das entregas pode subir devido ao alto volume de pedidos!"
+    ];
+
+    // Função para embaralhar um array (algoritmo Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Verifica se o usuário já visitou o site
+    const isFirstVisit = localStorage.getItem('hasVisited') === null;
+    localStorage.setItem('hasVisited', 'true'); // Marca a visita para a próxima vez
+
+    let mensagensParaExibir = [];
+
+    if (isFirstVisit) {
+        // Na primeira visita, exibe a primeira mensagem, e depois o resto embaralhado
+        mensagensParaExibir.push(primeiraMensagem);
+        mensagensParaExibir = mensagensParaExibir.concat(shuffleArray([...mensagensAlternadas]));
+    } else {
+        // Em visitas subsequentes, embaralha todas as mensagens, incluindo a "Negroni"
+        mensagensParaExibir = shuffleArray([primeiraMensagem, ...mensagensAlternadas]);
+    }
+
+
+    let currentIndex = 0; // Índice inicial da mensagem
+    const boxElement = document.getElementById('atencao-box');
+    const conteudoElement = document.getElementById('mensagem-conteudo');
+
+    // Configurações de tempo
+    const tempoExibicao = 9000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
+    const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (20 segundos)
+    const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (11 segundos)
+
+    function showNextMessage() {
+        // Pega a mensagem atual
+        // O array 'mensagensParaExibir' está agora com a ordem definida (ou embaralhada)
+        let message = mensagensParaExibir[currentIndex];
+
+        // Insere o conteúdo, convertendo **texto** para <strong>texto</strong> (negrito)
+        conteudoElement.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // 1. Exibe a caixa (Display ON)
+        boxElement.style.display = 'flex';
+
+        // 2. Agenda para esconder a caixa após o tempo de exibição
+        setTimeout(() => {
+            boxElement.style.display = 'none';
+
+            // 3. Agenda a próxima exibição após o tempo de espera 
+            setTimeout(showNextMessage, tempoEspera);
+        }, tempoExibicao);
+
+        // Atualiza o índice para a próxima mensagem (circular)
+        currentIndex = (currentIndex + 1) % mensagensParaExibir.length;
     }
 
     // ----------------------------------------------------
@@ -1119,12 +1294,20 @@
         verificarStatus();
         setInterval(verificarStatus, 60000); 
         
-        // 1. Esconde o conteúdo principal (Garante que está sempre oculto)
-        hideMainContent(); 
+        // No DOMContentLoaded, o estado inicial do #main-content deve ser content-hidden (desfocado).
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.classList.add('content-hidden');
+            mainContent.classList.remove('content-visible'); // Garante que a transição comece no estado de desfoque.
+        }
             
-        // 2. Inicia o fluxo de seleção do modal (SEMPRE obrigatório)
+        // 2. Inicia o fluxo de seleção do modal (obriga a interação).
         showInitialModal();
+        
+        // 3. Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
+        setTimeout(showNextMessage, 2000); 
     });
+    
 </script>
 </body>
 </html>
