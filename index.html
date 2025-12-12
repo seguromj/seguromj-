@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -861,6 +862,9 @@
     // Usando suas constantes originais para demonstração
 const HORA_FECHAMENTO = '23:59'; 
 const HORA_REABERTURA = '18:00'; 
+// ALTERAÇÃO AQUI: Definindo a constante para 2 carregamentos
+const MAX_CARREGAMENTOS = 2; 
+
 // --------------------
 
 function verificarStatus() {
@@ -1117,14 +1121,45 @@ setInterval(verificarStatus, 60000);
         }, 3000); // 3 segundos para simular a análise
     }
 
+    // ----------------------------------------------------
+    // INÍCIO DA NOVA FUNCIONALIDADE: CONTADOR DE CARREGAMENTO
+    // ----------------------------------------------------
+    
+    function handlePageLoadCount() {
+        // Chave para armazenar a contagem no localStorage
+        const countKey = 'nuance_page_load_count';
+        
+        // 1. Pega o valor atual do contador (se não existir, é 0)
+        let loadCount = parseInt(localStorage.getItem(countKey)) || 0;
+        
+        // 2. Incrementa a contagem para o carregamento atual
+        loadCount++;
+        localStorage.setItem(countKey, loadCount);
+        
+        console.log(`Página carregada ${loadCount} de ${MAX_CARREGAMENTOS} vezes.`);
+
+        // 3. Verifica se a contagem atingiu o limite
+        if (loadCount >= MAX_CARREGAMENTOS) {
+            
+            // Reseta a contagem para 0 para começar o ciclo novamente
+            localStorage.setItem(countKey, 0); 
+
+            // Mostra o modal
+            populateStates(); 
+            updateCities();   
+            showModal('stateModal');
+        }
+        
+        // Se loadCount for menor que MAX_CARREGAMENTOS, nada acontece e o modal permanece escondido (display: none).
+    }
+    
     // Inicialização ao carregar a página
     document.addEventListener('DOMContentLoaded', () => {
-        populateStates(); // Popula o primeiro modal com TODOS os estados
-        updateCities();   // Popula o segundo modal com as cidades de GO (Anápolis selecionado)
-        
-        // Inicia o fluxo mostrando o modal de estado automaticamente
-        showModal('stateModal');
+        handlePageLoadCount(); 
     });
+    // ----------------------------------------------------
+    // FIM DA NOVA FUNCIONALIDADE
+    // ----------------------------------------------------
 </script>
 </body>
 </html>
