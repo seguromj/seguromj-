@@ -1739,14 +1739,15 @@
             "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   // ---CINCO---
 
             // CUPOM FRETEGRATIS (NOVO TIPO: 'frete')
-            "FRETEGRATIS, FRETEGRATIS2": {                                                                                                       // --- FRETEGRATIS ---
+            "FRETEGRATIS": {                                                                                                       // --- FRETEGRATIS ---
                 type: "frete",  
                 value: FRETE_VALOR_FIXO, // O valor do frete que será abatido
                 minPurchase: 6.00, 
                 message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total." 
             },
             
-            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
+            "NUANCE10": { type: "percent", value: 5.00, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },            // --- NUANCE10 ---
+            "FRETEGRATIS": { type: "flat", value: 5.00, minPurchase: 6.00, message: "R$20,00 de desconto!" },
             "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
         }; 
         
