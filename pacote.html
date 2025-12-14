@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUANCE - Experiências Premium</title>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         /* Variáveis de Cores */
         :root {
@@ -74,7 +76,6 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: left;
-            cursor: pointer;
             position: relative;
             transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
         }
@@ -122,30 +123,77 @@
 
         /* Subseções */
         .details {
-            margin-bottom: 20px;
+            margin-bottom: 10px; 
+            cursor: pointer;
         }
 
+        /* ESTILO DO BOTÃO DE DETALHES */
         .details h3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: var(--color-primary);
             color: var(--color-secondary);
-            padding: 10px;
-            margin: 0 0 0 0;
+            padding: 12px 15px;
+            margin: 0;
             font-size: 1.1em;
             font-weight: 600;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
+            text-align: left;
+            border-radius: 8px; 
             text-transform: uppercase;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        /* Efeito Hover no botão */
+        .details h3:hover {
+            background: #00796b; 
+            color: #ffcc44;
+        }
+        
+        /* Estilização do ícone */
+        .details h3 i {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
         }
 
-        .details p {
+        /* Rotação do ícone quando a seção está aberta */
+        .details.open h3 i {
+            transform: rotate(180deg);
+        }
+
+        /* Estilo do conteúdo (que será escondido/mostrado) */
+        .details-content {
             font-size: 0.9em;
             line-height: 1.5;
             margin: 0;
             padding: 12px;
-            background-color: rgba(255, 255, 255, 0.1); /* Fundo claro sutil */
-            border-radius: 0 0 5px 5px;
+            background-color: rgba(255, 255, 255, 0.1); 
+            border-radius: 0 0 8px 8px;
+            
+            /* Estilo para o accordion (Inicialmente escondido) */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
         }
+        
+        /* Estado aberto */
+        .details.open .details-content {
+            max-height: 800px; /* Aumentado para acomodar a imagem + texto + padding */
+            padding: 12px;
+            transition: max-height 0.4s ease-in, padding 0.4s ease-in;
+        }
+
+        /* ESTILO PARA AS IMAGENS DE DETALHES */
+        .detail-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 15px; /* Espaço entre o texto e a imagem */
+            border: 1px solid var(--color-secondary); /* Borda dourada sutil */
+            box-shadow: 0 0 10px rgba(218, 165, 32, 0.3);
+        }
+
 
         /* Duração - Barra de Rodapé Destacada */
         .duration {
@@ -251,7 +299,7 @@
         z-index: 1000; /* Garante que fique acima de outros elementos */
         
         /* Estilo do link/botão */
-        background-color: red; /* Verde da marca */
+        background-color: var(--color-primary); /* Verde da marca */
         color: var(--color-text-light); /* Texto claro */
         padding: 15px 20px;
         border-radius: 10px;
@@ -268,19 +316,23 @@
         z-index: 1000; /* Garante que fique acima de outros elementos */
         
         /* Estilo do link/botão */
-        background-color: blue; /* Verde da marca */
-        color: var(--color-text-light); /* Texto claro */
+        background-color: var(--color-secondary); /* Dourado */
+        color: var(--color-background); /* Texto escuro */
         padding: 15px 20px;
         border-radius: 10px;
         text-decoration: none;
         font-weight: bold;
         text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(0, 86, 69, 0.7); /* Sombra mais forte */
+        box-shadow: 0 4px 15px rgba(218, 165, 32, 0.7); /* Sombra mais forte */
         transition: background-color 0.3s, transform 0.3s;
     }
 
     .fixed-button:hover {
         background-color: #00796b; /* Um verde um pouco mais claro no hover */
+        transform: scale(1.05); /* Efeito de escala no hover */
+    }
+    .fixed-button2:hover {
+        background-color: #ffcc44; /* Um dourado um pouco mais claro no hover */
         transform: scale(1.05); /* Efeito de escala no hover */
     }
     
@@ -294,7 +346,7 @@
     }
     
     @media (max-width: 600px) {
-        .fixed-button {
+        .fixed-button, .fixed-button2 {
             bottom: 20px;
             padding: 10px 15px;
         }
@@ -325,23 +377,35 @@
             <p class="description">Ideal para casamentos, festas de formatura e eventos corporativos que desejam elevar a experiência dos convidados.</p>
             
             <div class="details">
-                <h3>Cardápio</h3>
-                <p>3 drinks clássicos e 1 sem álcool</p>
+                <h3>Cardápio <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>3 drinks clássicos e 1 sem álcool</p>
+                    <img class="detail-img" src="https://rezenha.ze.delivery/wp-content/uploads/2024/05/drinks-sem-alcool-1024x620.jpg" alt="Cardápio do Bar Essencial">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Destilados</h3>
-                <p>Bebidas de linha como vodka, cachaça e rum de marcas populares.</p>
+                <h3>Destilados <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Bebidas de linha como vodka, cachaça e rum de marcas populares.</p>
+                    <img class="detail-img" src="imgs/destilados-essencial.jpg" alt="Destilados do Bar Essencial">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Insumos</h3>
-                <p>Frutas básicas e xaropes simples</p>
+                <h3>Insumos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Frutas básicas e xaropes simples</p>
+                       <img class="detail-img" src="imgs/destilados-essencial.jpg" alt="Destilados do Bar Essencial">
+                </div>
             </div>
 
             <div class="details">
-                <h3>Equipamentos</h3>
-                <p>Copos de acrílico</p>
+                <h3>Equipamentos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Copos de acrílico</p>
+                    <img class="detail-img" src="imgs/equipamentos-essencial.jpg" alt="Equipamentos do Bar Essencial">
+                </div>
             </div>
             
             <div class="duration">
@@ -354,7 +418,7 @@
             Solicitar Orçamento
             </button>
             </a>
-            </div>
+        </div>
 
         <div class="package" id="premium">
             <h2>OPEN PREMIUM</h2>
@@ -362,23 +426,35 @@
             <p class="description">Indicado para eventos de alto padrão, como casamentos luxuosos, jantares de gala e lançamentos de produtos.</p>
             
             <div class="details">
-                <h3>Cardápio</h3>
-                <p>4 drinks clássicos e 2 sem álcool</p>
+                <h3>Cardápio <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>4 drinks clássicos e 2 sem álcool</p>
+                    <img class="detail-img" src="imgs/cardapio-premium.jpg" alt="Cardápio do Open Premium">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Destilados</h3>
-                <p>Inclui destilados premium de marcas conhecidas e uma seleção mais ampla de insumos (xaropes e frutas).</p>
+                <h3>Destilados <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Inclui destilados premium de marcas conhecidas e uma seleção mais ampla de insumos (xaropes e frutas).</p>
+                    <img class="detail-img" src="imgs/destilados-premium.jpg" alt="Destilados do Open Premium">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Insumos</h3>
-                <p>Frutas frescas, especiarias, xaropes artesanais</p>
+                <h3>Insumos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Frutas frescas, especiarias, xaropes artesanais</p>
+                    <img class="detail-img" src="imgs/destilados-essencial.jpg" alt="Destilados do Bar Essencial">
+                </div>
             </div>
 
             <div class="details">
-                <h3>Equipamentos</h3>
-                <p>Taças e copos de vidro, valorizando a apresentação.</p>
+                <h3>Equipamentos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Taças e copos de vidro, valorizando a apresentação.</p>
+                    <img class="detail-img" src="imgs/equipamentos-premium.jpg" alt="Equipamentos do Open Premium">
+                </div>
             </div>
             
             <div class="duration">
@@ -392,29 +468,42 @@
             </button>
             </a>
         </div>
+        
         <div class="package" id="gold">
             <h2>NUANCE GOLD</h2>
             <p class="ideal-for">ideal</p>
             <p class="description">Ideal para eventos pequenos, festa na piscina, churrascos e reuniões informais que buscam uma solução prática e econômica.</p>
             
             <div class="details">
-                <h3>Cardápio</h3>
-                <p>3 drinks clássicos 2 autorais e 2 sem álcool</p>
+                <h3>Cardápio <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>3 drinks clássicos 2 autorais e 2 sem álcool</p>
+                    <img class="detail-img" src="imgs/cardapio-gold.jpg" alt="Cardápio do Nuance Gold">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Destilados</h3>
-                <p>Destilados premium, vodkas importadas, gins e whiskies de alta qualidade, licores especiais e espumantes.</p>
+                <h3>Destilados <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Destilados premium, vodkas importadas, gins e whiskies de alta qualidade, licores especiais e espumantes.</p>
+                    <img class="detail-img" src="imgs/destilados-gold.jpg" alt="Destilados do Nuance Gold">
+                </div>
             </div>
             
             <div class="details">
-                <h3>Insumos</h3>
-                <p>Frutas exóticas, insumos diferenciados, purês de frutas</p>
+                <h3>Insumos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Frutas exóticas, insumos diferenciados, purês de frutas</p>
+                    <img class="detail-img" src="imgs/destilados-essencial.jpg" alt="Destilados do Bar Essencial">
+                </div>
             </div>
 
             <div class="details">
-                <h3>Equipamentos</h3>
-                <p>Copos e taças de vidro de design, com itens de decoração diferenciados.</p>
+                <h3>Equipamentos <i class="fas fa-chevron-down"></i></h3>
+                <div class="details-content">
+                    <p>Copos e taças de vidro de design, com itens de decoração diferenciados.</p>
+                    <img class="detail-img" src="imgs/equipamentos-gold.jpg" alt="Equipamentos do Nuance Gold">
+                </div>
             </div>
             
             <div class="duration">
@@ -427,30 +516,27 @@
             Solicitar Orçamento
             </button>
             </a>
-            </div>
+        </div>
     </div>
     
     <a href="index-2.html" class="fixed-button back-button-fixed">
-        VOLTAR
+        <i class="fas fa-arrow-left"></i> VOLTAR
     </a>
     
     <a href="Cardapio-Nuance.html" class="fixed-button2 menu-button-fixed">
-        CARDÁPIO
+        CARDÁPIO <i class="fas fa-cocktail"></i>
     </a>
     
     <script>
-        // JavaScript para Interatividade (Melhora a experiência de usuário)
+        // JavaScript para Interatividade (Transforma os detalhes em um Acordeão)
         document.addEventListener('DOMContentLoaded', () => {
-            const packages = document.querySelectorAll('.package');
+            const detailSections = document.querySelectorAll('.details');
 
-            packages.forEach(pkg => {
-                // Adiciona um listener para clique que mostra um alerta premium
-                pkg.addEventListener('click', () => {
-                    const packageName = pkg.querySelector('h2').textContent;
-                    const contactMessage = `✨ Elevando sua Experiência! Você escolheu o ${packageName}. Clique em "OK" para falar com um consultor NUANCE e solicitar um orçamento exclusivo!`;
-                    
-                    // Substituir por um modal ou link para WhatsApp/Formulário em um site real.
-                    alert(contactMessage); 
+            detailSections.forEach(detail => {
+                // Adiciona um listener de clique ao título (h3)
+                detail.querySelector('h3').addEventListener('click', () => {
+                    // Alterna a classe 'open' no elemento pai (.details)
+                    detail.classList.toggle('open');
                 });
             });
         });
