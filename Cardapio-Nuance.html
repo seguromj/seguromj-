@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1691,7 +1693,8 @@
         </div>
   </div>
          
-<script>
+
+	<script>
         
         let carrinho = [];
         let etapaAtual = 1; 
@@ -1729,540 +1732,592 @@
         };
 
         // =================================================================
-        // 🚨 OBJETO DE CUPOM (ATUALIZADO PARA INCLUIR FRETEGRATIS) 🚨
-       //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+        // ✅ NOVO: MAPEAMENTO DOS HORÁRIOS DOS BLOCOS (Simples e Direto) ✅
+        // Este é o único ponto que define os horários dos seus 8 blocos.
+        // Chave: Nome do Bloco | Valor: [Hora de Início (0-23), Duração (em horas)]
+        const blocoHorarios = {
+            "BLOCK_0": [6, 3],  // 06:00 a 08:59
+            "BLOCK_1": [9, 3],  // 09:00 a 11:59
+            "BLOCK_2": [12, 3], // 12:00 a 14:59
+            "BLOCK_3": [15, 3], // 15:00 a 17:59
+            "BLOCK_4": [18, 3], // 18:00 a 20:59
+            "BLOCK_5": [21, 3], // 21:00 a 23:59 (Cruza a meia-noite)
+            "BLOCK_6": [0, 3],  // 00:00 a 02:59
+            "BLOCK_7": [3, 3]   // 03:00 a 05:59
+        };
+
         // =================================================================
-   
-        // Catálogo de cupons válidos
+        // 🚨 FUNÇÃO DE VALIDAÇÃO DE TEMPO DO CUPOM (ATUALIZADA) 🚨
+        // Verifica se o cupom está ativo na hora atual.
+        function isCupomAtivo(cupomCode) {
+            
+            // Se não for um cupom FRETE_X, ele está sempre ativo (CINCO, MEGA20, etc.)
+            if (!cupomCode.startsWith("FRETE_")) {
+                return true;
+            }
+
+            // 1. Identificar o Bloco (Lendo a propriedade 'bloco' que será adicionada)
+            const cupomInfo = cuponsValidos[cupomCode];
+            if (!cupomInfo || !cupomInfo.bloco) {
+                // Cupom FRETE_X sem bloco definido
+                return false; 
+            }
+
+            const blocoKey = cupomInfo.bloco; // Ex: "BLOCK_0"
+            const [horaInicio, duracao] = blocoHorarios[blocoKey];
+
+            if (horaInicio === undefined) {
+                 // Bloco não mapeado na lista de horários
+                return false; 
+            }
+
+            const agora = new Date();
+            const horaAtual = agora.getHours(); // 0 a 23
+            const horaFim = (horaInicio + duracao) % 24; // Fim com duração de 3h, circular
+
+            // Lógica de intervalo de tempo (inclusive a hora de início, exclusiva a hora de fim)
+            if (horaInicio < horaFim) {
+                // Intervalo normal (Ex: 9h a 11:59h)
+                return horaAtual >= horaInicio && horaAtual < horaFim;
+            } else {
+                // Intervalo que cruza a meia-noite (Ex: 21h a 23:59h E 00:00h a 02:59h)
+                return horaAtual >= horaInicio || horaAtual < horaFim;
+            }
+        }
+
+        // =================================================================
+        // 🚨 OBJETO DE CUPOM (ATUALIZADO COM A PROPRIEDADE 'bloco') 🚨
+        // AGORA É ESSENCIAL ADICIONAR A PROPRIEDADE 'bloco' EM CADA CUPOM FRETE_
+        // =================================================================
         const cuponsValidos = {
             // CUPOM DE R$5,00 (Exemplo que ABATE o valor)
             "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   // ---CINCO---
 
             // 🚨CUPONS FRETEGRATIS🚨
 			
-
-	// --- INÍCIO DO BLOCK_0 ---
-	"FRETE_B87H": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	// --- INÍCIO DO BLOCK_0 --- (6:00 - 8:59)
+	"FRETE_B87H": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_NTC6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NTC6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_5S24": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5S24": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_VVGG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_VVGG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_UHL1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_UHL1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_NIP5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NIP5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_KXSU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_KXSU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_5PQU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5PQU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_JIGJ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_JIGJ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_FDTM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_FDTM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_6HVK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_6HVK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_ES8K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ES8K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_EWVG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_EWVG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_897F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_897F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_EGAQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_EGAQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_5F57": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5F57": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_5OBZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5OBZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_4FHU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_4FHU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_C2QI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_C2QI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_S3B0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_S3B0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_P6FW": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_P6FW": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_NMQ4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NMQ4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_8ZWI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_8ZWI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_IT6G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_IT6G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_PTLR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_PTLR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_EVJS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_EVJS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_EHVB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_EHVB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_NRBO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NRBO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_050I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_050I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_7Q9D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_7Q9D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
-	"FRETE_ILUP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-
-	// --- INÍCIO DO BLOCK_1 ---
-	"FRETE_7OJF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MJSL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SBRS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_CQQQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_FP2J": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_IUF7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MWBC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_BTDO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_WGK4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_5966": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3IIV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_EEPA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_ZFZZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_N3I3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_GY5T": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_QVGX": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_PYA6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_O8OF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_ZIT2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_B449": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_USV6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_5KBL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_I859": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_21KK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SZTC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_4W8F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_CZC1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_T3U0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_NCXN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_0WAR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_HIZS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ILUP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_0"
 	},
 
-	// --- INÍCIO DO BLOCK_2 ---
-	"FRETE_2J38": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	// --- INÍCIO DO BLOCK_1 --- (9:00 - 11:59)
+	"FRETE_7OJF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_I0I0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_MJSL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_RWKO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_SBRS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_ER46": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_CQQQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_09R7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_FP2J": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_2T1E": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_IUF7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_2JXO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_MWBC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_NMCM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_BTDO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_WMN4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_WGK4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_JNM8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5966": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_X4QQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_3IIV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_3CXB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_EEPA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_8IJV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ZFZZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_QKVL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_N3I3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_TA9Y": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_GY5T": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_X91I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_QVGX": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_8J21": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_PYA6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_VP0N": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_O8OF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_LB6Y": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ZIT2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_CHZO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_B449": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_9RS3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_USV6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_ADG7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_5KBL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_F37G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_I859": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_Q3A6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_21KK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_13H2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_SZTC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_3ECV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_4W8F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_N2Y4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_CZC1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_L2N3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_T3U0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_HUNZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NCXN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_GQKE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_0WAR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
-	"FRETE_2AIK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-
-	// --- INÍCIO DO BLOCK_3 ---
-	"FRETE_39GO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_40PF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_T15K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MPI0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_6OJ8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_4OF8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_M9N4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_V4ZV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_VFMH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_BKJD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_N8KG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_6V6F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_O5N8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_BSG0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_F3N2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_JV80": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_1BZH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_7ULB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_22LM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_GUCU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_I60Z": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_P0DQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_GBQH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SI2L": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_74WW": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_ASJT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3PRF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3ZWV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_L7VB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MILO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_9RQF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_HIZS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_1"
 	},
 
-	// --- INÍCIO DO BLOCK_4 ---
-	"FRETE_CKJV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	// --- INÍCIO DO BLOCK_2 --- (12:00 - 14:59)
+	"FRETE_2J38": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_CC4W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_I0I0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_3DOP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_RWKO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_HY62": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ER46": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_LEAN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_09R7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_625H": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_2T1E": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_RLW6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_2JXO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_YCM0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_NMCM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_ZHW5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_WMN4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_OKK6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_JNM8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_OF6R": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_X4QQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_411I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_3CXB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_L7TO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_8IJV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_R44C": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_QKVL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_AYS3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_TA9Y": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_0WAZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_X91I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_OVDL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_8J21": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_4XM8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_VP0N": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_GPGH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_LB6Y": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_OSSZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_CHZO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_TL44": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_9RS3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_BKOG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ADG7": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_MUR2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_F37G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_VSCG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_Q3A6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_9V26": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_13H2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_4JH4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_3ECV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_4CLQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_N2Y4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_SL4F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_L2N3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_XCNX": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_HUNZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_0ZWD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_GQKE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
-	"FRETE_9IWN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-
-	// --- INÍCIO DO BLOCK_5 ---
-	"FRETE_9N6V": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_UTLS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3AIR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_KGGN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_P37D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_WTT2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3IGI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_J5FV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_0DGE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_IA9P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_AX6D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_XXED": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_WMKS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SJ3K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_VF4K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MUSV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_GQPQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_TTM2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_FJ8F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3210": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_X3XL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_INI1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_RDTP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_E3ME": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_PF6W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_P9U9": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_TYN3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_6ONF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SR3X": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_JJ1A": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_Q9AP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_2AIK": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_2"
 	},
 
-	// --- INÍCIO DO BLOCK_6 ---
-	"FRETE_15RA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	// --- INÍCIO DO BLOCK_3 --- (15:00 - 17:59)
+	"FRETE_39GO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_U5QF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_40PF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_OT1Z": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_T15K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_I54K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_MPI0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_XRIT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_6OJ8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_VR7T": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_4OF8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_9SLR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_M9N4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_7WLA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_V4ZV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_9JMO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_VFMH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_V5UI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_BKJD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_6S7P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_N8KG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_0E94": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_6V6F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_6G87": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_O5N8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_LMPT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_BSG0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_OHYA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_F3N2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_H5DG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_JV80": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_3K6R": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_1BZH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_X2QS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_7ULB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_EJEY": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_22LM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_DKKO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_GUCU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_UOZB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_I60Z": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_X5NQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_P0DQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_E9B1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_GBQH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_G307": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_SI2L": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_GL0P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_74WW": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_NVH3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_ASJT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_F3Y4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_3PRF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_ABHE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_3ZWV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_15F4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_L7VB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_NTTC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_MILO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
-	"FRETE_PFAO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-
-	// --- INÍCIO DO BLOCK_7 ---
-	"FRETE_53IM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3WAB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_1WX2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_7ZBT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_MMH5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_OI5W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_38CD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_AOQA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_EVAF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_15LA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_WLRU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_SNDG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_9A7K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_ZJGU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_GQ4X": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_TVI9": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_74PC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_IC0D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_Q9QD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_5RDB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_K7KC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_9ARO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_7JCU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_6N4D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_4M2A": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_Z91M": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_UT1P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_PV5G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_W7ZI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_3A7G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
-	},
-	"FRETE_6QFD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total."
+	"FRETE_9RQF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_3"
 	},
 
-	
-// Deixa o final assim:👉 },
-// Com a virgula e remover o cochete em baixo e cima no começo
+	// --- INÍCIO DO BLOCK_4 --- (18:00 - 20:59)
+	"FRETE_CKJV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_CC4W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_3DOP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_HY62": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_LEAN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_625H": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_RLW6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_YCM0": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_ZHW5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_OKK6": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_OF6R": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_411I": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_L7TO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_R44C": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_AYS3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_0WAZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_OVDL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_4XM8": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_GPGH": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_OSSZ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_TL44": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_BKOG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_MUR2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_VSCG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_9V26": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_4JH4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_4CLQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_SL4F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_XCNX": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_0ZWD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+	"FRETE_9IWN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_4"
+	},
+
+	// --- INÍCIO DO BLOCK_5 --- (21:00 - 23:59)
+	"FRETE_9N6V": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_UTLS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_3AIR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_KGGN": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_P37D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_WTT2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_3IGI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_J5FV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_0DGE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_IA9P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_AX6D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_XXED": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_WMKS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_SJ3K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_VF4K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_MUSV": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_GQPQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_TTM2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_FJ8F": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_3210": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_X3XL": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_INI1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_RDTP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_E3ME": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_PF6W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_P9U9": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_TYN3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_6ONF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_SR3X": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_JJ1A": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+	"FRETE_Q9AP": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_5"
+	},
+
+	// --- INÍCIO DO BLOCK_6 --- (00:00 - 02:59)
+	"FRETE_15RA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_U5QF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_OT1Z": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_I54K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_XRIT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_VR7T": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_9SLR": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_7WLA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_9JMO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_V5UI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_6S7P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_0E94": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_6G87": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_LMPT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_OHYA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_H5DG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_3K6R": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_X2QS": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_EJEY": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_DKKO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_UOZB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_X5NQ": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_E9B1": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_G307": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_GL0P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_NVH3": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_F3Y4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_ABHE": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_15F4": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_NTTC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+	"FRETE_PFAO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_6"
+	},
+
+	// --- INÍCIO DO BLOCK_7 --- (3:00 - 5:59)
+	"FRETE_53IM": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_3WAB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_1WX2": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_7ZBT": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_MMH5": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_OI5W": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_38CD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_AOQA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_EVAF": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_15LA": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_WLRU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_SNDG": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_9A7K": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_ZJGU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_GQ4X": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_TVI9": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_74PC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_IC0D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_Q9QD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_5RDB": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_K7KC": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_9ARO": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_7JCU": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_6N4D": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_4M2A": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_Z91M": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_UT1P": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_PV5G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_W7ZI": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_3A7G": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+	"FRETE_6QFD": { type: "frete", value: FRETE_VALOR_FIXO, minPurchase: 6.00, message: "🎉 Frete Grátis aplicado! O valor de R$5,00 foi removido do total.", bloco: "BLOCK_7"
+	},
+
             
-            
-            "NUANCE10": { type: "percent", value: 5.00, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },            // --- NUANCE10 ---
-            "FRETEGRATIS2": { type: "flat", value: 5.00, minPurchase: 6.00, message: "R$20,00 de desconto!" },
+            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },            // --- NUANCE10 ---
+            "FRETEGRATIS2": { type: "flat", value: 5.00, minPurchase: 6.00, message: "R$5,00 de desconto!" }, // Cupom Fixo que abate o valor do frete
             "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
         }; 
         
+        // =================================================================
+        // 🚨 FUNÇÃO mapCouponsToBlocks REMOVIDA
+        // A alocação de blocos foi feita diretamente no objeto cuponsValidos acima!
+        // =================================================================
+
         function salvarCarrinho() {
             try {
                 // Converte o array de objetos para uma string JSON e armazena
@@ -2316,61 +2371,7 @@
             }
         }
         
-        // ----------------------------------------------------
-        // 🚨 NOVO: Lógica de Quantidade no Carrinho 🚨
-        // ----------------------------------------------------
-        function alterarQuantidade(index, operacao) {
-            if (carrinho[index]) {
-                if (operacao === 'aumentar') {
-                    carrinho[index].quantidade++;
-                } else if (operacao === 'diminuir' && carrinho[index].quantidade > 1) {
-                    carrinho[index].quantidade--;
-                } else if (operacao === 'diminuir' && carrinho[index].quantidade === 1) {
-                    // Se for 1 e tentar diminuir, remove
-                    removerItemCarrinho(index);
-                    return; // Sai da função para evitar o processamento duplicado
-                }
-                
-                salvarCarrinho();
-                atualizarCarrinhoFlutuante();
-                aplicarCupom(true); 
-                atualizarListaCarrinhoModal(); // Redesenha a lista
-            }
-        }
-        window.alterarQuantidade = alterarQuantidade; // Torna global para o HTML/Modal
-
-
-        // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
-        function formatarTelefone(input) {
-            let value = input.value.replace(/\D/g, ''); 
-            let formatted = '';
-
-            if (value.length > 0) {
-                formatted = '(' + value.substring(0, 2);
-            }
-            if (value.length > 2) {
-                formatted += ') ' + value.substring(2, 7);
-            }
-            if (value.length > 7) {
-                formatted += '-' + value.substring(7, 11);
-            }
-            input.value = formatted;
-        }
-
-        function formatarCEP(input) {
-            let value = input.value.replace(/\D/g, ''); 
-            let formatted = '';
-
-            if (value.length > 0) {
-                formatted = value.substring(0, 5);
-            }
-            if (value.length > 5) {
-                formatted += '-' + value.substring(5, 8);
-            }
-            input.value = formatted;
-        }
-
-        // --- LÓGICA DE EXIBIÇÃO DE CAMPOS CONDICIONAIS ---
+// --- LÓGICA DE EXIBIÇÃO DE CAMPOS CONDICIONAIS ---
         document.getElementById('local').addEventListener('change', function() {
             const local = this.value;
             const campoMesa = document.getElementById('campo-mesa');
@@ -2554,6 +2555,28 @@
             // 🚨 CORREÇÃO ESSENCIAL: Redesenha a lista do carrinho no modal para sumir com o item.
             atualizarListaCarrinhoModal(); 
         }
+
+        // 🚨 NOVO: Funções de alterarQuantidade (não estava no código anterior, mas é essencial para o render)
+        function alterarQuantidade(index, action) {
+            if (!carrinho[index]) return;
+
+            if (action === 'aumentar') {
+                carrinho[index].quantidade++;
+            } else if (action === 'diminuir') {
+                if (carrinho[index].quantidade > 1) {
+                    carrinho[index].quantidade--;
+                } else {
+                    // Se for 1 e diminuir, remove o item
+                    removerItemCarrinho(index);
+                    return; // Sai da função para evitar o salvamento duplicado
+                }
+            }
+            
+            salvarCarrinho();
+            aplicarCupom(true); 
+            atualizarListaCarrinhoModal(); 
+        }
+        window.alterarQuantidade = alterarQuantidade; // Torna acessível no HTML
         
         // ===================================
         // === LÓGICA DO CUPOM ===
@@ -2603,6 +2626,16 @@
             if (cuponsValidos[cupomParaTestar]) {
                 const cupom = cuponsValidos[cupomParaTestar];
 
+                // 🚨 NOVA VALIDAÇÃO DE TEMPO 🚨
+                // Se for um cupom FRETE_, verifica o horário.
+                if (!isCupomAtivo(cupomParaTestar)) {
+                    if (!isSilent) {
+                        messageDisplay.textContent = '🚫 Este cupom de frete não está ativo neste momento. Tente novamente no próximo bloco de horário.';
+                    }
+                    atualizarListaCarrinhoModal();
+                    return;
+                }
+                
                 if (totalItens >= cupom.minPurchase) {
                     novoCupomAplicado = { ...cupom, codigo: cupomParaTestar }; // Armazena o código também
                     
@@ -2726,6 +2759,19 @@
             const totalParaDescontoConvencional = totalItens; 
             
             if (cupomAplicado) {
+                // 🚨 NOVA VALIDAÇÃO DE TEMPO para cupons persistidos 🚨
+                if (!isCupomAtivo(cupomAplicado.codigo)) {
+                    cupomAplicado = null; // Invalida se o horário expirou
+                    descontoValor = 0;
+                    messageDisplay.textContent = '🚫 O cupom aplicado expirou (limite de tempo).';
+                    messageDisplay.style.color = 'red';
+                    input.value = '';
+                    salvarCarrinho();
+                    // Recalcula sem o cupom
+                    atualizarListaCarrinhoModal();
+                    return;
+                }
+
                 if (cupomAplicado.type === 'percent') {
                     totalDesconto = totalParaDescontoConvencional * cupomAplicado.value;
                 } else if (cupomAplicado.type === 'flat') {
@@ -2785,7 +2831,7 @@
                 removeBtn.style.display = 'none'; // Esconde se não houver cupom ativo
                 
                 // Se o input tem valor mas não há cupom aplicado (Ex: não atingiu o mínimo), não limpa a mensagem de erro
-                if (input.value === '') { 
+                if (input.value === '' && messageDisplay.textContent.startsWith('🚫') === false) { 
                     messageDisplay.textContent = ''; 
                 }
             }
@@ -2805,6 +2851,9 @@
             atualizarCarrinhoFlutuante();
         }
 
+        // =========================================================================
+        // 🚀 FUNÇÃO 'validarFormulario' CORRIGIDA PARA TELEFONE FLEXÍVEL 🚀
+        // =========================================================================
         function validarFormulario() {
             let isValid = true;
             
@@ -2825,8 +2874,11 @@
                 isValid = false;
             }
 
-            const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/; 
-            if (!telefoneRegex.test(telefone.value.trim())) {
+            // 1. Limpa o telefone: remove tudo que não for dígito (ignora (), espaço, -)
+            const telefoneLimpo = telefone.value.trim().replace(/\D/g, '');
+            
+            // 2. Validação: verifica se o telefone limpo tem exatamente 11 dígitos (DDD + 9º dígito + 8 dígitos)
+            if (telefoneLimpo.length !== 11) {
                 document.getElementById('error-telefone').style.display = 'block';
                 isValid = false;
             }
@@ -2841,10 +2893,13 @@
             }
             
             if (local.value === 'Entrega') {
-                 const cepRegex = /^\d{5}-\d{3}$/;
-                 if (!cepRegex.test(cep.value.trim())) {
+                 // Limpa o CEP para validação
+                 const cepLimpo = cep.value.trim().replace(/\D/g, '');
+                 
+                 // Valida o CEP (espera 8 dígitos)
+                 if (cepLimpo.length !== 8) {
                     isValid = false; 
-                    // Se o CEP é inválido, marca como false
+                    // Nota: Aqui você pode adicionar um display de erro específico para o CEP se necessário
                  }
 
                  if (rua.value.trim() === '' || numero.value.trim() === '') {
@@ -2855,7 +2910,8 @@
             // Armazena os dados se for válido
             if (isValid) {
                 form.nome = nome.value.trim();
-                form.telefone = telefone.value.trim();
+                // Armazena o telefone na forma limpa (apenas dígitos)
+                form.telefone = telefoneLimpo; 
                 form.local = local.value;
                 form.mesa = local.value === 'Mesa' ? mesa.value.trim() : '';
                 
@@ -2871,6 +2927,8 @@
             
             return isValid;
         }
+        // =========================================================================
+        
            function gerarMensagemPedido() {
             let mensagemPedido = '';
             let totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
@@ -2899,8 +2957,12 @@
 
             // 1. Dados do Cliente
             mensagemPedido += `*📋 NOVO PEDIDO - NUANCE 📋*\n`;
+            
+            // O telefone é pego do 'form.telefone', que já está limpo (apenas dígitos)
+            const telefoneFormatado = form.telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+            
             mensagemPedido += `Nome: ${form.nome}\n`;
-            mensagemPedido += `Telefone: ${form.telefone}\n`;
+            mensagemPedido += `Telefone: ${telefoneFormatado}\n`;
             
             if (form.local === 'Mesa' && form.mesa) {
                 mensagemPedido += `Local: Mesa ${form.mesa} (Consumo no Local)\n`;
@@ -2912,7 +2974,8 @@
                 if (form.complemento) {
                      mensagemPedido += `Comple.: ${form.complemento}\n`;
                 }
-                mensagemPedido += `CEP: ${form.cep}\n`;
+                // O CEP será enviado como a pessoa digitou, mas a validação exigiu 8 dígitos numéricos.
+                mensagemPedido += `CEP: ${form.cep}\n`; 
             }
 
             mensagemPedido += `\n*🛒 ITENS DO PEDIDO 🛒*\n`;
@@ -2935,7 +2998,7 @@
             if (freteAplicado > 0) {
                  mensagemPedido += `Frete: R$ ${freteFormatado}\n`;
             } else {
-                 mensagemPedido += `Frete: *GRÁTIS* (Cupom FRETEGRATIS aplicado)\n`;
+                 mensagemPedido += `Frete: *GRÁTIS* (Cupom ${cupomAplicado.codigo} aplicado)\n`;
             }
             
             if (cupomAplicado && cupomAplicado.type !== 'frete') {
@@ -3174,6 +3237,7 @@ function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
+        
     }
     return array;
 }
@@ -3227,7 +3291,9 @@ function showNextMessage() {
 }
 
 // Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
-setTimeout(showNextMessage, 2000); 
-    </script>
+setTimeout(showNextMessage, 2000);
+</script>
+	
 </body>
 </html>
+
