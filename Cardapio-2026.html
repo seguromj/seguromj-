@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -105,7 +104,7 @@
         .price { color: var(--success); font-weight: bold; font-size: 1.2em; display: flex; justify-content: center; align-items: center; gap: 8px; margin: 10px 0; }
         .old-price { color: #999; text-decoration: line-through; font-size: 0.8em; font-weight: normal; }
         .badge-ml { background: #eee; color: #555; padding: 2px 6px; border-radius: 5px; font-size: 0.5em; text-transform: uppercase; vertical-align: middle; }
-        .badge-ml { background: #eee; color: #555; padding: 2px 6px; border-radius: 5px; font-size: 0.5em; text-transform: uppercase; vertical-align: middle; }
+        
        
         
         .btn-main, .btn-add { background: var(--primary); border: none; width: 180px; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
@@ -391,9 +390,7 @@
             </div>
         </div>
             
-<!--==========DRINKS SEM ALCOOL===============-->
-            
-        <div class="menu-section" data-category="sem-alcool">
+<div class="menu-section" data-category="sem-alcool">
             <h2>Drinks sem Álcool</h2>
                 
             <div class="carousel-container drag-scroll">
@@ -469,9 +466,7 @@
                 </div>
             </div>
         </div>
-<!--========COPÃO=================-->
-            
-        <div class="menu-section" data-category="copao">
+<div class="menu-section" data-category="copao">
             <h2>Copão</h2>
                 
     <div class="top-bar-branding">
@@ -685,6 +680,18 @@
     let activeDiscount = 0;
     let freeShippingRequested = false;
 
+    // --- NOVA ESTRUTURA DE CUPONS POR BLOCOS ---
+    const CUPONS_POR_BLOCO = {
+	0: ["MAYCK2E3Q", "MAYCKJIH7", "MAYCKNJ4V", "MAYCKZNIC", "MAYCKWQ3C", "MAYCKAOR5", "MAYCKFM6F", "MAYCKJWYI", "MAYCKEI5I", "MAYCK88S9", "MAYCKFBYF", "MAYCKA880", "MAYCK7FRY", "MAYCKJPFL", "MAYCKT71J", "MAYCKZU8E", "MAYCK7LO5", "MAYCKFF6V", "MAYCK0CLW", "MAYCKOZTL", "MAYCK5ZRR", "MAYCKQG1Y", "MAYCKQMA3", "MAYCK2R7N", "MAYCKXQPV", "MAYCKPIDM", "MAYCKO3YB", "MAYCKWB8M", "MAYCKS58H", "MAYCKXFVE", "MAYCKAU2Q"], // 06:00 - 08:59
+	1: ["MAYCKWDAJ", "MAYCKGYO0", "MAYCK7N3A", "MAYCKTDQU", "MAYCKPA10", "MAYCKXWPM", "MAYCKIYND", "MAYCKGBZW", "MAYCKDH36", "MAYCKPY62", "MAYCKAGHW", "MAYCKIBLE", "MAYCK9O71", "MAYCK9TTF", "MAYCKB8MT", "MAYCKLGQ8", "MAYCKICXC", "MAYCKOB3R", "MAYCKDUWW", "MAYCKD3CM", "MAYCKLI3M", "MAYCKJ4JL", "MAYCKH1DU", "MAYCK7IUS", "MAYCK3N38", "MAYCKUF4V", "MAYCKMVZ0", "MAYCKGTJN", "MAYCKM9FB", "MAYCKPN99", "MAYCKY0FI"], // 09:00 - 11:59
+	2: ["MAYCKWBW3", "MAYCKNBVI", "MAYCKPYR6", "MAYCKVNVA", "MAYCKWU3P", "MAYCKKO5L", "MAYCK4WS8", "MAYCKHNHG", "MAYCKONB6", "MAYCK4E17", "MAYCKBAPR", "MAYCK13CF", "MAYCKBNTS", "MAYCKLQKZ", "MAYCKVS2W", "MAYCKZR1R", "MAYCKDIJ6", "MAYCKBPNF", "MAYCKRSAO", "MAYCKZVJ4", "MAYCKIUNP", "MAYCK14RJ", "MAYCKZHX7", "MAYCKLFGW", "MAYCK4XGD", "MAYCKW3YP", "MAYCK5KQH", "MAYCK7011", "MAYCKEUFZ", "MAYCKPEXQ", "MAYCKUI3F"], // 12:00 - 14:59
+	3: ["MAYCK5ZHA", "MAYCK4NK6", "MAYCKHLWG", "MAYCKU39U", "MAYCKYO3Q", "MAYCKWXH9", "MAYCKOBHZ", "MAYCK73GW", "MAYCK0TJ9", "MAYCKVGDC", "MAYCK9V9Q", "MAYCK2ZKK", "MAYCKC6W9", "MAYCKKPV2", "MAYCKVFS0", "MAYCKEVHQ", "MAYCK6UY6", "MAYCKPYJN", "MAYCKIXXM", "MAYCKE3AB", "MAYCKHQW0", "MAYCKFUHX", "MAYCKHCJG", "MAYCK0Z54", "MAYCKXDJG", "MAYCK8S8C", "MAYCKOVT0", "MAYCKUWYR", "MAYCKQPJN", "MAYCK9FMA", "MAYCKHQ61"], // 15:00 - 17:59
+	4: ["MAYCK1VKW", "MAYCKT46I", "MAYCKDI36", "MAYCKTDNH", "MAYCK1YOY", "MAYCKU4Y5", "MAYCKLEAW", "MAYCK4CC4", "MAYCKD2O0", "MAYCKRQJ5", "MAYCKRE86", "MAYCKY5U3", "MAYCKDC27", "MAYCKT21C", "MAYCKVP50", "MAYCK3AR2", "MAYCKIO74", "MAYCKXRR6", "MAYCKC64Y", "MAYCK1Q0W", "MAYCK0BWZ", "MAYCK8JQB", "MAYCKUQBG", "MAYCKSRU4", "MAYCKA6UM", "MAYCKYQB3", "MAYCKZI7X", "MAYCK2GO0", "MAYCKR7PL", "MAYCKX6CW", "MAYCKI9C4"], // 18:00 - 20:59
+	5: ["MAYCKPGI3", "MAYCK3JH0", "MAYCKY1I6", "MAYCKBF9R", "MAYCK7HVL", "MAYCKFA9E", "MAYCKZUKH", "MAYCK8IFX", "MAYCK31BF", "MAYCK2SS3", "MAYCKO509", "MAYCK7U9G", "MAYCK0E3K", "MAYCKT1EN", "MAYCKRMS2", "MAYCKAXDJ", "MAYCK3X1S", "MAYCKSYKV", "MAYCKGNAO", "MAYCK31XI", "MAYCKMKZ3", "MAYCKKHCI", "MAYCKMVY1", "MAYCKKCV6", "MAYCKQ98M", "MAYCKBW2Y", "MAYCKG6MY", "MAYCKJDIY", "MAYCKWVA9", "MAYCKLRAW", "MAYCK11FR"], // 21:00 - 23:59
+	6: ["MAYCKZWVU", "MAYCKK5L2", "MAYCKD263", "MAYCK2ICX", "MAYCK38C0", "MAYCKLVG0", "MAYCK315G", "MAYCK6YJS", "MAYCK3BKG", "MAYCKXQIA", "MAYCKNKQI", "MAYCKZZYV", "MAYCKYEGK", "MAYCK7HHL", "MAYCKFGNS", "MAYCKWJRJ", "MAYCK8QIJ", "MAYCKQJXX", "MAYCKXQV9", "MAYCK3BGI", "MAYCK0A5W", "MAYCK8Y3B", "MAYCKJ7C9", "MAYCKSL7R", "MAYCKDISB", "MAYCKG1LU", "MAYCK4Y4P", "MAYCKPJBH", "MAYCKM21F", "MAYCKHCX7", "MAYCKEBTA"], // 00:00 - 02:59
+	7: ["MAYCKULDZ", "MAYCKIODH", "MAYCK619J", "MAYCKJ1AX", "MAYCKITVK", "MAYCKP7UA", "MAYCK28D0", "MAYCKC38O", "MAYCKXGSB", "MAYCKP0ZG", "MAYCKEG0A", "MAYCKS7PO", "MAYCKO57B", "MAYCK3LUU", "MAYCKSPWH", "MAYCK430P", "MAYCKDOQE", "MAYCKMFBW", "MAYCKX8PO", "MAYCKI8IF", "MAYCK06H3", "MAYCKM7AQ", "MAYCKXPH0", "MAYCKM393", "MAYCKGWPV", "MAYCK2UAT", "MAYCK04SA", "MAYCKS9KC", "MAYCKQ8CB", "MAYCK2DYS", "MAYCKOXEU"] // 03:00 - 05:59
+};
+
     const linksDePagamentoFixos = {
         "1.00": "https://mpago.la/2AXmnns", "2.00": "https://mpago.la/1XRx3MU", "3.00": "https://mpago.la/2hCQdie",
         "4.00": "https://mpago.la/21V68Ki", "5.00": "https://mpago.la/2GCnr3j", "6.00": "https://mpago.la/127jvNn",
@@ -760,10 +767,10 @@
         const now = new Date();
         
         // Defina aqui o horário de abertura e fechamento
-        const horaAbertura = 08;   //abre
+        const horaAbertura = 18;   //abre
         const minutoAbertura = 0;
-        const horaFechamento = 20;  //Fecha
-        const minutoFechamento = 30;
+        const horaFechamento = 23;  //Fecha
+        const minutoFechamento = 59;
 
         // Converte tudo para minutos totais desde o início do dia
         const minutosAgora = (now.getHours() * 60) + now.getMinutes();
@@ -817,9 +824,42 @@
         activeDiscount = 0;
         freeShippingRequested = false;
 
-        if (input === "FRETEGRATIS") {
+        const agora = new Date();
+        const horaAtual = agora.getHours();
+        
+        let blocoAtual;
+        if (horaAtual >= 6 && horaAtual < 9) blocoAtual = 0;
+        else if (horaAtual >= 9 && horaAtual < 12) blocoAtual = 1;
+        else if (horaAtual >= 12 && horaAtual < 15) blocoAtual = 2;
+        else if (horaAtual >= 15 && horaAtual < 18) blocoAtual = 3;
+        else if (horaAtual >= 18 && horaAtual < 21) blocoAtual = 4;
+        else if (horaAtual >= 21 && horaAtual < 24) blocoAtual = 5;
+        else if (horaAtual >= 0 && horaAtual < 3) blocoAtual = 6;
+        else if (horaAtual >= 3 && horaAtual < 6) blocoAtual = 7;
+
+        const cuponsValidosDesteBloco = CUPONS_POR_BLOCO[blocoAtual];
+
+        // VERIFICAÇÃO DE FRETE GRÁTIS (FRETEGRATIS OU BLOCOS 0-7)
+        let cupomDeBlocoDigitado = false;
+        let cupomDeOutroBloco = false;
+
+        // Verifica se o cupom digitado pertence ao bloco atual
+        if (cuponsValidosDesteBloco.includes(input)) {
+            cupomDeBlocoDigitado = true;
+        } else {
+            // Verifica se pertence a qualquer outro bloco
+            for (let b in CUPONS_POR_BLOCO) {
+                if (CUPONS_POR_BLOCO[b].includes(input)) {
+                    cupomDeOutroBloco = true;
+                }
+            }
+        }
+
+        if (input === "FRETEGRATIS" || cupomDeBlocoDigitado) {
             freeShippingRequested = true;
-            msg.innerHTML = "<span style='color:green'>Cupom FRETEGRATIS ativado (Válido apenas para Delivery).</span>";
+            msg.innerHTML = "<span style='color:green'>Cupom de frete grátis ativado (Válido apenas para Delivery).</span>";
+        } else if (cupomDeOutroBloco) {
+            msg.innerHTML = "<span style='color:orange'>Este cupom não está ativo neste horário.</span>";
         } else if (input === "10%") {
             activeDiscount = 0.10;
             msg.innerHTML = "<span style='color:green'>Desconto de 10% aplicado!</span>";
