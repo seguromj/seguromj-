@@ -984,25 +984,24 @@
   const botaoInstalar = document.getElementById('btnInstalarApp');
   const botaoRecusar = document.getElementById('btnRecusarApp');
 
-  // Função para verificar se os 15 minutos já passaram
-  function podeMostrarNovamente() {
-    const expiraEm = localStorage.getItem('nuance_pausa_instalacao');
-    if (!expiraEm) return true;
-    return new Date().getTime() > expiraEm;
-  }
-
+  // Captura o evento do navegador
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     promptDeInstalacao = e;
 
-    // MOSTRA EM 5 SEGUNDOS (5000ms)
-    // Só inicia o contador se os 15 minutos já tiverem passado
-    if (podeMostrarNovamente()) {
-      setTimeout(() => {
-        areaInstalacao.style.display = 'block';
-      }, 5000); 
-    }
+    // Se o app não estiver instalado, mostra em 5 segundos
+    iniciarContadorAparecer(5000);
   });
+
+  function iniciarContadorAparecer(tempo) {
+    setTimeout(() => {
+      // Verifica se o usuário já instalou ou se já está no app antes de mostrar
+      const modoApp = window.matchMedia('(display-mode: standalone)').matches;
+      if (!modoApp) {
+        areaInstalacao.style.display = 'block';
+      }
+    }, tempo);
+  }
 
   botaoInstalar.addEventListener('click', () => {
     if (promptDeInstalacao) {
@@ -1016,18 +1015,19 @@
   });
 
   botaoRecusar.addEventListener('click', () => {
-    // Define o tempo atual + 15 minutos (15 * 60 * 1000 milissegundos)
-    const tempoExpira = new Date().getTime() + (15 * 60 * 1000);
-    localStorage.setItem('nuance_pausa_instalacao', tempoExpira);
-    
+    // Esconde o botão imediatamente
     areaInstalacao.style.display = 'none';
+
+    // Agenda para aparecer novamente em 10 minutos (600.000 ms) 
+    // caso ele não atualize a página
+    iniciarContadorAparecer(600000);
   });
 
   window.addEventListener('appinstalled', () => {
     areaInstalacao.style.display = 'none';
-    localStorage.removeItem('nuance_pausa_instalacao');
   });
 </script>
+
 
 
 
