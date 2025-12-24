@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="imgs/Favicon.jpg" type="image/x-con">
+
+	
 	<title>NUANCE - Cardápio Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -967,6 +969,73 @@
         <br><br><br>
 </footer>
 
+	<!--====================================================================-->
+<!--====================================================================-->
+<div id="container-instalacao" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: rgba(0,0,0,0.95); padding: 30px 20px; text-align: center; border: 1px solid #d4af37; border-radius: 15px; z-index: 10000; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+    <p style="color: #fff; margin: 0 0 20px 0; font-family: sans-serif; font-size: 16px; line-height: 1.5;">Leve a <strong>NUANCE</strong> no seu bolso! <br>Instale nosso App. 🍸</p>
+    
+    <button id="btnInstalarApp" style="width: 100%; background-color: #fff; color: #000; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">
+        Instalar Agora
+    </button>
+    
+    <button id="btnRecusarApp" style="width: 100%; background-color: transparent; color: #aaa; border: none; padding: 10px; cursor: pointer; text-decoration: underline; font-size: 11px;">
+        Agora não
+    </button>
+</div>
+<script>
+  let promptDeInstalacao;
+  const areaInstalacao = document.getElementById('container-instalacao');
+  const botaoInstalar = document.getElementById('btnInstalarApp');
+  const botaoRecusar = document.getElementById('btnRecusarApp');
+
+  // Verifica se o usuário já recusou nesta visita (localStorage limpa ao fechar navegador em alguns casos, ou podemos usar cookies)
+  // Para aparecer apenas se ele entrar novamente no site, o sessionStorage é o ideal.
+  const jaDecidiuNestaSessao = sessionStorage.getItem('nuance_decisao_app');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    promptDeInstalacao = e;
+
+    // Se ele ainda não decidiu nesta sessão de navegação...
+    if (!jaDecidiuNestaSessao) {
+      // AGUARDA 30 SEGUNDOS (30000ms) PARA MOSTRAR
+      setTimeout(() => {
+        areaInstalacao.style.display = 'block';
+      }, 10000);
+    }
+  });
+
+  botaoInstalar.addEventListener('click', () => {
+    if (promptDeInstalacao) {
+      promptDeInstalacao.prompt();
+      promptDeInstalacao.userChoice.then((escolha) => {
+        if (escolha.outcome === 'accepted') {
+          areaInstalacao.style.display = 'none';
+        }
+        sessionStorage.setItem('nuance_decisao_app', 'sim');
+      });
+    }
+  });
+
+  botaoRecusar.addEventListener('click', () => {
+    // Esconde e marca que ele decidiu não instalar POR ENQUANTO.
+    // Como é sessionStorage, ao fechar o site e entrar de novo, o botão poderá aparecer após 30s.
+    sessionStorage.setItem('nuance_decisao_app', 'recusado');
+    areaInstalacao.style.display = 'none';
+  });
+
+  window.addEventListener('appinstalled', () => {
+    areaInstalacao.style.display = 'none';
+  });
+</script>
+
+
+
+
+
+<!--====================================================================-->
+<!--====================================================================-->
+    
         
         
 <script>
