@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -865,6 +866,7 @@
         <div id="fields-retirada" style="display:none"><div class="form-group"><label>Nome*</label><input type="text" id="ret-nome"></div><div class="form-group"><label>CPF*</label><input type="text" id="cpf-retirada" oninput="mascaraCPF(this)" maxlength="14"></div></div>
         <div id="fields-delivery" style="display:none">
             <div class="form-group"><label>Nome*</label><input type="text" id="dev-nome"></div>
+            <div class="form-group"><label>Seu WhatsApp*</label><input type="text" id="dev-contato"></div>
             <div class="form-group"><label>CPF*</label><input type="text" id="dev-CPF" oninput="mascaraCPF(this)" maxlength="14"></div>
             <div class="form-group"><label>Bairro*</label><input type="text" id="dev-bairro"></div>
             <div class="form-group"><label>Rua*</label><input type="text" id="dev-rua"></div>
@@ -1363,7 +1365,7 @@ function revealText(str) {
 
     function toggleFields() {
         const type = document.getElementById('delivery-type').value;
-        document.getElementById('fields-mesa').style.display = type === 'mesa' ? 'block' : 'none';
+        document.getElementById('fields-mesa').style.display = type === 'mesa 5' ? 'block' : 'none';
         document.getElementById('fields-retirada').style.display = type === 'retirada' ? 'block' : 'none';
         document.getElementById('fields-delivery').style.display = type === 'delivery' ? 'block' : 'none';
         
@@ -1412,16 +1414,17 @@ function revealText(str) {
         
         let dadosParaPlanilha = {
             produtos: produtosTxt, total: totalStr, coleta: type,
-            nome: "", cpf: "", bairro: "", rua: "", numero: "", comp: ""
+            nome: "", contato: "", cpf: "", bairro: "", rua: "", numero: "", comp: ""
         };
 
-        if (type === 'mesa') {
+        if (type === 'mesa5') {
             dadosParaPlanilha.nome = document.getElementById('mesa-nome').value;
         } else if (type === 'retirada') {
             dadosParaPlanilha.nome = document.getElementById('ret-nome').value;
             dadosParaPlanilha.cpf = document.getElementById('cpf-retirada').value;
         } else if (type === 'delivery') {
             dadosParaPlanilha.nome = document.getElementById('dev-nome').value;
+            dadosParaPlanilha.contato = document.getElementById('dev-contato').value;
             dadosParaPlanilha.cpf = document.getElementById('dev-CPF').value;
             dadosParaPlanilha.bairro = document.getElementById('dev-bairro').value;
             dadosParaPlanilha.rua = document.getElementById('dev-rua').value;
@@ -1437,14 +1440,14 @@ function revealText(str) {
     function finalizarWhatsApp() {
         playSuccessSound();
         const type = document.getElementById('delivery-type').value;
-        let msg = `*🐝 NOVO PEDIDO - BEEDRINKS*\n\n`;
+        let msg = `*NOVO PEDIDO - NUANCE*\n\n`;
         
-        if (type === 'mesa') {
-            msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa 5\n`;
+        if (type === 'mesa5') {
+            msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa5 5\n`;
         } else if (type === 'retirada') {
             msg += `*Cliente:* ${document.getElementById('ret-nome').value}\n*CPF:* ${document.getElementById('cpf-retirada').value}\n*Entrega:* Retirada no Balcão\n`;
         } else if (type === 'delivery') {
-            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*CPF:* ${document.getElementById('dev-CPF').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
+            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato').value}\n*CPF:* ${document.getElementById('dev-CPF').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
             const complemento = document.getElementById('dev-comp').value;
             if (complemento) msg += `*Comp:* ${complemento}\n`;
             
@@ -1512,7 +1515,8 @@ function revealText(str) {
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScCadaja6iLfwVL7fH6aVs_iXTJpZgBREY-Ju98Zqg3KKslWg/formResponse";
         const formData = new FormData();
         formData.append("entry.62718261", dados.produtos);        
-        formData.append("entry.1278482765", dados.nome);            
+        formData.append("entry.1278482765", dados.nome);
+        formData.append("entry.1120754933", dados.contato);
         formData.append("entry.143126943", dados.cpf);             
         formData.append("entry.1878038120", dados.bairro);           
         formData.append("entry.1399400806", dados.rua);                 
