@@ -1419,7 +1419,8 @@ function revealText(str) {
         
         let dadosParaPlanilha = {
             produtos: produtosTxt, total: totalStr, coleta: type,
-            nome: "", contato: "", cpf: "", cep: "", bairro: "", rua: "", numero: "", comp: ""
+            nome: "", contato: "", cpf: "", cep: "", bairro: "", rua: "", numero: "", comp: "",
+            pagamentoLink: currentPaymentLink // NOVA VARIÁVEL AQUI
         };
 
         if (type === 'mesa') {
@@ -1537,6 +1538,15 @@ function revealText(str) {
         formData.append("entry.1697072560", dados.comp);        
         formData.append("entry.1857638858", dados.coleta);          
         formData.append("entry.1235511550", dados.total);            
+        
+        // ACRESCENTADO O LINK DE PAGAMENTO AO CAMPO DE COMPLEMENTO OU QUALQUER OUTRO DESEJADO
+        // Nota: Como não sei o ID exato do campo do Link na sua planilha, 
+        // concatenei ele no campo de "Complemento" (entry.1697072560) para você visualizar
+        // Ou você pode criar um campo novo no forms e colocar o ID dele aqui.
+        if(dados.pagamentoLink !== "#") {
+             formData.append("entry.1697072560", dados.comp + " | LINK: " + dados.pagamentoLink);
+        }
+
         fetch(FORM_URL, { method: "POST", mode: "no-cors", body: formData });
     }
         
