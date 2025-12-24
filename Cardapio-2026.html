@@ -977,6 +977,8 @@
 
 	<!--====================================================================-->
 <!--====================================================================-->
+
+
 <div id="container-instalacao" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: rgba(0,0,0,0.95); padding: 30px 20px; text-align: center; border: 1px solid #d4af37; border-radius: 15px; z-index: 10000; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
     <p style="color: #fff; margin: 0 0 20px 0; font-family: sans-serif; font-size: 16px; line-height: 1.5;">Leve a <strong>NUANCE</strong> no seu bolso! <br>Instale nosso App. 🍸</p>
     
@@ -988,28 +990,31 @@
         Agora não
     </button>
 </div>
+
 <script>
   let promptDeInstalacao;
   const areaInstalacao = document.getElementById('container-instalacao');
   const botaoInstalar = document.getElementById('btnInstalarApp');
   const botaoRecusar = document.getElementById('btnRecusarApp');
 
-  // Verifica se o usuário já recusou nesta visita (localStorage limpa ao fechar navegador em alguns casos, ou podemos usar cookies)
-  // Para aparecer apenas se ele entrar novamente no site, o sessionStorage é o ideal.
-  const jaDecidiuNestaSessao = sessionStorage.getItem('nuance_decisao_app');
-
+  // Captura o evento do navegador
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     promptDeInstalacao = e;
 
-    // Se ele ainda não decidiu nesta sessão de navegação...
-    if (!jaDecidiuNestaSessao) {
-      // AGUARDA 30 SEGUNDOS (30000ms) PARA MOSTRAR
-      setTimeout(() => {
-        areaInstalacao.style.display = 'block';
-      }, 10000);
-    }
+    // Se o app não estiver instalado, mostra em 5 segundos
+    iniciarContadorAparecer(5000);
   });
+
+  function iniciarContadorAparecer(tempo) {
+    setTimeout(() => {
+      // Verifica se o usuário já instalou ou se já está no app antes de mostrar
+      const modoApp = window.matchMedia('(display-mode: standalone)').matches;
+      if (!modoApp) {
+        areaInstalacao.style.display = 'block';
+      }
+    }, tempo);
+  }
 
   botaoInstalar.addEventListener('click', () => {
     if (promptDeInstalacao) {
@@ -1018,23 +1023,23 @@
         if (escolha.outcome === 'accepted') {
           areaInstalacao.style.display = 'none';
         }
-        sessionStorage.setItem('nuance_decisao_app', 'sim');
       });
     }
   });
 
   botaoRecusar.addEventListener('click', () => {
-    // Esconde e marca que ele decidiu não instalar POR ENQUANTO.
-    // Como é sessionStorage, ao fechar o site e entrar de novo, o botão poderá aparecer após 30s.
-    sessionStorage.setItem('nuance_decisao_app', 'recusado');
+    // Esconde o botão imediatamente
     areaInstalacao.style.display = 'none';
+
+    // Agenda para aparecer novamente em 10 minutos (600.000 ms) 
+    // caso ele não atualize a página
+    iniciarContadorAparecer(600000);
   });
 
   window.addEventListener('appinstalled', () => {
     areaInstalacao.style.display = 'none';
   });
 </script>
-
 
 
 
