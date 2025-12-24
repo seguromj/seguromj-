@@ -1544,7 +1544,7 @@ function revealText(str) {
         // concatenei ele no campo de "Complemento" (entry.1697072560) para você visualizar
         // Ou você pode criar um campo novo no forms e colocar o ID dele aqui.
         if(dados.pagamentoLink !== "#") {
-             formData.append("entry.1697072560", dados.comp + " | LINK: " + dados.pagamentoLink);
+             formData.append("entry.1901397709", " | LINK: " + dados.pagamentoLink);
         }
 
         fetch(FORM_URL, { method: "POST", mode: "no-cors", body: formData });
