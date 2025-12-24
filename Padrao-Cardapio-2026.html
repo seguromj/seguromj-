@@ -1,10 +1,12 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUANCE - Cardápio Digital</title>
+    <link rel="shortcut icon" href="imgs/Favicon.jpg" type="image/x-con">
+	<title>NUANCE - Cardápio Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #FFD700; 
@@ -15,6 +17,7 @@
                 --danger: #ff4d4d;
                 --success: #27ae60; 
                 --Laranja: #F54927;
+			    --verde-perfil: #00F241;
                 --shadow: 0 4px 15px rgba(0,0,0,0.1); }
                 
         
@@ -456,7 +459,7 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--primary);
+    border: 2px solid var(--verde-perfil);
 }
 
 /* No computador, ele fica em uma linha só */
@@ -466,6 +469,8 @@
         justify-content: space-between;
     }
 }
+
+
 /* --- NOVA ANIMAÇÃO DO JOINHA --- */
 .thumb-animation {
     position: fixed;
@@ -481,7 +486,7 @@
 <body>
 
 <div class="top-bar-branding">
-    <h3 class="h3-pegar-cupom"><span class="papaiNoel"></span> Pegue seu <strong>CUPOM</strong></h3>
+    <h3 class="h3-pegar-cupom"><span class="papaiNoel">🌲🎅</span> Pegue seu <strong>CUPOM</strong></h3>
     
     <div style="display: flex; align-items: center;">
         <a href="Cliente-Nuance.html" class="wave-button" style="padding: 8px 15px; font-size: 12px;">
@@ -564,7 +569,7 @@
                     <h3>Moscow Mule</h3>
                         <span class="old-price">R$ 22.99</span> 
                         <span class="price">R$ 20.00
-                        <span class="badge-ml">350ml</span>
+                        <span class="badge-ml">350ml</span>2
                         </span>
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Moscow Mule', 20.00, 'img-produtos/Drinks-c-alcool/Moscow-mule.jpg')">Adicionar</button>
                 </div>
@@ -624,7 +629,7 @@
                      <span class="price">R$ 8,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="animateAdd(this); addToCart('AlMongorango', 8.00, 'img-produtos/Drinks-s-alcool/Mongorango.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Mongorango', 8.00, 'img-produtos/Drinks-s-alcool/Mongorango.jpeg')">Adicionar</button>
                 </div>
                    
                 <div class="product-card">
@@ -826,13 +831,19 @@
             </select>
             <div id="delivery-warning" class="delivery-warning">
                 <i class="fas fa-exclamation-triangle"></i> Atenção: Pedidos para delivery possuem um acréscimo de R$ 10,00 na taxa de entrega.
+				<br>
+				<span style="color: red;">Usou o Cupom?😍 Descunsidere esse aviso</span>
             </div>
         </div>
         <div id="fields-mesa"><div class="form-group"><label>Nome*</label><input type="text" id="mesa-nome"></div></div>
-        <div id="fields-retirada" style="display:none"><div class="form-group"><label>Nome*</label><input type="text" id="ret-nome"></div><div class="form-group"><label>CPF*</label><input type="text" id="cpf-retirada" oninput="mascaraCPF(this)" maxlength="14"></div></div>
+        <div id="fields-retirada" style="display:none">
+			<div class="form-group"><label>Nome*</label><input type="text" id="ret-nome"></div>
+			<div class="form-group"><label>WhatsApp*</label><input type="text" id="dev-contato-Balcao"></div>
+			<div class="form-group"><label>CPF*</label><input type="text" id="cpf-retirada" oninput="mascaraCPF(this)" maxlength="14"></div></div>
         <div id="fields-delivery" style="display:none">
             <div class="form-group"><label>Nome*</label><input type="text" id="dev-nome"></div>
-            <div class="form-group"><label>CPF*</label><input type="text" id="dev-CPF" oninput="mascaraCPF(this)" maxlength="14"></div>
+            <div class="form-group"><label>WhatsApp*</label><input type="text" id="dev-contato"></div>
+            <div class="form-group"><label>CEP*</label><input type="text" id="dev-CEP" oninput="mascaraCEP(this)" maxlength="9" placeholder="00000-000"></div>
             <div class="form-group"><label>Bairro*</label><input type="text" id="dev-bairro"></div>
             <div class="form-group"><label>Rua*</label><input type="text" id="dev-rua"></div>
             <div class="form-group"><label>Nº/Lote*</label><input type="text" id="dev-num"></div>
@@ -888,11 +899,11 @@
     <div class="mini-grid">
         <div class="barmans-footer">
             <div class="barman-item">
-                <img src="imgs/Logo-principal.jpg" alt="Darwin" class="barman-img">
+                <img src="imgs/Perfil.Darwin.jpg" alt="Darwin" class="barman-img">
                 <span>Barman Darwin</span>
             </div>
             <div class="barman-item">
-                <img src="imgs/Logo-principal.jpg" alt="Douglas" class="barman-img">
+                <img src="imgs/Perfil.Douglas.png" alt="Douglas" class="barman-img">
                 <span>Barman Douglas</span>
             </div>
         </div>
@@ -954,6 +965,10 @@ function revealText(str) {
 }
 
     
+    
+    
+    
+        
         
     let cart = [];
     let currentFlavorProduct = null;
@@ -963,14 +978,14 @@ function revealText(str) {
 
     // --- NOVA ESTRUTURA DE CUPONS POR BLOCOS ---
     const CUPONS_POR_BLOCO = {
-	0: ["MAYCK2E3Q", "MAYCKJIH7", "MAYCKNJ4V", "MAYCKZNIC", "MAYCKWQ3C", "MAYCKAOR5", "MAYCKFM6F", "MAYCKJWYI", "MAYCKEI5I", "MAYCK88S9", "MAYCKFBYF", "MAYCKA880", "MAYCK7FRY", "MAYCKJPFL", "MAYCKT71J", "MAYCKZU8E", "MAYCK7LO5", "MAYCKFF6V", "MAYCK0CLW", "MAYCKOZTL", "MAYCK5ZRR", "MAYCKQG1Y", "MAYCKQMA3", "MAYCK2R7N", "MAYCKXQPV", "MAYCKPIDM", "MAYCKO3YB", "MAYCKWB8M", "MAYCKS58H", "MAYCKXFVE", "MAYCKAU2Q"], // 06:00 - 08:59
-	1: ["MAYCKWDAJ", "MAYCKGYO0", "MAYCK7N3A", "MAYCKTDQU", "MAYCKPA10", "MAYCKXWPM", "MAYCKIYND", "MAYCKGBZW", "MAYCKDH36", "MAYCKPY62", "MAYCKAGHW", "MAYCKIBLE", "MAYCK9O71", "MAYCK9TTF", "MAYCKB8MT", "MAYCKLGQ8", "MAYCKICXC", "MAYCKOB3R", "MAYCKDUWW", "MAYCKD3CM", "MAYCKLI3M", "MAYCKJ4JL", "MAYCKH1DU", "MAYCK7IUS", "MAYCK3N38", "MAYCKUF4V", "MAYCKMVZ0", "MAYCKGTJN", "MAYCKM9FB", "MAYCKPN99", "MAYCKY0FI"], // 09:00 - 11:59
-	2: ["MAYCKWBW3", "MAYCKNBVI", "MAYCKPYR6", "MAYCKVNVA", "MAYCKWU3P", "MAYCKKO5L", "MAYCK4WS8", "MAYCKHNHG", "MAYCKONB6", "MAYCK4E17", "MAYCKBAPR", "MAYCK13CF", "MAYCKBNTS", "MAYCKLQKZ", "MAYCKVS2W", "MAYCKZR1R", "MAYCKDIJ6", "MAYCKBPNF", "MAYCKRSAO", "MAYCKZVJ4", "MAYCKIUNP", "MAYCK14RJ", "MAYCKZHX7", "MAYCKLFGW", "MAYCK4XGD", "MAYCKW3YP", "MAYCK5KQH", "MAYCK7011", "MAYCKEUFZ", "MAYCKPEXQ", "MAYCKUI3F"], // 12:00 - 14:59
-	3: ["MAYCK5ZHA", "MAYCK4NK6", "MAYCKHLWG", "MAYCKU39U", "MAYCKYO3Q", "MAYCKWXH9", "MAYCKOBHZ", "MAYCK73GW", "MAYCK0TJ9", "MAYCKVGDC", "MAYCK9V9Q", "MAYCK2ZKK", "MAYCKC6W9", "MAYCKKPV2", "MAYCKVFS0", "MAYCKEVHQ", "MAYCK6UY6", "MAYCKPYJN", "MAYCKIXXM", "MAYCKE3AB", "MAYCKHQW0", "MAYCKFUHX", "MAYCKHCJG", "MAYCK0Z54", "MAYCKXDJG", "MAYCK8S8C", "MAYCKOVT0", "MAYCKUWYR", "MAYCKQPJN", "MAYCK9FMA", "MAYCKHQ61"], // 15:00 - 17:59
-	4: ["MAYCK1VKW", "MAYCKT46I", "MAYCKDI36", "MAYCKTDNH", "MAYCK1YOY", "MAYCKU4Y5", "MAYCKLEAW", "MAYCK4CC4", "MAYCKD2O0", "MAYCKRQJ5", "MAYCKRE86", "MAYCKY5U3", "MAYCKDC27", "MAYCKT21C", "MAYCKVP50", "MAYCK3AR2", "MAYCKIO74", "MAYCKXRR6", "MAYCKC64Y", "MAYCK1Q0W", "MAYCK0BWZ", "MAYCK8JQB", "MAYCKUQBG", "MAYCKSRU4", "MAYCKA6UM", "MAYCKYQB3", "MAYCKZI7X", "MAYCK2GO0", "MAYCKR7PL", "MAYCKX6CW", "MAYCKI9C4"], // 18:00 - 20:59
-	5: ["MAYCKPGI3", "MAYCK3JH0", "MAYCKY1I6", "MAYCKBF9R", "MAYCK7HVL", "MAYCKFA9E", "MAYCKZUKH", "MAYCK8IFX", "MAYCK31BF", "MAYCK2SS3", "MAYCKO509", "MAYCK7U9G", "MAYCK0E3K", "MAYCKT1EN", "MAYCKRMS2", "MAYCKAXDJ", "MAYCK3X1S", "MAYCKSYKV", "MAYCKGNAO", "MAYCK31XI", "MAYCKMKZ3", "MAYCKKHCI", "MAYCKMVY1", "MAYCKKCV6", "MAYCKQ98M", "MAYCKBW2Y", "MAYCKG6MY", "MAYCKJDIY", "MAYCKWVA9", "MAYCKLRAW", "MAYCK11FR"], // 21:00 - 23:59
-	6: ["MAYCKZWVU", "MAYCKK5L2", "MAYCKD263", "MAYCK2ICX", "MAYCK38C0", "MAYCKLVG0", "MAYCK315G", "MAY6YJS", "MAYCK3BKG", "MAYCKXQIA", "MAYCKNKQI", "MAYCKZZYV", "MAYCKYEGK", "MAYCK7HHL", "MAYCKFGNS", "MAYCKWJRJ", "MAYCK8QIJ", "MAYCKQJXX", "MAYCKXQV9", "MAYCK3BGI", "MAYCK0A5W", "MAYCK8Y3B", "MAYCKJ7C9", "MAYCKSL7R", "MAYCKDIB", "MAYCKG1LU", "MAYCK4Y4P", "MAYCKPJBH", "MAYCKM21F", "MAYCKHCX7", "MAYCKEBTA"], // 00:00 - 02:59
-	7: ["MAYCKULDZ", "MAYCKIODH", "MAYCK619J", "MAYCKJ1AX", "MAYCKITVK", "MAYCKP7UA", "MAYCK28D0", "MAYCKC38O", "MAYCKXGSB", "MAYCKP0ZG", "MAYCKEG0A", "MAYCKS7PO", "MAYCKO57B", "MAYCK3LUU", "MAYCKSPWH", "MAYCK430P", "MAYCKDOQE", "MAYCKMFBW", "MAYCKX8PO", "MAYCKI8IF", "MAYCK06H3", "MAYCKM7AQ", "MAYCKXPH0", "MAYCKM393", "MAYCKGWPV", "MAYCK2UAT", "MAYCK04SA", "MAYCKS9KC", "MAYCKQ8CB", "MAYCK2DYS", "MAYCKOXEU"] // 03:00 - 05:59
+	0: ["FRETE-D36S", "FRETE-WEMC", "FRETE-BLXT", "FRETE-G3RB", "FRETE-VXAY", "FRETE-Y8DB", "FRETE-DL7M", "FRETE-48B0", "FRETE-RKX2", "FRETE-8YHH", "FRETE-66X9", "FRETE-RR1C", "FRETE-O7XV", "FRETE-VU6V", "FRETE-V1PC", "FRETE-USJK", "FRETE-DMJA", "FRETE-4F04", "FRETE-ECKO", "FRETE-DO58", "FRETE-OWUC", "FRETE-EKKQ", "FRETE-8AHA", "FRETE-U9Q2", "FRETE-3Z0J", "FRETE-8FGS", "FRETE-HAIR", "FRETE-KTV5", "FRETE-0CYR", "FRETE-LUJZ", "FRETE-1LVV"], // 06:00 - 08:59
+	1: ["FRETE-JC8S", "FRETE-OMXH", "FRETE-N1KM", "FRETE-JD4N", "FRETE-34ZV", "FRETE-VEKY", "FRETE-D3RR", "FRETE-OZSL", "FRETE-L77K", "FRETE-LTZD", "HOY9", "FRETE-URN7", "FRETE-PESK", "FRETE-1SNZ", "FRETE-9EWO", "FRETE-3XNE", "FRETE-M1LK", "FRETE-2A3T", "FRETE-8XI7", "FRETE-X4AJ", "FRETE-LS20", "FRETE-IUF8", "FRETE-XXK1", "FRETE-34HJ", "FRETE-LQND", "FRETE-16PJ", "FRETE-YTTC", "FRETE-Z1UZ", "FRETE-UDVB", "FRETE-NWRL", "FRETE-PQ5E"], // 09:00 - 11:59
+	2: ["FRETE-EFYZ", "FRETE-8SKT", "FRETE-CD95", "FRETE-0WQN", "FRETE-UT01", "FRETE-V8H2", "FRETE-LDB9", "FRETE-23B4", "FRETE-CBIA", "FRETE-T24R", "FRETE-F9ZR", "FRETE-JQKR", "FRETE-OX8X", "FRETE-4BUH", "FRETE-QBBY", "FRETE-Z29A", "FRETE-NNM9", "FRETE-ECMJ", "FRETE-B1UK", "FRETE-1BGU", "FRETE-FGKF", "FRETE-GP2W", "FRETE-C7ML", "FRETE-RK3Q", "FRETE-448P", "FRETE-GXJS", "A8HM", "5B2I", "IB05", "TMZI", "U1Q9"], // 12:00 - 14:59
+	3: ["FRETE-LJLA", "FRETE-Z0P8", "FRETE-OTUY", "FRETE-D91U", "FRETE-LESL", "FRETE-DJ6Z", "FRETE-FPCZ", "FRETE-Q10R", "FRETE-NPDS", "FRETE-BPDQ", "FRETE-6VWR", "FRETE-FBX6", "FRETE-ZCXL", "FRETE-XM5F", "FRETE-M1NN", "FRETE-1GJC", "FRETE-6HBZ", "FRETE-XL6D", "FRETE-KD5H", "FRETE-2C5Q", "FRETE-HM6D", "FRETE-5XVC", "FRETE-OBGG", "FRETE-FK9M", "FRETE-11WJ", "FRETE-9QRS", "FRETE-BMHR", "FRETE-EWEW", "FRETE-MTHA", "FRETE-4WTF", "FRETE-OAJE"], // 15:00 - 17:59
+	4: ["FRETE-AB3G", "FRETE-Z2XD", "FRETE-K6DQ", "FRETE-7P7L", "FRETE-WDSM", "FRETE-Y90I", "FRETE-7V79", "FRETE-4T0Z", "FRETE-I7UH", "FRETE-7A0V", "FRETE-19HY", "FRETE-CRTA", "FRETE-FPHY", "FRETE-I8B8", "FRETE-O23R", "FRETE-BMGE", "FRETE-EDTK", "FRETE-HSFO", "FRETE-T5WE", "FRETE-SYW0", "FRETE-MYF9", "FRETE-0UC2", "FRETE-MBJW", "FRETE-7COM", "FRETE-2WYY", "FRETE-DI3B", "FRETE-2AS7", "FRETE-WJZH", "FRETE-ZKUY", "FRETE-TZTL", "FRETE-Y8YL"], // 18:00 - 20:59
+	5: ["FRETE-XR4X", "FRETE-YC3U", "FRETE-5E54", "FRETE-K89F", "FRETE-QO0Z", "FRETE-4O02", "FRETE-LXX4", "FRETE-CDV0", "FRETE-VY05", "FRETE-0SW8", "FRETE-YL3Z", "FRETE-MCLW", "FRETE-FIRQ", "FRETE-EOGR", "FRETE-BFST", "FRETE-M34F", "FRETE-415A", "FRETE-7MW5", "FRETE-DDFT", "FRETE-F2WJ", "FRETE-0YUJ", "FRETE-ORT4", "FRETE-IVE3", "FRETE-5BQK", "FRETE-Z60P", "FRETE-ZYUY", "FRETE-IIVM", "FRETE-8RD8", "FRETE-EZ0U", "FRETE-JXUW", "FRETE-SNG2"], // 21:00 - 23:59
+	6: ["FRETE-IFSI", "FRETE-17XK", "FRETE-DHH9", "FRETE-FYTD", "FRETE-Z3HS", "FRETE-YUM8", "FRETE-5WY1", "FRETE-LBFX", "FRETE-ODTD", "FRETE-EJRU", "FRETE-WCC8", "FRETE-CEAH", "FRETE-ZH2R", "FRETE-T7CB", "FRETE-L1Q5", "FRETE-1B8V", "FRETE-OXET", "FRETE-OX5K", "FRETE-B9GR", "FRETE-S2MX", "FRETE-NVHP", "FRETE-WI5L", "FRETE-MD1X", "FRETE-1H6J", "FRETE-NPVR", "FRETE-NTJG", "FRETE-6A25", "FRETE-H13W", "FRETE-JH2L", "FRETE-II3D", "FRETE-BFXF"], // 00:00 - 02:59
+	7: ["FRETE-AMEG", "FRETE-TXR9", "FRETE-S378", "FRETE-9S9J", "FRETE-XM9L", "FRETE-ZNAM", "FRETE-XK3G", "FRETE-T89O", "FRETE-R68A", "FRETE-D276", "FRETE-3SZK", "FRETE-OJY9", "FRETE-7G17", "FRETE-P5ZK", "FRETE-J6K4", "FRETE-ON49", "FRETE-9H21", "FRETE-MGBE", "FRETE-2OJ8", "FRETE-V0EK", "FRETE-TAPW", "FRETE-FF0Q", "FRETE-56T6", "FRETE-QKN3", "FRETE-OJAC", "FRETE-NJ91", "FRETE-LBRE", "FRETE-ERCF", "FRETE-ADRN", "FRETE-POOF", "FRETE-ZARX"] // 03:00 - 5:59
 };
 
     const linksDePagamentoFixos = {
@@ -1065,8 +1080,8 @@ function revealText(str) {
         const now = new Date();
         
         // Defina aqui o horário de abertura e fechamento
-        const horaAbertura = 08;   //abre
-        const minutoAbertura = 0;
+        const horaAbertura = 01;   //abre
+        const minutoAbertura = 30;
         const horaFechamento = 23;  //Fecha
         const minutoFechamento = 59;
 
@@ -1327,18 +1342,24 @@ function revealText(str) {
         return true;
     }
 
+    // Função de validação de CEP simples
+    function validarCEP(cep) {
+        cep = cep.replace(/[^\d]+/g,'');
+        return cep.length === 8;
+    }
+
     function sendWhatsApp() {
         const type = document.getElementById('delivery-type').value;
         const totalStr = document.getElementById('modal-total').innerText;
         
         if (type === 'delivery') {
-            const cpfInput = document.getElementById('dev-CPF');
-            if (!validarCPF(cpfInput.value)) {
-                cpfInput.classList.add('input-error');
-                alert("Por favor, insira um CPF válido para o delivery.");
+            const cepInput = document.getElementById('dev-CEP');
+            if (!validarCEP(cepInput.value)) {
+                cepInput.classList.add('input-error');
+                alert("Por favor, insira um CEP válido para o delivery.");
                 return;
             }
-            cpfInput.classList.remove('input-error');
+            cepInput.classList.remove('input-error');
         }
 
         currentPaymentLink = linksDePagamentoFixos[totalStr] || "#";
@@ -1351,17 +1372,27 @@ function revealText(str) {
         
         let dadosParaPlanilha = {
             produtos: produtosTxt, total: totalStr, coleta: type,
-            nome: "", cpf: "", bairro: "", rua: "", numero: "", comp: ""
+            nome: "", contato: "", cpf: "", cep: "", bairro: "", rua: "", numero: "", comp: "",
+            pagamentoLink: currentPaymentLink // NOVA VARIÁVEL AQUI
         };
 
         if (type === 'mesa') {
             dadosParaPlanilha.nome = document.getElementById('mesa-nome').value;
         } else if (type === 'retirada') {
+            const cpfInput = document.getElementById('cpf-retirada');
+            if (!validarCPF(cpfInput.value)) {
+                cpfInput.classList.add('input-error');
+                alert("Por favor, insira um CPF válido.");
+                return;
+            }
+            cpfInput.classList.remove('input-error');
             dadosParaPlanilha.nome = document.getElementById('ret-nome').value;
-            dadosParaPlanilha.cpf = document.getElementById('cpf-retirada').value;
+            dadosParaPlanilha.contato = document.getElementById('dev-contato-Balcao').value; // CORREÇÃO: Captura o WhatsApp do Balcão
+            dadosParaPlanilha.cpf = cpfInput.value;
         } else if (type === 'delivery') {
             dadosParaPlanilha.nome = document.getElementById('dev-nome').value;
-            dadosParaPlanilha.cpf = document.getElementById('dev-CPF').value;
+            dadosParaPlanilha.contato = document.getElementById('dev-contato').value;
+            dadosParaPlanilha.cep = document.getElementById('dev-CEP').value;
             dadosParaPlanilha.bairro = document.getElementById('dev-bairro').value;
             dadosParaPlanilha.rua = document.getElementById('dev-rua').value;
             dadosParaPlanilha.numero = document.getElementById('dev-num').value;
@@ -1376,14 +1407,14 @@ function revealText(str) {
     function finalizarWhatsApp() {
         playSuccessSound();
         const type = document.getElementById('delivery-type').value;
-        let msg = `*🐝 NOVO PEDIDO - BEEDRINKS*\n\n`;
+        let msg = `*NOVO PEDIDO - NUANCE*\n\n`;
         
         if (type === 'mesa') {
             msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa 5\n`;
         } else if (type === 'retirada') {
-            msg += `*Cliente:* ${document.getElementById('ret-nome').value}\n*CPF:* ${document.getElementById('cpf-retirada').value}\n*Entrega:* Retirada no Balcão\n`;
+            msg += `*Cliente:* ${document.getElementById('ret-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato-Balcao').value}\n*CPF:* ${document.getElementById('cpf-retirada').value}\n*Entrega:* Retirada no Balcão\n`;
         } else if (type === 'delivery') {
-            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*CPF:* ${document.getElementById('dev-CPF').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
+            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato').value}\n*CEP:* ${document.getElementById('dev-CEP').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
             const complemento = document.getElementById('dev-comp').value;
             if (complemento) msg += `*Comp:* ${complemento}\n`;
             
@@ -1429,6 +1460,13 @@ function revealText(str) {
         i.value = v;
     }
 
+    // Máscara de CEP
+    function mascaraCEP(i) {
+        let v = i.value.replace(/\D/g,"");
+        v = v.replace(/(\d{5})(\d)/,"$1-$2");
+        i.value = v;
+    }
+
     function toggleCart() { 
         const m = document.getElementById('cart-modal'); 
         
@@ -1451,14 +1489,25 @@ function revealText(str) {
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScCadaja6iLfwVL7fH6aVs_iXTJpZgBREY-Ju98Zqg3KKslWg/formResponse";
         const formData = new FormData();
         formData.append("entry.62718261", dados.produtos);        
-        formData.append("entry.1278482765", dados.nome);            
-        formData.append("entry.143126943", dados.cpf);             
+        formData.append("entry.1278482765", dados.nome);
+        formData.append("entry.1120754933", dados.contato);
+        // Se for delivery envia CEP no campo de CPF da planilha para não quebrar a ordem, ou ajuste conforme sua planilha
+        formData.append("entry.143126943", dados.coleta === 'delivery' ? dados.cep : dados.cpf);             
         formData.append("entry.1878038120", dados.bairro);           
         formData.append("entry.1399400806", dados.rua);                 
         formData.append("entry.764712754", dados.numero);           
         formData.append("entry.1697072560", dados.comp);        
         formData.append("entry.1857638858", dados.coleta);          
         formData.append("entry.1235511550", dados.total);            
+        
+        // ACRESCENTADO O LINK DE PAGAMENTO AO CAMPO DE COMPLEMENTO OU QUALQUER OUTRO DESEJADO
+        // Nota: Como não sei o ID exato do campo do Link na sua planilha, 
+        // concatenei ele no campo de "Complemento" (entry.1697072560) para você visualizar
+        // Ou você pode criar um campo novo no forms e colocar o ID dele aqui.
+        if(dados.pagamentoLink !== "#") {
+             formData.append("entry.1901397709", " | LINK: " + dados.pagamentoLink);
+        }
+
         fetch(FORM_URL, { method: "POST", mode: "no-cors", body: formData });
     }
         
