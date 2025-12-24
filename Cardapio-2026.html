@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -867,7 +866,7 @@
         <div id="fields-delivery" style="display:none">
             <div class="form-group"><label>Nome*</label><input type="text" id="dev-nome"></div>
             <div class="form-group"><label>Seu WhatsApp*</label><input type="text" id="dev-contato"></div>
-            <div class="form-group"><label>CPF*</label><input type="text" id="dev-CPF" oninput="mascaraCPF(this)" maxlength="14"></div>
+            <div class="form-group"><label>CEP*</label><input type="text" id="dev-CEP" oninput="mascaraCEP(this)" maxlength="9" placeholder="00000-000"></div>
             <div class="form-group"><label>Bairro*</label><input type="text" id="dev-bairro"></div>
             <div class="form-group"><label>Rua*</label><input type="text" id="dev-rua"></div>
             <div class="form-group"><label>Nº/Lote*</label><input type="text" id="dev-num"></div>
@@ -1027,7 +1026,7 @@ function revealText(str) {
     // --- NOVA ESTRUTURA DE CUPONS POR BLOCOS ---
     const CUPONS_POR_BLOCO = {
 	0: ["FRETE-D36S", "FRETE-WEMC", "FRETE-BLXT", "FRETE-G3RB", "FRETE-VXAY", "FRETE-Y8DB", "FRETE-DL7M", "FRETE-48B0", "FRETE-RKX2", "FRETE-8YHH", "FRETE-66X9", "FRETE-RR1C", "FRETE-O7XV", "FRETE-VU6V", "FRETE-V1PC", "FRETE-USJK", "FRETE-DMJA", "FRETE-4F04", "FRETE-ECKO", "FRETE-DO58", "FRETE-OWUC", "FRETE-EKKQ", "FRETE-8AHA", "FRETE-U9Q2", "FRETE-3Z0J", "FRETE-8FGS", "FRETE-HAIR", "FRETE-KTV5", "FRETE-0CYR", "FRETE-LUJZ", "FRETE-1LVV"], // 06:00 - 08:59
-	1: ["FRETE-JC8S", "FRETE-OMXH", "FRETE-N1KM", "FRETE-JD4N", "FRETE-34ZV", "FRETE-VEKY", "FRETE-D3RR", "FRETE-OZSL", "FRETE-L77K", "FRETE-LTZD", "FRETE-HOY9", "FRETE-URN7", "FRETE-PESK", "FRETE-1SNZ", "FRETE-9EWO", "FRETE-3XNE", "FRETE-M1LK", "FRETE-2A3T", "FRETE-8XI7", "FRETE-X4AJ", "FRETE-LS20", "FRETE-IUF8", "FRETE-XXK1", "FRETE-34HJ", "FRETE-LQND", "FRETE-16PJ", "FRETE-YTTC", "FRETE-Z1UZ", "FRETE-UDVB", "FRETE-NWRL", "FRETE-PQ5E"], // 09:00 - 11:59
+	1: ["FRETE-JC8S", "FRETE-OMXH", "FRETE-N1KM", "FRETE-JD4N", "FRETE-34ZV", "FRETE-VEKY", "FRETE-D3RR", "FRETE-OZSL", "FRETE-L77K", "FRETE-LTZD", "HOY9", "FRETE-URN7", "FRETE-PESK", "FRETE-1SNZ", "FRETE-9EWO", "FRETE-3XNE", "FRETE-M1LK", "FRETE-2A3T", "FRETE-8XI7", "FRETE-X4AJ", "FRETE-LS20", "FRETE-IUF8", "FRETE-XXK1", "FRETE-34HJ", "FRETE-LQND", "FRETE-16PJ", "FRETE-YTTC", "FRETE-Z1UZ", "FRETE-UDVB", "FRETE-NWRL", "FRETE-PQ5E"], // 09:00 - 11:59
 	2: ["FRETE-EFYZ", "FRETE-8SKT", "FRETE-CD95", "FRETE-0WQN", "FRETE-UT01", "FRETE-V8H2", "FRETE-LDB9", "FRETE-23B4", "FRETE-CBIA", "FRETE-T24R", "FRETE-F9ZR", "FRETE-JQKR", "FRETE-OX8X", "FRETE-4BUH", "FRETE-QBBY", "FRETE-Z29A", "FRETE-NNM9", "FRETE-ECMJ", "FRETE-B1UK", "FRETE-1BGU", "FRETE-FGKF", "FRETE-GP2W", "FRETE-C7ML", "FRETE-RK3Q", "FRETE-448P", "FRETE-GXJS", "FRETE-A8HM", "FRETE-5B2I", "FRETE-IB05", "FRETE-TMZI", "FRETE-U1Q9"], // 12:00 - 14:59
 	3: ["FRETE-LJLA", "FRETE-Z0P8", "FRETE-OTUY", "FRETE-D91U", "FRETE-LESL", "FRETE-DJ6Z", "FRETE-FPCZ", "FRETE-Q10R", "FRETE-NPDS", "FRETE-BPDQ", "FRETE-6VWR", "FRETE-FBX6", "FRETE-ZCXL", "FRETE-XM5F", "FRETE-M1NN", "FRETE-1GJC", "FRETE-6HBZ", "FRETE-XL6D", "FRETE-KD5H", "FRETE-2C5Q", "FRETE-HM6D", "FRETE-5XVC", "FRETE-OBGG", "FRETE-FK9M", "FRETE-11WJ", "FRETE-9QRS", "FRETE-BMHR", "FRETE-EWEW", "FRETE-MTHA", "FRETE-4WTF", "FRETE-OAJE"], // 15:00 - 17:59
 	4: ["FRETE-AB3G", "FRETE-Z2XD", "FRETE-K6DQ", "FRETE-7P7L", "FRETE-WDSM", "FRETE-Y90I", "FRETE-7V79", "FRETE-4T0Z", "FRETE-I7UH", "FRETE-7A0V", "FRETE-19HY", "FRETE-CRTA", "FRETE-FPHY", "FRETE-I8B8", "FRETE-O23R", "FRETE-BMGE", "FRETE-EDTK", "FRETE-HSFO", "FRETE-T5WE", "FRETE-SYW0", "FRETE-MYF9", "FRETE-0UC2", "FRETE-MBJW", "FRETE-7COM", "FRETE-2WYY", "FRETE-DI3B", "FRETE-2AS7", "FRETE-WJZH", "FRETE-ZKUY", "FRETE-TZTL", "FRETE-Y8YL"], // 18:00 - 20:59
@@ -1365,7 +1364,7 @@ function revealText(str) {
 
     function toggleFields() {
         const type = document.getElementById('delivery-type').value;
-        document.getElementById('fields-mesa').style.display = type === 'mesa 5' ? 'block' : 'none';
+        document.getElementById('fields-mesa').style.display = type === 'mesa' ? 'block' : 'none';
         document.getElementById('fields-retirada').style.display = type === 'retirada' ? 'block' : 'none';
         document.getElementById('fields-delivery').style.display = type === 'delivery' ? 'block' : 'none';
         
@@ -1390,18 +1389,24 @@ function revealText(str) {
         return true;
     }
 
+    // Função de validação de CEP simples
+    function validarCEP(cep) {
+        cep = cep.replace(/[^\d]+/g,'');
+        return cep.length === 8;
+    }
+
     function sendWhatsApp() {
         const type = document.getElementById('delivery-type').value;
         const totalStr = document.getElementById('modal-total').innerText;
         
         if (type === 'delivery') {
-            const cpfInput = document.getElementById('dev-CPF');
-            if (!validarCPF(cpfInput.value)) {
-                cpfInput.classList.add('input-error');
-                alert("Por favor, insira um CPF válido para o delivery.");
+            const cepInput = document.getElementById('dev-CEP');
+            if (!validarCEP(cepInput.value)) {
+                cepInput.classList.add('input-error');
+                alert("Por favor, insira um CEP válido para o delivery.");
                 return;
             }
-            cpfInput.classList.remove('input-error');
+            cepInput.classList.remove('input-error');
         }
 
         currentPaymentLink = linksDePagamentoFixos[totalStr] || "#";
@@ -1414,10 +1419,10 @@ function revealText(str) {
         
         let dadosParaPlanilha = {
             produtos: produtosTxt, total: totalStr, coleta: type,
-            nome: "", contato: "", cpf: "", bairro: "", rua: "", numero: "", comp: ""
+            nome: "", contato: "", cpf: "", cep: "", bairro: "", rua: "", numero: "", comp: ""
         };
 
-        if (type === 'mesa5') {
+        if (type === 'mesa') {
             dadosParaPlanilha.nome = document.getElementById('mesa-nome').value;
         } else if (type === 'retirada') {
             dadosParaPlanilha.nome = document.getElementById('ret-nome').value;
@@ -1425,7 +1430,7 @@ function revealText(str) {
         } else if (type === 'delivery') {
             dadosParaPlanilha.nome = document.getElementById('dev-nome').value;
             dadosParaPlanilha.contato = document.getElementById('dev-contato').value;
-            dadosParaPlanilha.cpf = document.getElementById('dev-CPF').value;
+            dadosParaPlanilha.cep = document.getElementById('dev-CEP').value;
             dadosParaPlanilha.bairro = document.getElementById('dev-bairro').value;
             dadosParaPlanilha.rua = document.getElementById('dev-rua').value;
             dadosParaPlanilha.numero = document.getElementById('dev-num').value;
@@ -1442,12 +1447,12 @@ function revealText(str) {
         const type = document.getElementById('delivery-type').value;
         let msg = `*NOVO PEDIDO - NUANCE*\n\n`;
         
-        if (type === 'mesa5') {
-            msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa5 5\n`;
+        if (type === 'mesa') {
+            msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa 5\n`;
         } else if (type === 'retirada') {
             msg += `*Cliente:* ${document.getElementById('ret-nome').value}\n*CPF:* ${document.getElementById('cpf-retirada').value}\n*Entrega:* Retirada no Balcão\n`;
         } else if (type === 'delivery') {
-            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato').value}\n*CPF:* ${document.getElementById('dev-CPF').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
+            msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato').value}\n*CEP:* ${document.getElementById('dev-CEP').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
             const complemento = document.getElementById('dev-comp').value;
             if (complemento) msg += `*Comp:* ${complemento}\n`;
             
@@ -1493,6 +1498,13 @@ function revealText(str) {
         i.value = v;
     }
 
+    // Máscara de CEP
+    function mascaraCEP(i) {
+        let v = i.value.replace(/\D/g,"");
+        v = v.replace(/(\d{5})(\d)/,"$1-$2");
+        i.value = v;
+    }
+
     function toggleCart() { 
         const m = document.getElementById('cart-modal'); 
         
@@ -1517,7 +1529,8 @@ function revealText(str) {
         formData.append("entry.62718261", dados.produtos);        
         formData.append("entry.1278482765", dados.nome);
         formData.append("entry.1120754933", dados.contato);
-        formData.append("entry.143126943", dados.cpf);             
+        // Se for delivery envia CEP no campo de CPF da planilha para não quebrar a ordem, ou ajuste conforme sua planilha
+        formData.append("entry.143126943", dados.coleta === 'delivery' ? dados.cep : dados.cpf);             
         formData.append("entry.1878038120", dados.bairro);           
         formData.append("entry.1399400806", dados.rua);                 
         formData.append("entry.764712754", dados.numero);           
