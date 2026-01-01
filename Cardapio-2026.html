@@ -477,7 +477,7 @@
     }
 }
 
-/* --- ESTILOS PARA OS FLOCOS DE NEVE --- */
+/* --- ESTILOS PARA OS FLOCOS DE NEVE 
 .snowflake {
     color: red;
     font-size: 1.2em;
@@ -503,7 +503,7 @@
 @keyframes snowflakes-shake {
     0%, 100% { transform: translateX(0); }
     50% { transform: translateX(80px); }
-}
+} --- */
 
 /* --- NOVA ANIMAÇÃO DO JOINHA --- */
 .thumb-animation {
@@ -1077,26 +1077,26 @@ function revealText(str) {
     
     
     //===•Flocis
-        document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('ano-mini').textContent = new Date().getFullYear();
-    // Inicia os flocos de neve
-    createSnowflakes();
-});
+//        document.addEventListener('DOMContentLoaded', function() {
+//    document.getElementById('ano-mini').textContent = new Date().getFullYear();
+    //🚨 Inicia os flocos de neve
+//	createSnowflakes();
+//});
 
-    // Função para criar flocos de neve dinamicamente
-    function createSnowflakes() {
-        const numberOfSnowflakes = 50;
-        for (let i = 0; i < numberOfSnowflakes; i++) {
-            let snowflake = document.createElement('div');
-            snowflake.className = 'snowflake';
-            snowflake.innerHTML = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDelay = Math.random() * 10 + 's';
-            snowflake.style.opacity = Math.random();
-            snowflake.style.fontSize = Math.random() * 1.5 + 0.5 + 'em';
-            document.body.appendChild(snowflake);
-        }
-    }
+    //🚨 Função para criar flocos de neve dinamicamente
+//    function createSnowflakes() {
+ //       const numberOfSnowflakes = 50;
+   //     for (let i = 0; i < numberOfSnowflakes; i++) {
+//            let snowflake = document.createElement('div');
+ //           snowflake.className = 'snowflake';
+//            snowflake.innerHTML = '❄';
+// snowflake.style.left = Math.random() * 100 + 'vw';
+//            snowflake.style.animationDelay = Math.random() * 10 + 's';
+//            snowflake.style.opacity = Math.random();
+//            snowflake.style.fontSize = Math.random() * 1.5 + 0.5 + 'em';
+//            document.body.appendChild(snowflake);
+ //       }
+//    }
 //===•Termino Flocos
         
         
