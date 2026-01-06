@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,7 +18,10 @@
                 --success: #27ae60; 
                 --Laranja: #F54927;
 			    --verde-perfil: #00F241;
-                --shadow: 0 4px 15px rgba(0,0,0,0.1); }
+                --shadow: 0 4px 15px rgba(0,0,0,0.1);
+			    --nuance-gold1: #d4af37; /*Cor rodapé*/
+                --vibrant-glow1: #ff007f; /* Cor que mudará via JS Rodapé*/
+			  }
                 
 
 .logo-container45 {
@@ -361,10 +365,10 @@
 }
     
         
-        
+/*🚨🚨🚨 RODAPÉ 🚨🚨*/        
 .mini-rodape {
     background: white;
-    color: black;
+    color: Black;
     padding: 20px 15px;
     font-family: sans-serif;
     border-top: 1px solid #333;
@@ -432,7 +436,122 @@
     50% { transform: translateY(-3px); }
 }
 
-/* Estilos dos Barmans no Rodapé */
+
+/* 🚨🚨Estilos dos perfis do Rodapé🚨🚨 */
+.profiles-container {
+    display: flex;
+    gap: 20px; /* Reduzido para caber melhor no layout */
+    padding: 20px;
+    background: black; 
+    justify-content: center;
+    flex-wrap: wrap; /* Para não quebrar no celular */
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.barman-item-interactive {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 190px; /*deixa os perfis no centro*/
+    height: 160px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    overflow: visible;
+}
+
+.barman-item-interactive.active {
+    width: 350px; /*perfil se arrasta pra esquerda*/
+}
+
+/* Círculo com Luz Vibrante por trás */
+.glow-circle-interactive {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    z-index: 5;
+    flex-shrink: 0;
+}
+
+.glow-circle-interactive::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--vibrant-glow1); /* Usando sua variável do root */
+    filter: blur(15px);
+    z-index: -1;
+    animation: pulse-glow-int 2.5s infinite;
+}
+
+@keyframes pulse-glow-int {
+    0%, 100% { transform: scale(0.8); opacity: 0.3; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.barman-photo-interactive {
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%;
+    object-fit: cover; 
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+/* Modal Lateral */
+.side-modal-interactive {
+    position: absolute;
+    left: 120px; /*Afasta o Modal do perfis*/
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 10px 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.4s ease;
+    white-space: nowrap;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.barman-item-interactive.active .side-modal-interactive {
+    opacity: 1; 
+    visibility: visible; 
+    transform: translateX(0);
+}
+
+.modal-title-int { color: var(--nuance-gold1); font-size: 0.8rem; font-weight: bold; }
+
+.btn-action-int {
+    border: none; 
+    padding: 5px 10px; 
+    border-radius: 5px;
+    font-size: 0.7rem; 
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-gold-int { background: var(--nuance-gold1); color: #000; }
+.btn-outline-int { background: transparent; color: white; border: 1px solid #C2A32F; }
+
+.name-label-interactive {
+    position: absolute;
+    background: var(--nuance-gold1);
+    padding: 5px;
+    border-radius: 15px;
+    bottom: 5px;
+    width: 80px; /*Nome dos baremen Direita e esquerda*/
+    text-align: center; 
+    font-size: 0.6rem; 
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+}
+/*🚨🚨Os perfis do rodapé ☝️🚨🚨*/
+		
 .barmans-footer {
     display: flex;
     flex-direction: column;
@@ -443,7 +562,7 @@
 .barman-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 100px;
     font-size: 14px;
     font-weight: bold;
 }
@@ -884,32 +1003,59 @@
   </div>
 
 <footer class="mini-rodape">
-    <div class="mini-grid">
-        <div class="barmans-footer">
-            <div class="barman-item">
-                <img src="imgs/Perfil.Darwin.jpg" alt="Darwin" class="barman-img">
-                <span>Barman Darwin</span>
-            </div>
-            <div class="barman-item">
-                <img src="imgs/Perfil.Douglas.png" alt="Douglas" class="barman-img">
-                <span>Barman Douglas</span>
-            </div>
-        </div>
+       <h1 style="
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3.5rem;
+    text-align: center;
+    margin: 10px auto;
+    padding: 15px 40px;
+    color: #fff;
+    display: table;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    /* Moldura de linhas duplas */
+    border-top: 4px double #D4AF37;
+    border-bottom: 4px double #D4AF37;
+    /* Efeito de sobreposição de cores no texto */
+    text-shadow: 
+        2px 2px 0px #D4AF37, 
+        4px 4px 0px rgba(0,0,0,1), 
+        6px 6px 15px rgba(212, 175, 55, 0.5);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+">
+    NUANCE
+</h1>
+        <p style="text-align: center;">👇 Para mais informações 👇</p>
+
         
-        <div class="links-mini">
-            <a href="#" style="font-size: 30px;">Início</a>
+    <div class="profiles-container">
+        <div class="barman-item-interactive" onclick="handleInteractiveProfile(this)">
+            <div class="glow-circle-interactive">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG8F8vhgzIgpAUSZQSBWtXLUBm6j3d8zMn3eDRXCxOuHl_nhWBP1AGq5s&s=10" class="barman-photo-interactive">
+            </div>
+            <div class="side-modal-interactive">
+                <span class="modal-title-int">BARMAN DARWIN</span>
+                <a href="#" target="_blank"><button class="btn-action-int btn-gold-int">Ver Especialidade</button></a>
+                <a href="https://wa.me/62995679219" target="_blank"><button class="btn-action-int btn-outline-int">WhatsApp</button></a>
+            </div>
+            <div class="name-label-interactive">Darwin</div>
         </div>
 
-	        <div class="social-mini">
-            <a href="https://wa.me/62995679219?text=Ol%C3%A1!" style="font-size: 30px;" target="_blank" class="insta-link"><i class="fab fa-whatsapp"></i></a>
+        <div class="barman-item-interactive" onclick="handleInteractiveProfile(this)">
+            <div class="glow-circle-interactive">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG8F8vhgzIgpAUSZQSBWtXLUBm6j3d8zMn3eDRXCxOuHl_nhWBP1AGq5s&s=10" class="barman-photo-interactive">
+            </div>
+            <div class="side-modal-interactive">
+                <span class="modal-title-int">BARMAN DOUGLAS</span>
+                <a href="#" target="_blank"><button class="btn-action-int btn-gold-int" onclick="alert('Especialidade: Moscow Mule!')">Ver Especialidade</button></a>
+                <a href="https://wa.me/62995679219" target="_blank"><button class="btn-action-int btn-outline-int">WhatsApp</button></a>
+            </div>
+            <div class="name-label-interactive">Douglas</div>
         </div>
     </div>
-    
-    <div class="barra-final">
-        <p>&copy; <span id="ano-mini"></span> • Nuance <span class="magic">❤️</span></p>
-    </div>
-    
-    
+
+
     <a href="https://www.instagram.com/nuance_drinks?igsh=MXEwcDh1Y3FpenozNw==" target="_blank" class="logo-container45">
         <svg id="insta-icon" width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -923,15 +1069,143 @@
             </defs>
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.355 2.618 6.778 6.98 6.978 1.28.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="url(#insta-gradient)"/>
         </svg>
-
         <h1 id="brand-name"></h1>
     </a>
-        <br><br><br>
+        <!--botao do selo de propriedade Particula-->
+        <button onclick="abrirModalDireitos()" style="
+    background: rgba(212, 175, 55, 0.05);
+    color: #D4AF37;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 8px 24px 8px 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 30px auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+">
+    <div style="
+        background: #D4AF37;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    ">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+    </div>
+
+    <div style="text-align: left;">
+        <span style="display: block; font-weight: 900; font-size: 0.75rem;">Site Protegido</span>
+        <span style="display: block; font-size: 0.55rem; opacity: 0.8;">Propriedade Nuance</span>
+    </div>
+</button>
+
+<div id="modalDireitos" style="
+    display: none; 
+    position: fixed; 
+    z-index: 10000; 
+    left: 0; top: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    backdrop-filter: blur(8px);
+">
+    <div style="
+        background: #111; 
+        border: 1px solid #D4AF37; 
+        color: white; 
+        margin: 15% auto; 
+        padding: 30px; 
+        width: 80%; 
+        max-width: 450px; 
+        border-radius: 15px; 
+        text-align: center; 
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        font-family: 'Segoe UI', sans-serif;
+    ">
+        <h3 style="color: #D4AF37; margin-top: 0; letter-spacing: 2px;">DIREITOS AUTORAIS</h3>
+        <div style="height: 1px; background: linear-gradient(to right, transparent, #D4AF37, transparent); margin: 15px 0;"></div>
+        
+        <p style="line-height: 1.6; font-size: 0.95rem; color: #ccc;">
+            Design, conceito e inovação. Todo o conteúdo presente neste portal é de propriedade exclusiva da <strong>Nuance</strong>. 
+            Protegemos nossa criatividade para garantir que a excelência que você vê aqui permaneça única e autêntica.
+        </p>
+        
+        <p style="font-size: 0.8rem; color: #D4AF37; margin-top: 20px;">
+            © 2026 Nuance - Todos os Direitos Reservados.
+        </p>
+
+        <button onclick="fecharModalDireitos()" style="
+            margin-top: 20px; 
+            background: #D4AF37; 
+            border: none; 
+            color: #000; 
+            padding: 8px 25px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 5px;
+            text-transform: uppercase;">Fechar</button>
+    </div>
+</div>
+  <!--Final do botao do selo de propriedade Particula-->
+        <br><br><br><br><br><br>
 </footer>
+
+ 
 
         
         
 <script>
+//<-- botao do selo de propriedade Particula -->      
+function abrirModalDireitos() {
+    document.getElementById('modalDireitos').style.display = "block";
+}
+
+function fecharModalDireitos() {
+    document.getElementById('modalDireitos').style.display = "none";
+}
+
+// Fecha se clicar fora da caixa preta
+window.onclick = function(event) {
+    var modal = document.getElementById('modalDireitos');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+//<-- Final do botao do selo de propriedade Particula -->
+
+
+    function handleInteractiveProfile(element) {
+    // Fecha outros perfis interativos se houver algum aberto
+    document.querySelectorAll('.barman-item-interactive').forEach(item => {
+        if(item !== element) item.classList.remove('active');
+    });
+    // Abre ou fecha o atual
+    element.classList.toggle('active');
+}
+
+// Atualização da cor vibrante (usando sua variável existente)
+setInterval(() => {
+    const vibranteColors = ['#ff007f', '#00f2fe', '#d4af37', '#7000ff', '#00ff41'];
+    const nextColor = vibranteColors[Math.floor(Math.random() * vibranteColors.length)];
+    document.documentElement.style.setProperty('--vibrant-glow1', nextColor);
+}, 2500);
+
+
+
+
+//🚨🚨🚨👇👇👇 Rodapé Instagram rolante
+	
     const icon = document.getElementById('insta-icon');
 const brandNameContainer = document.getElementById('brand-name');
 const text = "nuance _drinks";
@@ -951,13 +1225,9 @@ function revealText(str) {
         }
     }, 100); // Velocidade do surgimento das letras (100ms)
 }
-
+//🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
     
     
-    
-    
-        
-        
     let cart = [];
     let currentFlavorProduct = null;
     let currentPaymentLink = "#"; 
