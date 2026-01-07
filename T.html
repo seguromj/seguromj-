@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bartender Professional | Drinks & Experiências</title>
+    <style>
+        /* Estilos Gerais */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f0f0f; color: #fff; line-height: 1.6; }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 { font-size: 3rem; color: #d4af37; margin-bottom: 10px; text-transform: uppercase; }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin-bottom: 30px; }
+
+        /* Botões */
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        .btn-whatsapp:hover { transform: scale(1.05); }
+
+        /* Seções */
+        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+        h2 { text-align: center; color: #d4af37; font-size: 2.5rem; margin-bottom: 40px; }
+
+        /* Especialidades/Drinks */
+        .grid-drinks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card-drink {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        .card-drink h3 { color: #d4af37; margin-bottom: 10px; }
+
+        /* Sobre */
+        .sobre { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+        .sobre-texto { flex: 1; min-width: 300px; }
+        .sobre-imagem { flex: 1; min-width: 300px; border: 2px solid #d4af37; border-radius: 10px; overflow: hidden; }
+        .sobre-imagem img { width: 100%; display: block; filter: grayscale(30%); }
+
+        /* Rodapé */
+        footer { text-align: center; padding: 40px; background: #050505; border-top: 1px solid #333; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Drinks de Alta Coquetelaria</h1>
+        <p>Transformando seu evento em uma experiência inesquecível com coquetéis clássicos e autorais feitos sob medida.</p>
+        <a href="https://wa.me/SEUNUMEROHERE" target="_blank" class="btn-whatsapp">Solicitar Orçamento no WhatsApp</a>
+    </header>
+
+    <section id="especialidades">
+        <h2>Minhas Especialidades</h2>
+        <div class="grid-drinks">
+            <div class="card-drink">
+                <h3>Clássicos</h3>
+                <p>Negroni, Moscow Mule e Gin Tônica executados com perfeição e insumos premium.</p>
+            </div>
+            <div class="card-drink">
+                <h3>Autorais</h3>
+                <p>Criações exclusivas com xaropes artesanais e combinações de sabores únicos.</p>
+            </div>
+            <div class="card-drink">
+                <h3>Mocktails</h3>
+                <p>Coquetéis sem álcool sofisticados para que todos os convidados aproveitem a festa.</p>
+            </div>
+            <div class="card-drink">
+                <h3>Bar de Eventos</h3>
+                <p>Estrutura completa para casamentos, aniversários e eventos corporativos.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="sobre">
+        <div class="sobre-imagem">
+            <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bartender em ação">
+        </div>
+        <div class="sobre-texto">
+            <h2>O Barman</h2>
+            <p>Com anos de experiência no mercado de eventos, meu objetivo é levar a sofisticação dos melhores bares do mundo para dentro da sua festa. Foco total em higiene, agilidade e, acima de tudo, no paladar do seu convidado.</p>
+            <br>
+            <p><strong>Diferenciais:</strong></p>
+            <ul>
+                <li>Insumos frescos e artesanais</li>
+                <li>Postura profissional e uniforme impecável</li>
+                <li>Cardápio personalizado para o tema do evento</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Bartender Profissional - Todos os direitos reservados.</p>
+        <p>Siga no Instagram: @SeuUsuario</p>
+    </footer>
+
+</body>
+</html>
