@@ -931,15 +931,22 @@
         <div class="form-group">
             <label>Como deseja receber?</label>
             <select id="delivery-type" onchange="toggleFields()">
+                <option value="mesa">Mesa 5</option>
+                <option value="retirada">Retirar no Balcão</option>
                 <option value="delivery">Delivery em Casa</option>
             </select>
-            <div id="delivery-warning" class="delivery-warning" style="display: block;">
+            <div id="delivery-warning" class="delivery-warning">
                 <i class="fas fa-exclamation-triangle"></i> Atenção: Pedidos para delivery possuem um acréscimo de R$ 10,00 na taxa de entrega.
 				<br>
 				<span style="color: red;">Usou o Cupom?😍 Descunsidere esse aviso</span>
             </div>
         </div>
-        <div id="fields-delivery" style="display:block">
+        <div id="fields-mesa"><div class="form-group"><label>Nome*</label><input type="text" id="mesa-nome"></div></div>
+        <div id="fields-retirada" style="display:none"
+			<div class="form-group"><label>Nome*</label><input type="text" id="ret-nome"></div>
+			<div class="form-group"><label>WhatsApp*</label><input type="text" id="dev-contato-Balcao"></div>
+			<div class="form-group"><label>CPF*</label><input type="text" id="cpf-retirada" oninput="mascaraCPF(this)" maxlength="14"></div></div>
+        <div id="fields-delivery" style="display:none">
             <div class="form-group"><label>Nome*</label><input type="text" id="dev-nome"></div>
             <div class="form-group"><label>WhatsApp*</label><input type="text" id="dev-contato"></div>
             <div class="form-group"><label>CEP*</label><input type="text" id="dev-CEP" oninput="mascaraCEP(this)" maxlength="9" placeholder="00000-000"></div>
@@ -1063,6 +1070,7 @@
         </svg>
         <h1 id="brand-name"></h1>
     </a>
+        <!--botao do selo de propriedade Particula-->
         <button onclick="abrirModalDireitos()" style="
     background: rgba(212, 175, 55, 0.05);
     color: #D4AF37;
@@ -1180,7 +1188,8 @@
 			Fechar</button>
 	</div>
 </div>
-  <br><br><br><br>
+  <!--Final do botao do selo de propriedade Particula-->
+        <br><br><br><br>
 </footer>
 
  
@@ -1599,8 +1608,10 @@ function revealText(str) {
 
     function toggleFields() {
         const type = document.getElementById('delivery-type').value;
-        // Removido mesa e retirada, mantendo apenas delivery
+        document.getElementById('fields-mesa').style.display = type === 'mesa' ? 'block' : 'none';
+        document.getElementById('fields-retirada').style.display = type === 'retirada' ? 'block' : 'none';
         document.getElementById('fields-delivery').style.display = type === 'delivery' ? 'block' : 'none';
+        
         document.getElementById('delivery-warning').style.display = type === 'delivery' ? 'block' : 'none';
         updateUI();
     }
@@ -1641,7 +1652,7 @@ function revealText(str) {
             }
             cepInput.classList.remove('input-error');
         }
-
+ 
         currentPaymentLink = linksDePagamentoFixos[totalStr] || "#";
         const payBtn = document.getElementById('pay-link');
         payBtn.href = currentPaymentLink;
@@ -1656,7 +1667,20 @@ function revealText(str) {
             pagamentoLink: currentPaymentLink // NOVA VARIÁVEL AQUI
         };
 
-        if (type === 'delivery') {
+        if (type === 'mesa') {
+            dadosParaPlanilha.nome = document.getElementById('mesa-nome').value;
+        } else if (type === 'retirada') {
+            const cpfInput = document.getElementById('cpf-retirada');
+            if (!validarCPF(cpfInput.value)) {
+                cpfInput.classList.add('input-error');
+                alert("Por favor, insira um CPF válido.");
+                return;
+            }
+            cpfInput.classList.remove('input-error');
+            dadosParaPlanilha.nome = document.getElementById('ret-nome').value;
+            dadosParaPlanilha.contato = document.getElementById('dev-contato-Balcao').value; // CORREÇÃO: Captura o WhatsApp do Balcão
+            dadosParaPlanilha.cpf = cpfInput.value;
+        } else if (type === 'delivery') {
             dadosParaPlanilha.nome = document.getElementById('dev-nome').value;
             dadosParaPlanilha.contato = document.getElementById('dev-contato').value;
             dadosParaPlanilha.cep = document.getElementById('dev-CEP').value;
@@ -1676,7 +1700,11 @@ function revealText(str) {
         const type = document.getElementById('delivery-type').value;
         let msg = `*NOVO PEDIDO - NUANCE*\n\n`;
         
-        if (type === 'delivery') {
+        if (type === 'mesa') {
+            msg += `*Cliente:* ${document.getElementById('mesa-nome').value}\n*Local:* Mesa 5\n`;
+        } else if (type === 'retirada') {
+            msg += `*Cliente:* ${document.getElementById('ret-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato-Balcao').value}\n*CPF:* ${document.getElementById('cpf-retirada').value}\n*Entrega:* Retirada no Balcão\n`;
+        } else if (type === 'delivery') {
             msg += `*Cliente:* ${document.getElementById('dev-nome').value}\n*WhatsApp:* ${document.getElementById('dev-contato').value}\n*CEP:* ${document.getElementById('dev-CEP').value}\n*Endereço:* ${document.getElementById('dev-rua').value}, ${document.getElementById('dev-num').value}\n*Bairro:* ${document.getElementById('dev-bairro').value}\n`;
             const complemento = document.getElementById('dev-comp').value;
             if (complemento) msg += `*Comp:* ${complemento}\n`;
